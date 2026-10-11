@@ -1,11 +1,11 @@
-FROM axiz/java-build-base:1.0.0 AS build
+FROM axiz/java-build-base:1.1.0 AS build
 COPY . /build
 RUN mvn -o -B -ntp package -DskipTests
 FROM quay.io/keycloak/keycloak:26.8.0
-COPY --from=build /build/spi-common/target/spi-common-1.0.0.jar /opt/keycloak/providers/
-COPY --from=build /build/spi-code/target/spi-code-1.0.0.jar /opt/keycloak/providers/
-COPY --from=build /build/spi-password/target/spi-password-1.0.0.jar /opt/keycloak/providers/
-COPY --from=build /build/spi-phone/target/spi-phone-1.0.0.jar /opt/keycloak/providers/
+COPY --from=build /build/spi-common/target/spi-common-1.1.0.jar /opt/keycloak/providers/
+COPY --from=build /build/auth-code-dni-spi/target/auth-code-dni-spi-1.1.0.jar /opt/keycloak/providers/
+COPY --from=build /build/ropc-dni-spi/target/ropc-dni-spi-1.1.0.jar /opt/keycloak/providers/
+COPY --from=build /build/external-auth-phone-spi/target/external-auth-phone-spi-1.1.0.jar /opt/keycloak/providers/
 RUN /opt/keycloak/bin/kc.sh build --db=postgres --health-enabled=true
 ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]
 CMD ["start", "--optimized", "--import-realm"]

@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>pe.axiz</groupId>
   <artifactId>keycloak-payment-poc</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
   <packaging>pom</packaging>
   <properties>
     <maven.compiler.release>21</maven.compiler.release>
@@ -14,9 +14,9 @@
   </properties>
   <modules>
     <module>spi-common</module>
-    <module>spi-code</module>
-    <module>spi-password</module>
-    <module>spi-phone</module>
+    <module>auth-code-dni-spi</module>
+    <module>ropc-dni-spi</module>
+    <module>external-auth-phone-spi</module>
     <module>payment-service</module>
   </modules>
   <dependencyManagement>
@@ -32,6 +32,14 @@
   </dependencyManagement>
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.5.1</version>
+        <configuration>
+          <archive><manifest><addDefaultImplementationEntries>true</addDefaultImplementationEntries></manifest></archive>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>

@@ -2,9 +2,9 @@ FROM maven:3.10.0-eclipse-temurin-25
 WORKDIR /build
 COPY pom.xml ./
 COPY spi-common spi-common
-COPY spi-code spi-code
-COPY spi-password spi-password
-COPY spi-phone spi-phone
+COPY auth-code-dni-spi auth-code-dni-spi
+COPY ropc-dni-spi ropc-dni-spi
+COPY external-auth-phone-spi external-auth-phone-spi
 COPY payment-service payment-service
 RUN mvn -B -ntp install -DskipTests \
     && mvn -B -ntp dependency:go-offline \

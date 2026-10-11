@@ -183,6 +183,28 @@ def portal_login():
 def main():
     request(KC + "/realms/axiz/.well-known/openid-configuration")
     request(API + "/api/payments", expected=401)
+    for client, username, credential in [
+        ("payments-password", "22334455", os.environ["DNI_PASSWORD"]),
+        (
+            "payments-phone",
+            "+51911111111",
+            os.environ.get("PHONE_DEMO_PASSWORD", "Telefono2026!"),
+        ),
+        ("payments-phone", "+51987654321", "ClaveIncorrecta2026!"),
+    ]:
+        request(
+            OIDC + "/token",
+            password(client, username, credential),
+            form=True,
+            expected=400,
+        )
+    additional = request(
+        OIDC + "/token",
+        password("payments-password", "87654321", os.environ["DNI_PASSWORD"]),
+        form=True,
+    )
+    assert claims(additional["access_token"])["acr"] == "4"
+
     request(
         OIDC + "/token",
         password("payments-password", "12345678", "ClaveIncorrecta2026!"),

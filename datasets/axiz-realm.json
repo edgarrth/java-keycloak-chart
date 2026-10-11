@@ -26,121 +26,67 @@
       }
     ]
   },
-  "users": [
-    {
-      "username": "12345678",
-      "enabled": true,
-      "emailVerified": true,
-      "firstName": "Operador",
-      "lastName": "Axiz",
-      "email": "operador@example.test",
-      "realmRoles": [
-        "merchant"
-      ],
-      "credentials": [
-        {
-          "type": "password",
-          "value": "${DNI_PASSWORD}",
-          "temporary": false
-        }
-      ]
-    }
-  ],
+  "users": [],
   "authenticationFlows": [
     {
-      "alias": "axiz-code",
-      "description": "Se valida la identidad y se establece el ACR del flujo.",
+      "alias": "auth-code-dni",
+      "description": "Se autentica con identificador y contraseña mediante el SPI propio del flujo.",
       "providerId": "basic-flow",
       "topLevel": true,
       "builtIn": false,
       "authenticationExecutions": [
         {
-          "authenticator": "auth-username-password-form",
+          "authenticator": "auth-code-dni",
           "requirement": "REQUIRED",
           "priority": 10,
           "userSetupAllowed": false,
           "authenticatorFlow": false
-        },
-        {
-          "authenticator": "axiz-code",
-          "requirement": "REQUIRED",
-          "priority": 20,
-          "userSetupAllowed": false,
-          "authenticatorFlow": false
         }
       ],
-      "id": "axiz-code"
+      "id": "auth-code-dni"
     },
     {
-      "alias": "axiz-password",
-      "description": "Se valida la identidad y se establece el ACR del flujo.",
+      "alias": "ropc-dni",
+      "description": "Se autentica con identificador y contraseña mediante el SPI propio del flujo.",
       "providerId": "basic-flow",
       "topLevel": true,
       "builtIn": false,
       "authenticationExecutions": [
         {
-          "authenticator": "direct-grant-validate-username",
+          "authenticator": "ropc-dni",
           "requirement": "REQUIRED",
           "priority": 10,
           "userSetupAllowed": false,
           "authenticatorFlow": false
-        },
-        {
-          "authenticator": "direct-grant-validate-password",
-          "requirement": "REQUIRED",
-          "priority": 20,
-          "userSetupAllowed": false,
-          "authenticatorFlow": false
-        },
-        {
-          "authenticator": "axiz-password",
-          "requirement": "REQUIRED",
-          "priority": 30,
-          "userSetupAllowed": false,
-          "authenticatorFlow": false
         }
       ],
-      "id": "axiz-password"
+      "id": "ropc-dni"
     },
     {
-      "alias": "axiz-phone",
-      "description": "Se valida la identidad y se establece el ACR del flujo.",
+      "alias": "external-auth-phone",
+      "description": "Se autentica con identificador y contraseña mediante el SPI propio del flujo.",
       "providerId": "basic-flow",
       "topLevel": true,
       "builtIn": false,
       "authenticationExecutions": [
         {
-          "authenticator": "direct-grant-validate-username",
+          "authenticator": "external-auth-phone",
           "requirement": "REQUIRED",
           "priority": 10,
           "userSetupAllowed": false,
           "authenticatorFlow": false
-        },
-        {
-          "authenticator": "direct-grant-validate-password",
-          "requirement": "REQUIRED",
-          "priority": 20,
-          "userSetupAllowed": false,
-          "authenticatorFlow": false
-        },
-        {
-          "authenticator": "axiz-phone",
-          "requirement": "REQUIRED",
-          "priority": 30,
-          "userSetupAllowed": false,
-          "authenticatorFlow": false
         }
       ],
-      "id": "axiz-phone"
+      "id": "external-auth-phone"
     }
   ],
-  "browserFlow": "axiz-code",
-  "directGrantFlow": "axiz-password",
+  "browserFlow": "auth-code-dni",
+  "directGrantFlow": "ropc-dni",
   "components": {
     "org.keycloak.storage.UserStorageProvider": [
       {
-        "name": "axiz-phone",
-        "providerId": "axiz-phone-storage",
+        "name": "external-auth-phone",
+        "providerId": "external-auth-phone-storage",
         "config": {
           "priority": [
             "0"
@@ -203,7 +149,7 @@
         }
       ],
       "authenticationFlowBindingOverrides": {
-        "browser": "axiz-code"
+        "browser": "auth-code-dni"
       },
       "fullScopeAllowed": false
     },
@@ -252,7 +198,7 @@
         }
       ],
       "authenticationFlowBindingOverrides": {
-        "direct_grant": "axiz-password"
+        "direct_grant": "ropc-dni"
       },
       "fullScopeAllowed": false
     },
@@ -301,7 +247,7 @@
         }
       ],
       "authenticationFlowBindingOverrides": {
-        "direct_grant": "axiz-phone"
+        "direct_grant": "external-auth-phone"
       },
       "fullScopeAllowed": false
     }

@@ -2,8 +2,10 @@ package pe.axiz.identity.common;
 
 import org.keycloak.Config;
 import org.keycloak.models.*;
+import org.keycloak.provider.ServerInfoAwareProviderFactory;
 
-public final class AcrPolicyFactory implements AcrPolicyProviderFactory {
+public final class AcrPolicyFactory
+    implements AcrPolicyProviderFactory, ServerInfoAwareProviderFactory {
   public AcrPolicy create(KeycloakSession session) {
     return new AcrPolicy() {
       public void establish(org.keycloak.authentication.AuthenticationFlowContext c, String flow) {
@@ -31,4 +33,8 @@ public final class AcrPolicyFactory implements AcrPolicyProviderFactory {
   public void postInit(KeycloakSessionFactory f) {}
 
   public void close() {}
+
+  public java.util.Map<String, String> getOperationalInfo() {
+    return java.util.Map.of("version", SpiVersion.of(AcrPolicyFactory.class), "keycloak", "26.8.0");
+  }
 }

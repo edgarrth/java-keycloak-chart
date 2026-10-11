@@ -1,17 +1,16 @@
 {
-  "created_at": "2026-10-11T05:20:50.258228+00:00",
+  "created_at": "2026-10-11T17:11:03.949695+00:00",
+  "project_version": "1.1.0",
   "build": {
     "status": "PASS",
     "java": "25.0.4.1",
     "maven": "3.10.0",
+    "keycloak": "26.8.0",
     "spring_boot": "4.1.1",
     "spring_framework": "7.0.9",
-    "keycloak": "26.8.0",
-    "compiler_plugin": "3.16.0",
-    "surefire_plugin": "3.6.0",
-    "spotless": "3.10.4",
-    "google_java_format": "1.36.1",
-    "tests": [
+    "clean_build": true,
+    "spotless_check": "PASS",
+    "unit_tests": [
       {
         "suite": "pe.axiz.payments.adapters.AcrAuthorizationTest",
         "tests": 2,
@@ -29,68 +28,86 @@
     ],
     "artifacts": [
       {
-        "file": "dist/spi-common-1.0.0.jar",
-        "sha256": "f3951d47cbb1814cd7c8509018f5b767e063699c764d0466d772d2b826f4544b",
-        "java_class_major": 65
+        "file": "dist/spi-common-1.1.0.jar",
+        "sha256": "0944ae0c0d0e158a2531346fb23d2607ef08e9d3e1b86d9a9a4d483bd2aa6e43",
+        "java_class_major": 65,
+        "implementation_version": "1.1.0"
       },
       {
-        "file": "dist/spi-password-1.0.0.jar",
-        "sha256": "9ed94682e0eefaed2b1383bbf3e58c83a5d44e2e5d3f6856a0b9be309034ebd4",
-        "java_class_major": 65
+        "file": "dist/auth-code-dni-spi-1.1.0.jar",
+        "sha256": "9c33cc63d5e496faf95d61e737e79f30954e6c2b15e310a09e0c3197e6dcbfd7",
+        "java_class_major": 65,
+        "implementation_version": "1.1.0"
       },
       {
-        "file": "dist/spi-code-1.0.0.jar",
-        "sha256": "958b5a2bae2825b2714567c7a73881d3d45f9ccf7e185cec2aa043911cbeaa28",
-        "java_class_major": 65
+        "file": "dist/ropc-dni-spi-1.1.0.jar",
+        "sha256": "ef7de54fc802e2c155971b1f940718a6e23a66410d0c21cf8a79268eb0b27c8d",
+        "java_class_major": 65,
+        "implementation_version": "1.1.0"
       },
       {
-        "file": "dist/payment-service-1.0.0-exec.jar",
-        "sha256": "9d7e28fc19d3746ba40370c50b1fcb6e90458d96cb5d5abd2bdeb667e8e32801",
-        "java_class_major": 69
+        "file": "dist/external-auth-phone-spi-1.1.0.jar",
+        "sha256": "144a8fa00cdaac1d0a974ebfc1ec21a10ad55dd15a07b728e3101586404d8c72",
+        "java_class_major": 65,
+        "implementation_version": "1.1.0"
       },
       {
-        "file": "dist/spi-phone-1.0.0.jar",
-        "sha256": "831f036e7f4a06b8002a0acca2419f0bc783767a725433006af2cf6bb9e4e551",
-        "java_class_major": 65
+        "file": "dist/payment-service-1.1.0-exec.jar",
+        "sha256": "fed7c8389c9723adb59414f6487dcda1ab238009f6bd35d67239167f44e9d1f0",
+        "java_class_major": 69,
+        "implementation_version": "1.1.0"
       }
     ]
   },
   "runtime_identity": {
     "status": "PASS",
-    "http_checks": 18,
-    "server": "Keycloak 26.8.0 real, persistencia interna H2 de laboratorio",
-    "external_storage": "Fixture H2 adaptado al protocolo PostgreSQL; se utilizó JDBC 42.7.13 real y el SPI entregado sin cambios. No se validó PostgreSQL 18.",
+    "http_checks": 33,
+    "server": "Keycloak 26.8.0 real; H2 interno de laboratorio",
+    "external_storage": "Fixture H2 externo adaptado al protocolo PostgreSQL; JDBC 42.7.13 y proveedor entregado sin cambios. No se validó PostgreSQL 18.6.",
+    "acr": {
+      "code": "5",
+      "password": "4",
+      "phone": "3"
+    },
+    "spi_versions": {
+      "authenticator/auth-code-dni": "1.1.0",
+      "authenticator/ropc-dni": "1.1.0",
+      "authenticator/external-auth-phone": "1.1.0",
+      "axiz-acr-policy/default": "1.1.0",
+      "storage/external-auth-phone-storage": "1.1.0"
+    },
+    "single_authenticator_per_flow": true,
+    "test_users": {
+      "dni": 3,
+      "phone": 2,
+      "disabled": 2
+    },
     "validated": [
-      "authorization_code_PKCE_S256_ACR5",
-      "DNI_password_ACR4",
-      "external_phone_password_ACR3",
-      "nonce_state",
-      "authorization_code_replay_rejected",
-      "refresh_rotation",
-      "refresh_preserves_ACR",
-      "cross_flow_identities_rejected",
-      "roles_merchant",
-      "JWT_resource_server_issuer_audience_context",
-      "unauthenticated_401",
-      "phone_create_403",
-      "password_approve_403",
-      "Spring_OIDC_portal_callback"
+      "Autenticación DNI y teléfono con clave",
+      "Rechazo de claves incorrectas, cuentas deshabilitadas y orígenes cruzados",
+      "Authorization Code PKCE S256, state, nonce y rechazo de reutilización",
+      "Portal Spring OIDC",
+      "ACR 3/4/5 y rol merchant",
+      "Autorización JWT y denegaciones 401/403",
+      "Rotación de refresh y persistencia de ACR",
+      "Versión individual y nombre de cada autenticador en Admin REST"
     ],
-    "payment_database": "Flyway deshabilitado únicamente en el proceso de verificación de identidad; la configuración entregada lo habilita."
+    "payment_database": "Flyway deshabilitado únicamente en el proceso temporal de verificación de identidad; configuración entregada habilitada"
   },
   "static": {
     "shell_syntax": "PASS",
-    "python_compile_and_format": "PASS",
-    "compose_config": "PASS con Docker Compose 5.6.0, sin Docker Engine",
-    "helm_lint": "PASS con Helm 4.3.0",
-    "helm_template": "PASS, 8 recursos",
-    "external_dataset_hash_java25": "PASS"
+    "python_compile_and_black": "PASS",
+    "compose_config": "PASS con Compose 5.6.0 sin Docker Engine",
+    "helm_lint": "PASS con Helm 4.3.0 y Kubernetes 1.36.4",
+    "helm_template": "PASS, 8 recursos; solo workload Keycloak, sin PVC ni PostgreSQL ni pagos",
+    "envoyproxy_schema": "PASS contra CRD oficial Envoy Gateway 1.9.2",
+    "external_dataset_hash": "PASS, salts independientes y PBKDF2 600000 iteraciones"
   },
   "not_executed": [
-    "construcción de imágenes con Docker Engine",
-    "despliegue efectivo en Kubernetes",
-    "persistencia y privilegios PostgreSQL 18.6",
-    "migraciones Flyway sobre PostgreSQL 18.6",
-    "conjunto HTTP completo de pagos: creación, idempotencia y aprobación persistida"
+    "Construcción efectiva de imágenes Docker",
+    "Despliegue efectivo Kubernetes, Gateway y conexión a las bases externas",
+    "Persistencia y privilegios de las dos instancias PostgreSQL 18.6",
+    "Migraciones Flyway sobre PostgreSQL 18.6",
+    "Conjunto completo HTTP de pagos persistidos: creación, idempotencia y aprobación"
   ]
 }

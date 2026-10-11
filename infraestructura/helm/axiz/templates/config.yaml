@@ -1,27 +1,18 @@
 apiVersion: v1
 kind: ConfigMap
-metadata:
-  name: axiz-datasets
+metadata: {name: axiz-datasets}
 data:
-  postgres-init.sh: |
-{{ .Files.Get "files/postgres-init.sh" | indent 4 }}
-  phone-seed.sql: |
-{{ .Files.Get "files/phone-seed.sql" | indent 4 }}
   axiz-realm.json: |
 {{ .Files.Get "files/axiz-realm.json" | indent 4 }}
 ---
 apiVersion: v1
 kind: Secret
-metadata:
-  name: axiz-credentials
+metadata: {name: axiz-credentials}
 type: Opaque
 stringData:
-  POSTGRES_PASSWORD: {{ required "Se requiere la contraseña PostgreSQL" .Values.credentials.postgres | quote }}
   KC_DB_PASSWORD: {{ required "Se requiere la contraseña Keycloak DB" .Values.credentials.keycloak | quote }}
-  PHONE_DB_PASSWORD: {{ required "Se requiere la contraseña de lectura externa" .Values.credentials.phone | quote }}
-  PAYMENT_DB_PASSWORD: {{ required "Se requiere la contraseña de pagos" .Values.credentials.payment | quote }}
+  PHONE_DB_PASSWORD: {{ required "Se requiere la contraseña externa" .Values.credentials.phone | quote }}
   KC_BOOTSTRAP_ADMIN_USERNAME: {{ .Values.credentials.adminUser | quote }}
   KC_BOOTSTRAP_ADMIN_PASSWORD: {{ required "Se requiere la contraseña administrativa" .Values.credentials.adminPassword | quote }}
-  DNI_PASSWORD: {{ required "Se requiere la contraseña DNI" .Values.credentials.dniPassword | quote }}
-  PASSWORD_CLIENT_SECRET: {{ required "Se requiere el secreto del cliente DNI" .Values.credentials.passwordClient | quote }}
-  PHONE_CLIENT_SECRET: {{ required "Se requiere el secreto del cliente telefónico" .Values.credentials.phoneClient | quote }}
+  PASSWORD_CLIENT_SECRET: {{ required "Se requiere el secreto DNI" .Values.credentials.passwordClient | quote }}
+  PHONE_CLIENT_SECRET: {{ required "Se requiere el secreto telefónico" .Values.credentials.phoneClient | quote }}
