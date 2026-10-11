@@ -479,7 +479,17 @@ Se importan ambos archivos mediante **Import** y se selecciona el entorno **Axiz
 - `infrastructure/datasets/postman/axiz-keycloak.postman_collection.json`
 - `infrastructure/datasets/postman/axiz-local.postman_environment.json`
 
-Se utiliza Postman con sus objetos Web Crypto nativos para generar PKCE S256, state y nonce. El script no utiliza `await` en el nivel superior: se espera la finalización de SHA-256 mediante una prueba asíncrona con callback `done`, antes de enviar la autorización. Si la versión instalada no dispone de Web Crypto, se muestra un mensaje para actualizar Postman; no se reemplaza la aleatoriedad criptográfica por Math.random. No se requiere CryptoJS ni instalar paquetes externos en los scripts. Las credenciales iniciales del entorno corresponden a `.env.example`; si se modificaron durante el despliegue se ajustan una sola vez los valores del entorno antes de ejecutar la colección.
+Se generan PKCE S256, state y nonce con Web Crypto cuando está disponible en el sandbox. Se utiliza el módulo `url` incluido en Postman para validar orígenes y callbacks. No se utilizan `await` en el nivel superior ni bibliotecas criptográficas externas.
+
+Para Postman 10.20.0 o un sandbox sin Web Crypto se prepara un entorno local desde la raíz:
+
+```bash
+bash infrastructure/datasets/postman/prepare-environment.sh
+```
+
+Se importa la colección y `.runtime/axiz-local.postman_environment.json`, seleccionando **Axiz local - PKCE compatible con Postman 10**. Se generan 64 conjuntos independientes mediante Python `secrets`, con el SHA-256 correspondiente; no se ejecuta ningún servicio en el host. El pre-request consume y retira un conjunto por autorización, guarda automáticamente las variables y no requiere copiar valores. Se conserva la colección; solo cambia el entorno importado para esta modalidad.
+
+Se mantienen los valores del entorno al terminar el Runner con **Keep variable values**, para conservar el consumo. Se utiliza el mismo entorno y una ejecución a la vez; no se reimporta una copia antigua para repetir pruebas. Cuando se agota el conjunto se vuelve a ejecutar el script y se importa el archivo regenerado. El archivo se crea con permisos 600, contiene secretos de prueba y no se incorpora al ZIP ni al repositorio. El ejemplo distribuido no contiene conjuntos PKCE precargados.
 
 Se ejecuta la colección completa con **Run collection**, una iteración y las carpetas en el orden importado. En el Runner se habilita **Keep variable values** para conservar los valores al terminar; durante la ejecución se comparten automáticamente mediante `pm.environment.set`. Para solicitudes individuales se comienza por el request que genera el token del flujo. El primer request de discovery limpia los valores generados de la ejecución anterior, por lo que no se ejecuta en medio de una secuencia ya iniciada.
 

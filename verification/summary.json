@@ -209,5 +209,26 @@
     "external_http_rejected": true,
     "real_keycloak_http_executed": false,
     "real_postman_sandbox": "6.7.4 PASS, variables disponibles al finalizar el script"
+  },
+  "postman_url_correction": {
+    "status": "PASS",
+    "scripts_fixed": 7,
+    "global_url_unavailable": true,
+    "post_response_fixture_executions": 12,
+    "sandbox_versions": [
+      "4.7.1",
+      "6.7.4"
+    ],
+    "scope": "Formularios, callback con state, origen, sesión Spring y redirección relativa; sin HTTP a Keycloak"
+  },
+  "postman_10_compatibility": {
+    "status": "PASS",
+    "sandbox": "4.7.1 real sin crypto, URL ni TextEncoder",
+    "scripts_parsed": 54,
+    "legacy_pkce_executions": 64,
+    "independent_sha256": "PASS",
+    "pool_consumption": "PASS, un conjunto diferente por autorización",
+    "real_keycloak_http_executed": false,
+    "failure_checks": "PASS: material ausente, agotado, tipo incorrecto y campos inválidos; variables previas eliminadas"
   }
 }
