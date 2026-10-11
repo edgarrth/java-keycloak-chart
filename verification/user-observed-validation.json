@@ -1,0 +1,11 @@
+{
+  "status": "PASS observado",
+  "source": "Logs compartidos de Fedora WSL, modo Compose previo a la orquestación Kubernetes",
+  "docker_images_built": true,
+  "postgres_instances": 2,
+  "postgres_version": "18.6",
+  "flyway_migration": 1,
+  "unit_tests": 6,
+  "http_checks": 30,
+  "kubernetes_deployment_confirmed": false
+}

@@ -99,12 +99,40 @@
   "static": {
     "shell_syntax": "PASS",
     "python_compile_and_black": "PASS",
-    "compose_config": "PASS con Compose 5.6.0 sin Docker Engine",
+    "compose_config": "PASS con Compose 2.39.4 y 5.6.0 sin Docker Engine",
     "helm_lint": "PASS con Helm 4.3.0 y Kubernetes 1.36.4",
     "helm_template": "PASS, 8 recursos; solo workload Keycloak, sin PVC ni PostgreSQL ni pagos",
     "envoyproxy_schema": "PASS contra CRD oficial Envoy Gateway 1.9.2",
     "external_dataset_hash": "PASS, salts independientes y PBKDF2 600000 iteraciones",
-    "compose_build_graph": "PASS, base requerida por additional_contexts; perfil build fuera de ejecución app"
+    "compose_build_graph": "PASS en Compose 2.39.4 y 5.6.0: base sin perfil, scale=0 y additional_contexts para app y Keycloak",
+    "kubernetes_layout": {
+      "status": "PASS",
+      "chart_version": "1.2.0",
+      "compose_versions": [
+        "2.39.4",
+        "5.6.0"
+      ],
+      "runtime_compose": [
+        "postgres-keycloak",
+        "postgres-external",
+        "payments"
+      ],
+      "build_only_scale_zero": [
+        "java-build-base",
+        "keycloak"
+      ],
+      "helm_resources": 8,
+      "helm_workloads": [
+        "keycloak"
+      ],
+      "postgres_in_kubernetes": false,
+      "helm_lint": "PASS",
+      "envoyproxy_schema": "PASS",
+      "shell_syntax": "PASS",
+      "shell_formatter": "shfmt 3.14.1",
+      "python_black": "PASS",
+      "actual_deployment_executed": false
+    }
   },
   "not_executed": [
     "Construcción efectiva de imágenes Docker",
@@ -113,12 +141,15 @@
     "Migraciones Flyway sobre PostgreSQL 18.6",
     "Conjunto completo HTTP de pagos persistidos: creación, idempotencia y aprobación"
   ],
-  "updated_at": "2026-10-11T17:38:56.654740+00:00",
+  "updated_at": "2026-10-11T18:21:14.580864+00:00",
   "layout": {
     "infrastructure": "infrastructure/",
     "datasets": "infrastructure/datasets/",
     "postman": "infrastructure/datasets/postman/",
-    "common_spi": "common-spi/"
+    "common_spi": "common-spi/",
+    "compose": "infrastructure/docker-compose.yml",
+    "start_all": "infrastructure/start-all.sh",
+    "postgres_keycloak_bootstrap": "infrastructure/datasets/postgres-keycloak-init.sh"
   },
   "postman": {
     "status": "PASS",
@@ -131,5 +162,40 @@
     "schema": "PASS, esquema oficial Collection 2.1",
     "script_syntax_and_format": "PASS",
     "pending": "11 solicitudes de pagos persistidos sobre PostgreSQL 18.6"
+  },
+  "chart_version": "1.2.0",
+  "kubernetes_orchestration": {
+    "status": "PASS",
+    "environment": "Dobles de CLI Docker/kind/Helm/kubectl; no se ejecutaron contenedores ni Kubernetes",
+    "order": {
+      "cluster": 4,
+      "databases": 8,
+      "gateway_chart": 30,
+      "keycloak_chart": 31,
+      "seed_container": 34,
+      "payments": 36,
+      "http_test_container": 38,
+      "cleanup": 41
+    },
+    "checks": [
+      "Secuencia según dependencias",
+      "Carga de usuarios y pruebas HTTP en contenedores",
+      "Reutilización sin build ni creación del clúster",
+      "Imagen ausente: rechazo antes de modificar servicios",
+      "Kubeconfig privado",
+      "Limpieza de procesos sin borrar datos",
+      "Sin docker -d ni eliminación de volúmenes"
+    ]
+  },
+  "user_observed_validation": {
+    "status": "PASS observado",
+    "source": "Logs compartidos de Fedora WSL, modo Compose previo a la orquestación Kubernetes",
+    "docker_images_built": true,
+    "postgres_instances": 2,
+    "postgres_version": "18.6",
+    "flyway_migration": 1,
+    "unit_tests": 6,
+    "http_checks": 30,
+    "kubernetes_deployment_confirmed": false
   }
 }

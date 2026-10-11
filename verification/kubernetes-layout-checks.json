@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "chart_version": "1.2.0",
+  "compose_versions": [
+    "2.39.4",
+    "5.6.0"
+  ],
+  "runtime_compose": [
+    "postgres-keycloak",
+    "postgres-external",
+    "payments"
+  ],
+  "build_only_scale_zero": [
+    "java-build-base",
+    "keycloak"
+  ],
+  "helm_resources": 8,
+  "helm_workloads": [
+    "keycloak"
+  ],
+  "postgres_in_kubernetes": false,
+  "helm_lint": "PASS",
+  "envoyproxy_schema": "PASS",
+  "shell_syntax": "PASS",
+  "shell_formatter": "shfmt 3.14.1",
+  "python_black": "PASS",
+  "actual_deployment_executed": false
+}

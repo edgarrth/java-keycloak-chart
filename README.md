@@ -61,13 +61,13 @@ flowchart TB
     subgraph EXT["Fuera de Kubernetes"]
       K --> I["PostgreSQL instancia interna: keycloak"]
       F --> E["PostgreSQL instancia externa: phone_identity"]
-      P["API de pagos: host o Compose"] --> D["Base payments en instancia externa"]
+      P["API de pagos: Compose"] --> D["Base payments en instancia externa"]
     end
     B --> P
     P -->|"JWKS"| G
 ```
 
-En Kubernetes se despliega una réplica de la distribución estable Keycloak, con imagen optimizada y chart propio. Se instalan Envoy Gateway y las CRD de Gateway API mediante el chart oficial; GatewayClass, EnvoyProxy, Gateway y HTTPRoute exponen el servicio ClusterIP de Keycloak. Se utiliza la rama estable compatible con Kubernetes 1.36. No se crean workloads, PVC ni Jobs PostgreSQL dentro del clúster. La API de pagos se ejecuta en el host o en Compose.
+En Kubernetes se despliega una réplica de la distribución estable Keycloak, con imagen optimizada y chart propio. Se instalan Envoy Gateway y las CRD de Gateway API mediante el chart oficial; GatewayClass, EnvoyProxy, Gateway y HTTPRoute exponen el servicio ClusterIP de Keycloak. Se utiliza la rama estable compatible con Kubernetes 1.36. No se crean workloads, PVC ni Jobs PostgreSQL dentro del clúster. La API de pagos se ejecuta en Compose.
 
 Las sondas de Keycloak utilizan el puerto administrativo 9000, sin ruta pública. Se utiliza ejecución sin privilegios, límites de CPU/memoria, ConfigMap para el realm y Secret para credenciales. Las sondas y access logs HTTP no generan mensajes periódicos de health check. En kind se conectan los contenedores PostgreSQL externos a la red Docker del clúster para que los pods alcancen sus direcciones privadas; su ciclo de vida sigue siendo externo a Kubernetes.
 
@@ -82,7 +82,7 @@ auth-code-dni-spi/           Autenticación web DNI y clave, ACR 5
 ropc-dni-spi/                Autenticación Direct Grant DNI y clave, ACR 4
 external-auth-phone-spi/     Autenticación teléfono y clave, User Storage y ACR 3
 payment-service/            API hexagonal, portal OIDC y migración Flyway
-infrastructure/             Compose, imágenes, aprovisionamiento y chart Helm
+infrastructure/             Compose, imágenes, arranque único, aprovisionamiento y chart Helm
   datasets/                 Realm, SQL externo y generador de hashes
     postman/                Colección de pruebas y entorno importable
 tests/                      Pruebas HTTP/OIDC y validación estática
@@ -114,21 +114,19 @@ En pagos, `domain` define `Payment` y el puerto `PaymentRepository`; `applicatio
 
 ## Preparación en Fedora WSL
 
-Se requiere WSL2, conexión a Internet, Docker Engine disponible para el usuario, Docker Compose 2.22 o posterior con BuildKit y el plugin Buildx (se ha validado la configuración con Compose 5.6.0), Java 25, Maven, Python 3 y curl. Se ejecutan todos los comandos desde la raíz de este proyecto. Se comprueba que Docker pueda levantar contenedores antes de aprovisionar kind.
+Se requiere WSL2, conexión a Internet, Docker Engine disponible para el usuario, Docker Compose 2.22 o posterior con BuildKit y el plugin Buildx (se ha validado la configuración con Compose 2.39.4 y 5.6.0), Python 3 para utilidades, curl, tar y gzip. Se ejecutan todos los comandos desde la raíz de este proyecto. Se comprueba que Docker pueda levantar contenedores antes de aprovisionar kind.
 
 ```bash
-sudo dnf install -y java-25-openjdk-devel maven python3 curl tar gzip
-java -version
-mvn -version
+sudo dnf install -y python3 curl tar gzip
 docker version
 docker compose version
 cp .env.example .env
 chmod 600 .env
 ```
 
-Si el repositorio de Fedora no proporciona Java 25, se instala una distribución Temurin 25 y se configura `JAVA_HOME` para Maven. Para el modo de contenedores se utiliza el JDK de la imagen base y no se necesita Java en el host.
+Se utiliza Java 25 y Maven de la imagen base. Para editar y compilar desde un IDE se puede instalar Temurin 25 y configurar el JDK del reactor; los servicios y los runners de pruebas se ejecutan en contenedores.
 
-Los significados y valores admitidos de las propiedades se encuentran exclusivamente en `.env.example`. Se utiliza el archivo `.env` para las ejecuciones locales. El archivo no se incluye en el ZIP ni se incorpora a imágenes.
+Los significados y valores admitidos de las propiedades se encuentran exclusivamente en `.env.example`. Se utiliza el archivo `.env` para las ejecuciones locales en contenedores. El archivo no se incluye en el ZIP ni se incorpora a imágenes.
 
 ## Datos iniciales
 
@@ -149,9 +147,9 @@ bash infrastructure/datasets/generate.sh
 
 Se ingresa la nueva clave sin mostrarla en terminal y se actualiza su valor de demostración en `.env`. Se generan salts independientes para cada fila. El generador modifica el dataset y no una base ya inicializada.
 
-`infrastructure/postgres-keycloak-init.sh` inicializa exclusivamente el rol y la base de Keycloak en la primera instancia. `infrastructure/postgres-external-init.sh` inicializa roles, base telefónica y base de pagos en la segunda instancia y aplica `infrastructure/datasets/phone-seed.sql`. Flyway administra exclusivamente el esquema de pagos mediante `V1__payment.sql`; Keycloak administra su esquema mediante sus propias migraciones. No se duplica la creación de esquemas.
+`infrastructure/datasets/postgres-keycloak-init.sh` inicializa exclusivamente el rol y la base de Keycloak en la primera instancia. `infrastructure/postgres-external-init.sh` inicializa roles, base telefónica y base de pagos en la segunda instancia y aplica `infrastructure/datasets/phone-seed.sql`. Flyway administra exclusivamente el esquema de pagos mediante `V1__payment.sql`; Keycloak administra su esquema mediante sus propias migraciones. No se duplica la creación de esquemas.
 
-Compose ejecuta el servicio de carga `seed-keycloak` tras el arranque del realm; el despliegue Kubernetes ejecuta el mismo script desde el host una vez que el Gateway está disponible. Para volver a cargar los usuarios sintéticos:
+Se ejecuta el servicio de carga `seed-keycloak` de Compose tras el arranque del realm en Kubernetes; el despliegue Kubernetes ejecuta el mismo script en un contenedor una vez que el Gateway está disponible. Para volver a cargar los usuarios sintéticos:
 
 ```bash
 bash infrastructure/seed-keycloak.sh
@@ -167,7 +165,7 @@ Se puede importar el `pom.xml` raíz en IntelliJ IDEA, Eclipse o VS Code. Se sel
 mvn -B -ntp verify spotless:check
 ```
 
-Se genera `payment-service/target/payment-service-1.1.0-exec.jar` como artefacto ejecutable Spring Boot, separado del JAR normal de Maven. Se utiliza ese ejecutable en el host y en la imagen de pagos.
+Se genera `payment-service/target/payment-service-1.1.0-exec.jar` como artefacto ejecutable Spring Boot, separado del JAR normal de Maven. Se utiliza ese ejecutable en la imagen de pagos.
 
 Se aplica el formato cuando se modifica código:
 
@@ -177,7 +175,9 @@ mvn -B -ntp spotless:apply
 
 ## Imagen base reutilizable
 
-Compose construye primero `axiz/java-build-base:1.1.0` mediante `additional_contexts`, antes de compilar Keycloak y pagos. Se declara la dependencia de build explícitamente para evitar que Docker intente descargar la imagen privada de Docker Hub. El servicio de construcción tiene el perfil `build`: se incluye en el grafo de build como dependencia, pero no se inicia como contenedor al levantar el perfil `app`. No se requiere activar ese perfil ni ejecutar una construcción manual antes del primer arranque.
+Compose construye primero `axiz/java-build-base:1.1.0` mediante `additional_contexts`, antes de compilar Keycloak y pagos. Se declara la dependencia de build explícitamente para evitar que Docker intente descargar la imagen privada de Docker Hub. El servicio de construcción se declara sin perfil y con `scale: 0`: queda disponible para resolver `additional_contexts` tanto con el perfil `app` como en el modo de infraestructura, pero no se crean contenedores para ese servicio. Se evita depender de que Compose resuelva servicios excluidos por un perfil. No se requiere activar otro perfil ni ejecutar una construcción manual antes del primer arranque.
+
+Ante el error `declares unknown service "java-build-base" as additional contexts java_build_base`, se comprueba que la definición de `java-build-base` tenga `scale: 0` y no declare `profiles`. La configuración anterior reproducía ese fallo en Compose 2.39.4 al utilizar `--profile app`; se validaron el modelo y los grafos de build corregidos en Compose 2.39.4 y 5.6.0. Se reemplaza el archivo Compose con el incluido en este paquete.
 
 La imagen base conserva Maven, JDK y dependencias del reactor. Solo se copian los POM para prepararla; los cambios en código no invalidan esa capa. Se reutiliza la caché de BuildKit y las aplicaciones se compilan offline. Los cambios en POM o en el toolchain actualizan automáticamente la base al ejecutar `up --build`. Se puede preparar la imagen por separado de forma opcional:
 
@@ -187,99 +187,77 @@ bash infrastructure/build-base.sh
 
 La imagen final Keycloak incluye los cuatro JAR y ejecuta `kc.sh build` durante la construcción, no en cada arranque. Las imágenes de aplicación se conservan como `axiz/keycloak:1.1.0` y `axiz/payments:1.1.0`; un arranque con `--no-build` no recompila ni instala dependencias. Las imágenes finales no contienen Maven ni el repositorio de dependencias.
 
-## Ejecución con infraestructura en Compose y servicio en host
+## Composición de los servicios externos
 
-Se inician las dos instancias PostgreSQL y Keycloak en una terminal:
+`infrastructure/docker-compose.yml` define las dos instancias PostgreSQL independientes, pagos, la red externa `kind` y el contenedor de carga de usuarios. Se utilizan los volúmenes persistentes `keycloak-pgdata` y `external-pgdata` del proyecto Compose `axiz-identity`.
 
-```bash
-docker compose --env-file .env -f infrastructure/docker-compose.yml up --build postgres-keycloak postgres-external keycloak seed-keycloak
-```
+Se declaran `java-build-base` y `keycloak` con `scale: 0` exclusivamente como objetivos de construcción de imágenes. Compose no ejecuta el servidor Keycloak. Su única instancia de aplicación se despliega mediante el chart Helm. Se utiliza el script completo de la siguiente sección para crear la red del clúster antes de levantar los servicios que dependen de ella.
 
-Se ejecuta el servicio de pagos en otra terminal:
+## Kubernetes local y representatividad
 
-```bash
-bash infrastructure/run-host.sh
-```
+Se utiliza kind 0.33.0 con Kubernetes 1.36.4. Se ejecutan nodos Kubernetes reales como contenedores Docker y se utiliza kubeadm para su aprovisionamiento. Se considera suficiente para comprobar Authenticator SPI, User Storage, Helm, Secrets, ConfigMaps, StatefulSet, sondas, resolución de servicios y Gateway API. Se conservan los mismos recursos Kubernetes que pueden instalarse en otro clúster compatible. Las URL de bases externas y la exposición del Gateway se adaptan al entorno destino.
 
-Se conservan los comandos en primer plano. Los puertos 5432, 5433, 8080 y 8090 deben estar libres. Si ya existe la imagen de Keycloak, se puede iniciar la infraestructura sin construir:
+| Alternativa | Qué permite evaluar | Aplicación en esta PoC |
+| --- | --- | --- |
+| kind | Kubernetes local reproducible y pruebas de despliegue, también multinodo | Se selecciona por la integración con Docker, carga directa de imágenes y aprovisionamiento sencillo en Fedora WSL |
+| minikube | Desarrollo local con drivers de VM o contenedor y complementos | Se puede utilizar, pero se necesitaría adaptar la carga de imágenes y la red externa; no aporta una ventaja para comprobar estos SPI |
+| K3s | Distribución ligera, CNI, almacenamiento y operación de un clúster persistente | Se seleccionaría para evaluar una plataforma ligera mantenida como entorno de ejecución, incluyendo su operación y componentes integrados |
 
-```bash
-docker compose --env-file .env -f infrastructure/docker-compose.yml up --no-build postgres-keycloak postgres-external keycloak seed-keycloak
-```
+Se conserva el chart local en la versión 1.2.0 y los binarios Java en 1.1.0. Se distingue la validación funcional de la validación operativa de producción. El clúster local de un nodo no acredita alta disponibilidad, balanceadores cloud, almacenamiento distribuido, recuperación ante pérdida del nodo, TLS público ni políticas de red de una plataforma destino. Esas propiedades requieren pruebas en un clúster con la infraestructura correspondiente. Referencias: [kind](https://kind.sigs.k8s.io/), [K3s](https://docs.k3s.io/) y [minikube](https://minikube.sigs.k8s.io/docs/).
 
-## Ejecución completa con Compose
+## Arranque completo con Kubernetes y Compose
 
-Se levanta infraestructura, importación, seed y servicio en un solo comando después de preparar `.env`; la imagen base se construye automáticamente:
+Se ejecuta desde la raíz un único comando, con Docker Engine disponible:
 
 ```bash
-docker compose --env-file .env -f infrastructure/docker-compose.yml --profile app up --build
+bash infrastructure/start-all.sh --build
 ```
 
-Para reutilizar las imágenes existentes:
+Se crea `.env` a partir del ejemplo si no existe. Se comprueban Docker, Compose, curl y Python 3 para utilidades de aprovisionamiento. Los servicios de aplicación, las dos instancias PostgreSQL, la carga de usuarios y los runners de pruebas se ejecutan en contenedores. En el host solo se ejecutan las herramientas de orquestación. No se necesita Java ni Maven en el host para ejecutar este modo.
+
+Se sigue esta secuencia según las dependencias:
+
+- Se detienen únicamente los contenedores del modo Compose alternativo que ocupan los puertos de Keycloak y pagos. Se conservan los volúmenes y la instancia externa ya existente.
+- Se instalan kind, Helm y kubectl en `.tools` cuando no están disponibles, con comprobación de integridad. Se crea o reutiliza el clúster `axiz` y se espera que su nodo esté disponible. Se conserva el kubeconfig privado en `.runtime/kubeconfig` sin cambiar el contexto global del usuario.
+- Se levantan las dos instancias PostgreSQL con `infrastructure/docker-compose.yml` y se espera su estado saludable. Los scripts iniciales crean roles y bases únicamente sobre volúmenes vacíos; la segunda instancia carga las identidades telefónicas.
+- Se conectan ambos contenedores de base de datos a la red Docker `kind` y se obtienen sus IP privadas. Se construye la imagen de Keycloak, incluida la base compartida, y se carga en el nodo kind.
+- Se instala Envoy Gateway con su chart oficial. Se instala o actualiza el chart `infrastructure/helm/axiz`, que administra el StatefulSet de Keycloak con todos los SPI, Service, ConfigMap, Secret, GatewayClass, EnvoyProxy, Gateway y HTTPRoute. No contiene workloads PostgreSQL ni el servicio de pagos.
+- Se espera el rollout de Keycloak y la condición `Programmed` del Gateway. Se ejecuta la carga idempotente de usuarios en un contenedor Python conectado a `kind`.
+- Se construye y levanta el contenedor de pagos en Compose. Se alcanza Keycloak por `axiz-control-plane:30080` desde la red Docker compartida y se conserva `localhost:8080` como emisor y URL pública del navegador. Se espera `/ready`; Flyway aplica el esquema de pagos durante el arranque. Se imprimen todas las rutas disponibles.
+
+Se reutilizan las imágenes existentes con:
 
 ```bash
-docker compose --env-file .env -f infrastructure/docker-compose.yml --profile app up --no-build
+bash infrastructure/start-all.sh --no-build
 ```
 
-El servicio auxiliar `routes` espera la disponibilidad de Keycloak y pagos e imprime las rutas. Termina con código cero y no procesa peticiones. Se deja PostgreSQL persistido al detener Compose.
-
-## Aprovisionamiento y despliegue de Keycloak en Kubernetes
-
-Se utiliza Kubernetes para Keycloak y su exposición. Las dos instancias PostgreSQL y el servicio de pagos permanecen fuera del clúster. Los modos Compose anteriores y este modo son alternativas: no se inicia el contenedor Keycloak de Compose cuando kind ocupa 8080.
-
-En una primera terminal se mantienen las bases externas en primer plano:
+Se falla antes del despliegue si falta una imagen local. Para arrancar y ejecutar también las comprobaciones HTTP/OIDC en un contenedor antes de dejar los logs activos:
 
 ```bash
-bash infrastructure/run-databases.sh
+bash infrastructure/start-all.sh --build --test
 ```
 
-En una segunda terminal se provisiona kind, se instala Envoy Gateway mediante Helm, se construye y carga únicamente la imagen de Keycloak, se aplica el chart y se generan los usuarios:
+Se mantienen los procesos Compose supervisados por el script, con logs en primer plano y sin `-d`. Con `Ctrl+C` se reduce Keycloak a cero réplicas antes de detener pagos y las dos bases; se conservan el clúster, el release Helm y los datos. Se evita dejar Keycloak intentando reconectarse a una base detenida. Al ejecutar nuevamente el script se recuperan los contenedores, Helm restablece la réplica y se reutilizan los datos. No se eliminan volúmenes ni se recrea el realm existente.
+
+Para inspeccionar el clúster:
+
+```bash
+.tools/kubectl --kubeconfig .runtime/kubeconfig get nodes
+.tools/kubectl --kubeconfig .runtime/kubeconfig -n axiz get statefulset,pods,services,gateway,httproute
+.tools/helm --kubeconfig .runtime/kubeconfig -n axiz status axiz
+```
+
+Si se utilizan herramientas ya instaladas en el PATH, se invocan `kubectl` y `helm` en lugar de `.tools/kubectl` y `.tools/helm`. Se recomienda asignar a Docker cuatro CPU y 8 GiB de memoria. Se requieren libres 5432, 5433, 8080 y 8090. El script se ha preparado para Docker Engine en Linux/Fedora WSL; el runner HTTP utiliza la red del host Docker para alcanzar las URL públicas del laboratorio.
+
+## Actualización individual del chart
+
+Con las bases del modo anterior disponibles, se puede actualizar únicamente Keycloak:
 
 ```bash
 bash infrastructure/deploy-k8s.sh --build
 ```
 
-Para reutilizar la imagen construida:
-
-```bash
-bash infrastructure/deploy-k8s.sh --no-build
-```
-
-El script comprueba que ambas bases estén saludables y conecta sus contenedores a la red Docker `kind`. Se detectan las IP externas y se generan las URL JDBC para Helm. Ninguna base se instala en Kubernetes. Se espera el StatefulSet Keycloak y la condición `Programmed` del Gateway; se aplica la carga de usuarios y se imprimen las rutas. Las herramientas kind, Helm y kubectl se descargan con verificaciones de integridad en `.tools` cuando no están disponibles. Se requiere acceso a sus repositorios y recursos suficientes en Docker; se recomienda cuatro CPU y 8 GiB de memoria.
-
-Se inicia el servicio de pagos en una tercera terminal:
-
-```bash
-bash infrastructure/run-host.sh
-```
-
-Se utiliza `localhost:8080` para alcanzar el Gateway desde el host y `localhost:5433` para la base de pagos externa. Las mismas pruebas OIDC y ACR se ejecutan en todos los modos. Para un clúster existente se generan los valores desde `.env` y se aplica el chart a ese contexto; se requiere previamente Envoy Gateway 1.9.2 y sus CRD, conectividad hacia ambas bases externas y una imagen Keycloak disponible en el registro del clúster:
-
-```bash
-mkdir -p .runtime
-umask 077
-set -a
-source .env
-set +a
-python3 infrastructure/helm-values.py
-helm upgrade --install axiz infrastructure/helm/axiz --namespace axiz --create-namespace \
-  -f .runtime/helm-values.json --set-string images.keycloak=registro/axiz-keycloak:1.1.0 \
-  --wait --timeout 15m
-bash infrastructure/seed-keycloak.sh
-```
-
-Las credenciales se suministran mediante archivo con permisos restringidos y Secret, sin argumentos de contraseña en Helm. La versión del chart es 1.1.0 y la versión del servidor Keycloak es 26.8.0; se distingue la versión de los SPI de la del servidor. Se consulta el despliegue y los recursos de exposición:
-
-```bash
-.tools/kubectl -n axiz get pods,services,gateway,httproute
-.tools/helm status axiz -n axiz
-.tools/kubectl -n axiz logs statefulset/keycloak --tail=80
-.tools/kubectl -n envoy-gateway-system get deployments,services
-```
-
-El laboratorio usa HTTP y NodePort 30080 publicado exclusivamente en `127.0.0.1:8080` por kind. Para un entorno público se configura listener HTTPS con certificado, hostname público, LoadBalancer del Gateway y política TLS hacia las bases. Se utiliza un almacén de secretos del entorno y se sustituye la cuenta administrativa bootstrap. Las sondas administrativas no se enrutan por el Gateway. La imagen usa `start --optimized`, sin `start-dev`; una réplica constituye una PoC y no una topología de alta disponibilidad.
-
-Para cambiar desde Compose completo se detienen primero sus servicios con `docker compose --env-file .env -f infrastructure/docker-compose.yml --profile app down` y se inician de nuevo solo las bases con `run-databases.sh`. Se conservan los volúmenes. Tras migrar desde la versión anterior del proyecto se inicializan las nuevas instancias y se importan el realm y los flujos actualizados; no se reutiliza como si fuera compatible la antigua base compartida. En un realm ya existente se actualizan los bindings y ejecuciones mediante Admin REST o consola, pues `--import-realm` no lo sobrescribe.
+Se resuelve la revisión de imagen mediante su ID Docker y se añade a las anotaciones del StatefulSet. Una imagen diferente provoca el rollout aunque se conserve la etiqueta local. Se carga en kind antes de aplicar Helm. Se mantiene el ID de los proveedores y se visualiza la versión de cada JAR en la consola de Keycloak.
 
 ## Actualización de los SPI
 
@@ -289,13 +267,6 @@ Los cambios de configuración del realm, clientes, bindings y ejecuciones de flu
 
 Para cambiar código se incrementa la versión Maven del artefacto y se actualizan sus referencias de build y JAR; la consola muestra la versión del manifiesto efectivamente desplegado. Se conservan los IDs de los proveedores para mantener los bindings. Si cambia una dependencia se actualiza la base mediante el build de Compose; un cambio de código con las mismas dependencias reutiliza su caché.
 
-En Compose se construye y recrea solo Keycloak, manteniendo los demás contenedores:
-
-```bash
-docker compose --env-file .env -f infrastructure/docker-compose.yml build keycloak
-docker compose --env-file .env -f infrastructure/docker-compose.yml up --no-deps --no-build keycloak
-```
-
 En kind se utiliza una etiqueta de imagen nueva para que el cambio provoque un rollout. Con la versión binaria actual, el siguiente ejemplo publica una compilación nueva sin reinstalar bases ni Envoy Gateway:
 
 ```bash
@@ -303,9 +274,9 @@ RELEASE_TAG="spi-$(date -u +%Y%m%dT%H%M%SZ)"
 docker compose --env-file .env -f infrastructure/docker-compose.yml build keycloak
 docker tag axiz/keycloak:1.1.0 "axiz/keycloak:$RELEASE_TAG"
 .tools/kind load docker-image "axiz/keycloak:$RELEASE_TAG" --name axiz
-.tools/helm upgrade axiz infrastructure/helm/axiz --namespace axiz --reuse-values \
+.tools/helm --kubeconfig .runtime/kubeconfig upgrade axiz infrastructure/helm/axiz --namespace axiz --reuse-values \
   --set-string "images.keycloak=axiz/keycloak:$RELEASE_TAG" --wait --timeout 15m
-.tools/kubectl -n axiz rollout status statefulset/keycloak --timeout=10m
+.tools/kubectl --kubeconfig .runtime/kubeconfig -n axiz rollout status statefulset/keycloak --timeout=10m
 ```
 
 Se utiliza una etiqueta nueva en lugar de sobrescribir una etiqueta con `IfNotPresent`. Se consulta **Server info → Provider info** o la carpeta de administración de Postman para comprobar la versión de cada SPI. Con la réplica única de esta PoC se produce una interrupción breve durante el reinicio; no se garantiza actualización sin interrupciones. Para varias réplicas se evalúa la compatibilidad de sesiones, cachés y migraciones entre versiones antes de elegir una estrategia de rolling update. No se copia un JAR sobre un pod activo como mecanismo de actualización productiva.
@@ -539,13 +510,13 @@ Ese comando requiere que Keycloak y la API con su PostgreSQL de pagos estén dis
 
 ## Ejecución de todo el conjunto de pruebas
 
-Con los servicios disponibles y Java 25 en el host:
+Con los servicios disponibles, se ejecuta desde la raíz:
 
 ```bash
 bash tests/run-all.sh
 ```
 
-Se ejecutan compilación, pruebas unitarias, verificación de formato y pruebas HTTP reales. Se valida discovery, credenciales incorrectas, separación de orígenes, los tres ACR, PKCE, state, nonce, callback y sesión del portal, rechazo de reutilización de código, autorización 401/403, creación, idempotencia, conflicto de contenido, aprobación, aislamiento por usuario, rechazo de JWT alterado y rotación de refresh tokens. En el laboratorio HTTP se reproduce el tratamiento de cookies Secure de localhost de los navegadores únicamente dentro del cliente de pruebas; fuera de localhost se mantiene su restricción HTTPS. Se guarda el resultado sin tokens ni contraseñas en `.runtime/e2e-results.json`.
+Se ejecutan compilación, pruebas unitarias y formato dentro de la imagen base Maven/Java 25, y pruebas HTTP reales dentro de un contenedor Python, mediante `infrastructure/docker-compose-tests.yml`. No se requiere Java, Maven ni Python de aplicación en el host. Se utiliza Docker Engine Linux y la red del host en el runner HTTP para acceder a localhost:8080 y localhost:8090. Se valida discovery, credenciales incorrectas, separación de orígenes, los tres ACR, PKCE, state, nonce, callback y sesión del portal, rechazo de reutilización de código, autorización 401/403, creación, idempotencia, conflicto de contenido, aprobación, aislamiento por usuario, rechazo de JWT alterado y rotación de refresh tokens. En el laboratorio HTTP se reproduce el tratamiento de cookies Secure de localhost de los navegadores únicamente dentro del cliente de pruebas; fuera de localhost se mantiene su restricción HTTPS. Se guarda el resultado sin tokens ni contraseñas en `.runtime/e2e-results.json`.
 
 Se realiza validación estática de scripts, Compose y Helm:
 
@@ -569,13 +540,13 @@ Los autenticadores y protocol mappers utilizan APIs que Keycloak clasifica como 
 
 ## Evidencia y alcance de validación
 
-Se incluyen `verification/maven-verify.log`, los reportes JUnit, los hashes de artefactos y el resultado HTTP con fecha de ejecución. Se verificó compilación con Java 25, Maven 3.10.0, formato Spotless y seis pruebas unitarias. Se ejecutaron 33 comprobaciones HTTP contra Keycloak 26.8.0 real con los JAR 1.1.0: los tres flujos de credenciales, tres DNI y dos teléfonos habilitados, dos cuentas deshabilitadas, claves incorrectas, separación de orígenes, PKCE, state, nonce, rechazo de reutilización de código, callback del portal Spring, ACR y roles, respuestas 401/403 y rotación de refresh con conservación de ACR. Se verificaron los nombres versionados mediante Admin REST, los manifiestos individuales de los JAR y una sola ejecución de autenticador por flujo.
+Se incluyen el build Maven limpio, el formato Spotless, seis pruebas unitarias, hashes y manifiestos de los cinco JAR en `verification`. Se mantuvieron los binarios Java verificados en 1.1.0; esta actualización cambia la orquestación y el chart 1.2.0. Se comprobaron 33 operaciones HTTP y 38 solicitudes Postman con 74 aserciones de credenciales, PKCE, ACR, portal, rechazo de JWT alterado, roles y refresh contra Keycloak real. Ese laboratorio utilizó H2 interno y un fixture PostgreSQL-wire externo; se deshabilitó Flyway únicamente durante esa verificación.
 
-La ejecución de esa verificación utilizó H2 interno de laboratorio y un fixture H2 externo adaptado al protocolo PostgreSQL con el JDBC real y el proveedor sin cambios. Se deshabilitó Flyway únicamente en el proceso temporal de verificación de identidad. La configuración entregada utiliza dos PostgreSQL 18.6 y conserva Flyway habilitado.
+Se recibieron logs de una ejecución en Fedora WSL que muestran construcción de imágenes, disponibilidad de las dos instancias PostgreSQL 18.6, aprovisionamiento de usuarios, arranque de pagos y migración Flyway. El log posterior muestra `BUILD SUCCESS` y 30 comprobaciones HTTP/OIDC e idempotencia completadas. Se registra esa evidencia como ejecución observada del modo Compose previo, separada de las comprobaciones realizadas en el entorno de generación.
 
-Se verificaron la sintaxis Bash, el formato Python, el modelo Compose, `helm lint`, los ocho recursos renderizados del chart y el EnvoyProxy contra el esquema oficial 1.9.2. Se comprobó que el chart no contiene workloads PostgreSQL, PVC ni despliegue de pagos. Tras reorganizar las rutas se repitieron compilación, seis pruebas unitarias y validación estática de Compose y Helm. Se validó la colección con el esquema oficial Postman v2.1, se formatearon sus scripts y se ejecutaron 38 requests y 74 aserciones de identidad, portal y administración con el runtime Postman 7.56.1 y sandbox 6.7.4 contra Keycloak real; se mantuvieron las bases de laboratorio descritas. Las 11 solicitudes de pagos persistidos de la colección requieren la instancia PostgreSQL y no se ejecutaron en ese entorno. Se estandarizó el módulo compartido como `common-spi` y se repitieron la compilación limpia, las seis pruebas unitarias y las 38 solicitudes con 74 aserciones contra Keycloak con el nuevo JAR. Se ejecutó la preparación de dependencias a partir de los POM sin código fuente, con repackage deshabilitado, y `dependency:go-offline` 3.11.0; después se comprobó la compilación offline del código. Se validó el grafo de build de Compose para el perfil `app` y para Keycloak de forma aislada: ambos incluyen la base como dependencia y el perfil `app` no inicia un contenedor de compilación. Se registran estos resultados en `verification/compose-build-graph.json`, `verification/base-poms-install.log`, `verification/base-go-offline.log` y `verification/maven-offline-package.log`. Los JAR compilados se incluyen en `dist`; Docker los vuelve a construir desde el código fuente usando la base reutilizable.
+Para esta revisión se validaron los modelos y grafos de Compose 2.39.4 y 5.6.0, Bash, formato shfmt 3.14.1, Python/Black, `helm lint`, los ocho recursos renderizados y el EnvoyProxy contra su esquema oficial. Se comprobó que solo Keycloak tiene un workload en el chart, que ambas bases y pagos están en Compose y que el objetivo de construcción Keycloak tiene escala cero. Se verificó la secuencia de arranque con dobles de las herramientas CLI, el camino sin build, el rechazo de imágenes ausentes antes de modificar servicios, el kubeconfig privado y la limpieza sin borrar volúmenes. Se registra el alcance de esa simulación en `verification/orchestration-checks.json`; no se presenta como despliegue real.
 
-No se dispone de Docker Engine en el entorno de generación. Permanecen pendientes la construcción efectiva de imágenes, el despliegue en Kubernetes, la conectividad real del Gateway y de las dos instancias PostgreSQL 18.6, sus privilegios, las migraciones Flyway y el conjunto completo de pagos persistidos. No se presenta la validación estática ni el fixture como prueba de esos despliegues. Se ejecutan las comprobaciones completas en Fedora WSL mediante `bash tests/run-all.sh` con los servicios levantados. El alcance y los resultados se registran en `verification/summary.json`.
+No se dispone de Docker Engine en el entorno de generación. El nuevo despliegue completo con kind, Gateway, chart y runners de pruebas en contenedores permanece pendiente de ejecución real. Se comprueba en Fedora WSL mediante `bash infrastructure/start-all.sh --build --test` y `bash tests/run-all.sh`. Los resultados y sus límites se conservan en `verification/summary.json`.
 
 ## Referencias técnicas
 

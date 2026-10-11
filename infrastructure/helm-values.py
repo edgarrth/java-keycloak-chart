@@ -13,6 +13,7 @@ names = {
 values = {
     "publicUrl": os.environ["KEYCLOAK_PUBLIC_URL"],
     "credentials": {key: os.environ[value] for key, value in names.items()},
+    "images": {"keycloakRevision": os.getenv("KEYCLOAK_IMAGE_REVISION", "")},
     "database": {
         "keycloakUrl": os.environ["K8S_KEYCLOAK_DB_URL"],
         "phoneUrl": os.environ["K8S_PHONE_DB_URL"],

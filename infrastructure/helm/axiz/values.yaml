@@ -1,5 +1,6 @@
 images:
   keycloak: axiz/keycloak:1.1.0
+  keycloakRevision: ""
 publicUrl: http://localhost:8080
 database:
   keycloakUrl: ""

@@ -1,0 +1,22 @@
+name: axiz-tests
+services:
+  test-runner:
+    image: python:3.14.8-alpine
+    network_mode: host
+    working_dir: /work
+    environment:
+      KEYCLOAK_PUBLIC_URL: ${KEYCLOAK_PUBLIC_URL:-http://localhost:8080}
+      API_URL: ${API_URL:-http://localhost:8090}
+      PASSWORD_CLIENT_SECRET: ${PASSWORD_CLIENT_SECRET:?}
+      PHONE_CLIENT_SECRET: ${PHONE_CLIENT_SECRET:?}
+      DNI_PASSWORD: ${DNI_PASSWORD:?}
+      PHONE_DEMO_PASSWORD: ${PHONE_DEMO_PASSWORD:-Telefono2026!}
+    command: [python3, /tests/e2e.py]
+    volumes:
+      - ../tests:/tests:ro
+      - ../.runtime:/work/.runtime
+  unit-tests:
+    image: axiz/java-build-base:1.1.0
+    working_dir: /build
+    command: [mvn, -B, -ntp, verify, "spotless:check"]
+    volumes: ["..:/build"]

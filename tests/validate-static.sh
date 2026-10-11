@@ -6,7 +6,8 @@ python3 -m py_compile tests/e2e.py
 python3 -m json.tool infrastructure/datasets/axiz-realm.json >/dev/null
 python3 -m json.tool infrastructure/datasets/postman/axiz-keycloak.postman_collection.json >/dev/null
 python3 -m json.tool infrastructure/datasets/postman/axiz-local.postman_environment.json >/dev/null
-docker compose --env-file .env -f infrastructure/docker-compose.yml --profile app config --quiet
+docker compose --env-file .env -f infrastructure/docker-compose.yml --profile app --profile tasks config --quiet
+docker compose --env-file .env -f infrastructure/docker-compose-tests.yml config --quiet
 mkdir -p .runtime
 umask 077
 set -a

@@ -20,6 +20,7 @@ spec:
       annotations:
         checksum/credentials: {{ toJson .Values.credentials | sha256sum }}
         checksum/database: {{ toJson .Values.database | sha256sum }}
+        checksum/image: {{ .Values.images.keycloakRevision | quote }}
         checksum/realm: {{ .Files.Get "files/axiz-realm.json" | sha256sum }}
     spec:
       automountServiceAccountToken: false

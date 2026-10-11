@@ -1,6 +1,3 @@
 #!/usr/bin/env bash
 set -euo pipefail
-set -a
-source .env
-set +a
-python3 infrastructure/seed-keycloak.py
+docker compose --env-file .env -f infrastructure/docker-compose.yml run --rm seed-keycloak

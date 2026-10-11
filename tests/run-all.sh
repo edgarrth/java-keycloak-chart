@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
-set -a
-source .env
-set +a
-mvn -B -ntp verify spotless:check
-python3 tests/e2e.py
+mkdir -p .runtime
+compose=(docker compose --env-file .env -f infrastructure/docker-compose-tests.yml)
+bash infrastructure/build-base.sh
+"${compose[@]}" run --rm --no-deps unit-tests
+"${compose[@]}" run --rm --no-deps test-runner
