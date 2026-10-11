@@ -1,0 +1,8 @@
+.env
+.git
+.runtime
+.tools
+**/target
+dist
+verification
+**/__pycache__

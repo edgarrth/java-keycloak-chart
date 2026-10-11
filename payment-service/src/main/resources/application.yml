@@ -1,0 +1,11 @@
+server:
+  port: ${SERVER_PORT:8090}
+  forward-headers-strategy: framework
+spring:
+  datasource:
+    url: ${PAYMENT_DB_URL:jdbc:postgresql://localhost:5432/payments}
+    username: ${PAYMENT_DB_USER:payments}
+    password: ${PAYMENT_DB_PASSWORD}
+axiz:
+  issuer: ${KEYCLOAK_PUBLIC_URL:http://localhost:8080}/realms/axiz
+  jwks: ${KEYCLOAK_INTERNAL_URL:http://localhost:8080}/realms/axiz/protocol/openid-connect/certs

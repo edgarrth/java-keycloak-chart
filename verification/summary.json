@@ -1,0 +1,96 @@
+{
+  "created_at": "2026-10-11T05:20:50.258228+00:00",
+  "build": {
+    "status": "PASS",
+    "java": "25.0.4.1",
+    "maven": "3.10.0",
+    "spring_boot": "4.1.1",
+    "spring_framework": "7.0.9",
+    "keycloak": "26.8.0",
+    "compiler_plugin": "3.16.0",
+    "surefire_plugin": "3.6.0",
+    "spotless": "3.10.4",
+    "google_java_format": "1.36.1",
+    "tests": [
+      {
+        "suite": "pe.axiz.payments.adapters.AcrAuthorizationTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "pe.axiz.payments.adapters.AccessTokenPolicyTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "artifacts": [
+      {
+        "file": "dist/spi-common-1.0.0.jar",
+        "sha256": "f3951d47cbb1814cd7c8509018f5b767e063699c764d0466d772d2b826f4544b",
+        "java_class_major": 65
+      },
+      {
+        "file": "dist/spi-password-1.0.0.jar",
+        "sha256": "9ed94682e0eefaed2b1383bbf3e58c83a5d44e2e5d3f6856a0b9be309034ebd4",
+        "java_class_major": 65
+      },
+      {
+        "file": "dist/spi-code-1.0.0.jar",
+        "sha256": "958b5a2bae2825b2714567c7a73881d3d45f9ccf7e185cec2aa043911cbeaa28",
+        "java_class_major": 65
+      },
+      {
+        "file": "dist/payment-service-1.0.0-exec.jar",
+        "sha256": "9d7e28fc19d3746ba40370c50b1fcb6e90458d96cb5d5abd2bdeb667e8e32801",
+        "java_class_major": 69
+      },
+      {
+        "file": "dist/spi-phone-1.0.0.jar",
+        "sha256": "831f036e7f4a06b8002a0acca2419f0bc783767a725433006af2cf6bb9e4e551",
+        "java_class_major": 65
+      }
+    ]
+  },
+  "runtime_identity": {
+    "status": "PASS",
+    "http_checks": 18,
+    "server": "Keycloak 26.8.0 real, persistencia interna H2 de laboratorio",
+    "external_storage": "Fixture H2 adaptado al protocolo PostgreSQL; se utilizó JDBC 42.7.13 real y el SPI entregado sin cambios. No se validó PostgreSQL 18.",
+    "validated": [
+      "authorization_code_PKCE_S256_ACR5",
+      "DNI_password_ACR4",
+      "external_phone_password_ACR3",
+      "nonce_state",
+      "authorization_code_replay_rejected",
+      "refresh_rotation",
+      "refresh_preserves_ACR",
+      "cross_flow_identities_rejected",
+      "roles_merchant",
+      "JWT_resource_server_issuer_audience_context",
+      "unauthenticated_401",
+      "phone_create_403",
+      "password_approve_403",
+      "Spring_OIDC_portal_callback"
+    ],
+    "payment_database": "Flyway deshabilitado únicamente en el proceso de verificación de identidad; la configuración entregada lo habilita."
+  },
+  "static": {
+    "shell_syntax": "PASS",
+    "python_compile_and_format": "PASS",
+    "compose_config": "PASS con Docker Compose 5.6.0, sin Docker Engine",
+    "helm_lint": "PASS con Helm 4.3.0",
+    "helm_template": "PASS, 8 recursos",
+    "external_dataset_hash_java25": "PASS"
+  },
+  "not_executed": [
+    "construcción de imágenes con Docker Engine",
+    "despliegue efectivo en Kubernetes",
+    "persistencia y privilegios PostgreSQL 18.6",
+    "migraciones Flyway sobre PostgreSQL 18.6",
+    "conjunto HTTP completo de pagos: creación, idempotencia y aprobación persistida"
+  ]
+}

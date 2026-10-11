@@ -1,0 +1,329 @@
+{
+  "realm": "axiz",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "resetPasswordAllowed": false,
+  "loginWithEmailAllowed": false,
+  "bruteForceProtected": true,
+  "permanentLockout": false,
+  "failureFactor": 5,
+  "waitIncrementSeconds": 60,
+  "maxFailureWaitSeconds": 900,
+  "accessTokenLifespan": 180,
+  "revokeRefreshToken": true,
+  "refreshTokenMaxReuse": 0,
+  "passwordPolicy": "length(12) and digits(1) and upperCase(1) and lowerCase(1)",
+  "eventsEnabled": true,
+  "eventsExpiration": 86400,
+  "eventsListeners": [
+    "jboss-logging"
+  ],
+  "roles": {
+    "realm": [
+      {
+        "name": "merchant"
+      }
+    ]
+  },
+  "users": [
+    {
+      "username": "12345678",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Operador",
+      "lastName": "Axiz",
+      "email": "operador@example.test",
+      "realmRoles": [
+        "merchant"
+      ],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "${DNI_PASSWORD}",
+          "temporary": false
+        }
+      ]
+    }
+  ],
+  "authenticationFlows": [
+    {
+      "alias": "axiz-code",
+      "description": "Se valida la identidad y se establece el ACR del flujo.",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "auth-username-password-form",
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "userSetupAllowed": false,
+          "authenticatorFlow": false
+        },
+        {
+          "authenticator": "axiz-code",
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "userSetupAllowed": false,
+          "authenticatorFlow": false
+        }
+      ],
+      "id": "axiz-code"
+    },
+    {
+      "alias": "axiz-password",
+      "description": "Se valida la identidad y se establece el ACR del flujo.",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "direct-grant-validate-username",
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "userSetupAllowed": false,
+          "authenticatorFlow": false
+        },
+        {
+          "authenticator": "direct-grant-validate-password",
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "userSetupAllowed": false,
+          "authenticatorFlow": false
+        },
+        {
+          "authenticator": "axiz-password",
+          "requirement": "REQUIRED",
+          "priority": 30,
+          "userSetupAllowed": false,
+          "authenticatorFlow": false
+        }
+      ],
+      "id": "axiz-password"
+    },
+    {
+      "alias": "axiz-phone",
+      "description": "Se valida la identidad y se establece el ACR del flujo.",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "direct-grant-validate-username",
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "userSetupAllowed": false,
+          "authenticatorFlow": false
+        },
+        {
+          "authenticator": "direct-grant-validate-password",
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "userSetupAllowed": false,
+          "authenticatorFlow": false
+        },
+        {
+          "authenticator": "axiz-phone",
+          "requirement": "REQUIRED",
+          "priority": 30,
+          "userSetupAllowed": false,
+          "authenticatorFlow": false
+        }
+      ],
+      "id": "axiz-phone"
+    }
+  ],
+  "browserFlow": "axiz-code",
+  "directGrantFlow": "axiz-password",
+  "components": {
+    "org.keycloak.storage.UserStorageProvider": [
+      {
+        "name": "axiz-phone",
+        "providerId": "axiz-phone-storage",
+        "config": {
+          "priority": [
+            "0"
+          ],
+          "cachePolicy": [
+            "NO_CACHE"
+          ],
+          "enabled": [
+            "true"
+          ]
+        }
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "payments-web",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "secret": null,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "implicitFlowEnabled": false,
+      "serviceAccountsEnabled": false,
+      "redirectUris": [
+        "http://localhost:8090/login/oauth2/code/axiz",
+        "http://localhost:8090/callback-test"
+      ],
+      "webOrigins": [
+        "http://localhost:8090"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256"
+      },
+      "defaultClientScopes": [
+        "basic",
+        "profile",
+        "roles"
+      ],
+      "protocolMappers": [
+        {
+          "name": "acr-verificado",
+          "protocol": "openid-connect",
+          "protocolMapper": "axiz-verified-acr",
+          "config": {
+            "access.token.claim": "true",
+            "id.token.claim": "true"
+          }
+        },
+        {
+          "name": "payments-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "included.custom.audience": "payments-api"
+          }
+        }
+      ],
+      "authenticationFlowBindingOverrides": {
+        "browser": "axiz-code"
+      },
+      "fullScopeAllowed": false
+    },
+    {
+      "clientId": "payments-password",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "${PASSWORD_CLIENT_SECRET}",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "implicitFlowEnabled": false,
+      "serviceAccountsEnabled": false,
+      "redirectUris": [
+        "http://localhost:8090/login/oauth2/code/axiz",
+        "http://localhost:8090/callback-test"
+      ],
+      "webOrigins": [
+        "http://localhost:8090"
+      ],
+      "attributes": {},
+      "defaultClientScopes": [
+        "basic",
+        "profile",
+        "roles"
+      ],
+      "protocolMappers": [
+        {
+          "name": "acr-verificado",
+          "protocol": "openid-connect",
+          "protocolMapper": "axiz-verified-acr",
+          "config": {
+            "access.token.claim": "true",
+            "id.token.claim": "true"
+          }
+        },
+        {
+          "name": "payments-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "included.custom.audience": "payments-api"
+          }
+        }
+      ],
+      "authenticationFlowBindingOverrides": {
+        "direct_grant": "axiz-password"
+      },
+      "fullScopeAllowed": false
+    },
+    {
+      "clientId": "payments-phone",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "${PHONE_CLIENT_SECRET}",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "implicitFlowEnabled": false,
+      "serviceAccountsEnabled": false,
+      "redirectUris": [
+        "http://localhost:8090/login/oauth2/code/axiz",
+        "http://localhost:8090/callback-test"
+      ],
+      "webOrigins": [
+        "http://localhost:8090"
+      ],
+      "attributes": {},
+      "defaultClientScopes": [
+        "basic",
+        "profile",
+        "roles"
+      ],
+      "protocolMappers": [
+        {
+          "name": "acr-verificado",
+          "protocol": "openid-connect",
+          "protocolMapper": "axiz-verified-acr",
+          "config": {
+            "access.token.claim": "true",
+            "id.token.claim": "true"
+          }
+        },
+        {
+          "name": "payments-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "included.custom.audience": "payments-api"
+          }
+        }
+      ],
+      "authenticationFlowBindingOverrides": {
+        "direct_grant": "axiz-phone"
+      },
+      "fullScopeAllowed": false
+    }
+  ],
+  "scopeMappings": [
+    {
+      "client": "payments-web",
+      "roles": [
+        "merchant"
+      ]
+    },
+    {
+      "client": "payments-password",
+      "roles": [
+        "merchant"
+      ]
+    },
+    {
+      "client": "payments-phone",
+      "roles": [
+        "merchant"
+      ]
+    }
+  ]
+}

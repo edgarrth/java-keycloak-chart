@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Service
+metadata: {name: postgres}
+spec:
+  selector: {app: postgres}
+  ports: [{name: postgres, port: 5432, targetPort: 5432}]
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata: {name: postgres}
+spec:
+  serviceName: postgres
+  replicas: 1
+  selector:
+    matchLabels: {app: postgres}
+  template:
+    metadata:
+      labels: {app: postgres}
+    spec:
+      automountServiceAccountToken: false
+      securityContext: {fsGroup: 999}
+      containers:
+        - name: postgres
+          image: {{ .Values.images.postgres | quote }}
+          env:
+            {{- range $name := list "POSTGRES_PASSWORD" "KC_DB_PASSWORD" "PHONE_DB_PASSWORD" "PAYMENT_DB_PASSWORD" }}
+            - name: {{ $name }}
+              valueFrom:
+                secretKeyRef: {name: axiz-credentials, key: {{ $name }}}
+            {{- end }}
+          ports: [{containerPort: 5432}]
+          resources:
+            requests: {cpu: 100m, memory: 256Mi}
+            limits: {cpu: "1", memory: 512Mi}
+          readinessProbe:
+            exec: {command: [pg_isready, -U, postgres, -q]}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          volumeMounts:
+            - {name: data, mountPath: /var/lib/postgresql}
+            - {name: datasets, mountPath: /docker-entrypoint-initdb.d/10-init.sh, subPath: postgres-init.sh}
+            - {name: datasets, mountPath: /datasets/phone-seed.sql, subPath: phone-seed.sql}
+      volumes:
+        - name: datasets
+          configMap: {name: axiz-datasets, defaultMode: 0555}
+  volumeClaimTemplates:
+    - metadata: {name: data}
+      spec:
+        accessModes: [ReadWriteOnce]
+        resources:
+          requests:
+            storage: {{ .Values.storageSize }}

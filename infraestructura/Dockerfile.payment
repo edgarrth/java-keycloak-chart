@@ -1,0 +1,10 @@
+FROM axiz/java-build-base:1.0.0 AS build
+COPY . /build
+RUN mvn -o -B -ntp package -DskipTests
+FROM eclipse-temurin:25-jre
+WORKDIR /app
+RUN groupadd --gid 10001 axiz && useradd --uid 10001 --gid axiz axiz
+COPY --from=build /build/payment-service/target/payment-service-1.0.0-exec.jar /app/service.jar
+USER 10001
+EXPOSE 8090
+ENTRYPOINT ["java","-XX:MaxRAMPercentage=75","-jar","/app/service.jar"]
