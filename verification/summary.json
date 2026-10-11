@@ -197,5 +197,17 @@
     "unit_tests": 6,
     "http_checks": 30,
     "kubernetes_deployment_confirmed": false
+  },
+  "postman_pkce_correction": {
+    "status": "PASS",
+    "requests": 49,
+    "scripts_parsed_without_top_level_await": 54,
+    "pkce_roundtrips": 100,
+    "independent_sha256": "PASS",
+    "random_uniqueness": "PASS",
+    "missing_webcrypto_rejected": true,
+    "external_http_rejected": true,
+    "real_keycloak_http_executed": false,
+    "real_postman_sandbox": "6.7.4 PASS, variables disponibles al finalizar el script"
   }
 }
