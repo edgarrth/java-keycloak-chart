@@ -12,3 +12,6 @@ credentials:
   adminPassword: ""
   passwordClient: ""
   phoneClient: ""
+
+keycloak:
+  replicas: 2

@@ -1,0 +1,21 @@
+{{- range $index := until (int .Values.keycloak.replicas) }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ printf "keycloak-%d" $index }}
+spec:
+  selector:
+    app: keycloak
+    statefulset.kubernetes.io/pod-name: {{ printf "keycloak-%d" $index }}
+  ports:
+    - {name: http, port: 8080, targetPort: 8080}
+{{- end }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata: {name: keycloak}
+spec:
+  minAvailable: {{ sub (int .Values.keycloak.replicas) 1 }}
+  selector:
+    matchLabels: {app: keycloak}

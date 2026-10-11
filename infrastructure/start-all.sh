@@ -113,6 +113,9 @@ done
   exit 1
 }
 bash infrastructure/routes.sh
-if [[ "$run_tests" == true ]]; then docker compose --env-file .env -f infrastructure/docker-compose-tests.yml run --rm test-runner; fi
+if [[ "$run_tests" == true ]]; then
+  docker compose --env-file .env -f infrastructure/docker-compose-tests.yml run --rm test-runner
+  bash tests/run-ha.sh
+fi
 printf 'Se completó el arranque: Keycloak en Helm; dos instancias PostgreSQL y pagos en Compose. Se detiene el modo local con Ctrl+C.\n'
 wait "$payments_pid"

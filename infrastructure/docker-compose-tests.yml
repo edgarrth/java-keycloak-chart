@@ -20,3 +20,20 @@ services:
     working_dir: /build
     command: [mvn, -B, -ntp, verify, "spotless:check"]
     volumes: ["..:/build"]
+  ha-test-runner:
+    image: python:3.14.8-alpine
+    network_mode: host
+    working_dir: /work
+    environment:
+      KEYCLOAK_PUBLIC_URL: ${KEYCLOAK_PUBLIC_URL:-http://localhost:8080}
+      API_URL: ${API_URL:-http://localhost:8090}
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME:?}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD:?}
+      PASSWORD_CLIENT_SECRET: ${PASSWORD_CLIENT_SECRET:?}
+      PHONE_CLIENT_SECRET: ${PHONE_CLIENT_SECRET:?}
+      DNI_PASSWORD: ${DNI_PASSWORD:?}
+      PHONE_DEMO_PASSWORD: ${PHONE_DEMO_PASSWORD:-Telefono2026!}
+    command: [python3, /tests/ha_sessions.py]
+    volumes:
+      - ../tests:/tests:ro
+      - ../.runtime:/work/.runtime

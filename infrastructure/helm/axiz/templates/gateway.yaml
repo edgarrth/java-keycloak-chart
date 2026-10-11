@@ -47,6 +47,19 @@ metadata: {name: axiz-keycloak}
 spec:
   parentRefs: [{name: axiz-keycloak}]
   rules:
+    {{- range $index := until (int .Values.keycloak.replicas) }}
+    - matches:
+        - path: {type: PathPrefix, value: /}
+          headers:
+            - {type: Exact, name: X-Axiz-Instance, value: {{ printf "keycloak-%d" $index | quote }}}
+      filters:
+        - type: ResponseHeaderModifier
+          responseHeaderModifier:
+            set:
+              - {name: X-Axiz-Instance, value: {{ printf "keycloak-%d" $index | quote }}}
+      backendRefs:
+        - {name: {{ printf "keycloak-%d" $index }}, port: 8080}
+    {{- end }}
     - matches:
         - path: {type: PathPrefix, value: /}
       backendRefs:

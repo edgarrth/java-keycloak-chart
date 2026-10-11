@@ -101,13 +101,13 @@
     "python_compile_and_black": "PASS",
     "compose_config": "PASS con Compose 2.39.4 y 5.6.0 sin Docker Engine",
     "helm_lint": "PASS con Helm 4.3.0 y Kubernetes 1.36.4",
-    "helm_template": "PASS, 8 recursos; solo workload Keycloak, sin PVC ni PostgreSQL ni pagos",
+    "helm_template": "PASS, 11 recursos, dos réplicas Keycloak",
     "envoyproxy_schema": "PASS contra CRD oficial Envoy Gateway 1.9.2",
     "external_dataset_hash": "PASS, salts independientes y PBKDF2 600000 iteraciones",
     "compose_build_graph": "PASS en Compose 2.39.4 y 5.6.0: base sin perfil, scale=0 y additional_contexts para app y Keycloak",
     "kubernetes_layout": {
       "status": "PASS",
-      "chart_version": "1.2.0",
+      "chart_version": "1.4.0",
       "compose_versions": [
         "2.39.4",
         "5.6.0"
@@ -121,7 +121,7 @@
         "java-build-base",
         "keycloak"
       ],
-      "helm_resources": 8,
+      "helm_resources": 11,
       "helm_workloads": [
         "keycloak"
       ],
@@ -131,15 +131,14 @@
       "shell_syntax": "PASS",
       "shell_formatter": "shfmt 3.14.1",
       "python_black": "PASS",
-      "actual_deployment_executed": false
+      "actual_deployment_executed": false,
+      "replicas": 2
     }
   },
   "not_executed": [
-    "Construcción efectiva de imágenes Docker",
-    "Despliegue efectivo Kubernetes, Gateway y conexión a las bases externas",
-    "Persistencia y privilegios de las dos instancias PostgreSQL 18.6",
-    "Migraciones Flyway sobre PostgreSQL 18.6",
-    "Conjunto completo HTTP de pagos persistidos: creación, idempotencia y aprobación"
+    "Despliegue real de la revisión con dos Pods Keycloak",
+    "Formación real del clúster jdbc-ping con mTLS",
+    "Seis escenarios HA sobre Keycloak y las bases reales"
   ],
   "updated_at": "2026-10-11T18:21:14.580864+00:00",
   "layout": {
@@ -153,7 +152,7 @@
   },
   "postman": {
     "status": "PASS",
-    "collection_requests": 49,
+    "collection_requests": 57,
     "executed_requests": 38,
     "assertions": 74,
     "failures": 0,
@@ -161,9 +160,10 @@
     "postman_sandbox": "6.7.4",
     "schema": "PASS, esquema oficial Collection 2.1",
     "script_syntax_and_format": "PASS",
-    "pending": "11 solicitudes de pagos persistidos sobre PostgreSQL 18.6"
+    "pending": "11 solicitudes de pagos persistidos sobre PostgreSQL 18.6",
+    "ha_fixture_requests": 8
   },
-  "chart_version": "1.2.0",
+  "chart_version": "1.4.0",
   "kubernetes_orchestration": {
     "status": "PASS",
     "environment": "Dobles de CLI Docker/kind/Helm/kubectl; no se ejecutaron contenedores ni Kubernetes",
@@ -189,14 +189,15 @@
   },
   "user_observed_validation": {
     "status": "PASS observado",
-    "source": "Logs compartidos de Fedora WSL, modo Compose previo a la orquestación Kubernetes",
+    "source": "Log Fedora WSL anterior: kind, Gateway API, una instancia Keycloak y 30 comprobaciones HTTP",
     "docker_images_built": true,
     "postgres_instances": 2,
     "postgres_version": "18.6",
     "flyway_migration": 1,
     "unit_tests": 6,
     "http_checks": 30,
-    "kubernetes_deployment_confirmed": false
+    "kubernetes_deployment_confirmed": true,
+    "replicas": 1
   },
   "postman_pkce_correction": {
     "status": "PASS",
@@ -230,5 +231,35 @@
     "pool_consumption": "PASS, un conjunto diferente por autorización",
     "real_keycloak_http_executed": false,
     "failure_checks": "PASS: material ausente, agotado, tipo incorrecto y campos inválidos; variables previas eliminadas"
+  },
+  "ha_layout": {
+    "status": "PASS",
+    "chart_version": "1.4.0",
+    "helm_resources": 11,
+    "replicas": 2,
+    "cluster": "ispn; jdbc-ping predeterminado; mTLS; IP y nombre de Pod",
+    "http_route_schema": "PASS, CRD oficial Gateway API 1.6.1",
+    "targeted_services": 2,
+    "pdb_min_available": 1,
+    "compose_config": "PASS, 2.39.4",
+    "java_sources_poms_and_compiled_jars": "Sin cambios, correspondencia e integridad verificadas",
+    "actual_kubernetes_deployment_executed": false
+  },
+  "ha_harness": {
+    "status": "PASS",
+    "environment": "Fixture HTTP estatal de dos instancias simuladas; no es Keycloak ni Kubernetes",
+    "scenarios": 6,
+    "http_checks": 61,
+    "isolated_sessions_rejected": true,
+    "wrong_instance_rejected": true,
+    "actual_cluster_executed": false
+  },
+  "ha_postman": {
+    "status": "PASS",
+    "requests": 57,
+    "script_syntax_checks": 62,
+    "ha_requests": 8,
+    "ha_assertions": 16,
+    "sandbox": "4.7.1, respuestas simuladas; sin clúster real"
   }
 }

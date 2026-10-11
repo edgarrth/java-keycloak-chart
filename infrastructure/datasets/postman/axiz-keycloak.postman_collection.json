@@ -2896,6 +2896,464 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Sesiones compartidas entre dos instancias",
+      "item": [
+        {
+          "name": "Obtener administrador en keycloak-0",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Axiz-Instance",
+                "value": "keycloak-0"
+              }
+            ],
+            "url": "{{keycloak_url}}/realms/master/protocol/openid-connect/token",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "admin-cli",
+                  "type": "text"
+                },
+                {
+                  "key": "username",
+                  "value": "{{admin_username}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{admin_password}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Instancia keycloak-0\", () =>",
+                  "  pm.expect(pm.response.headers.get(\"X-Axiz-Instance\")).to.eql(\"keycloak-0\"),",
+                  ");",
+                  "pm.environment.set(\"admin_ha\", pm.response.json().access_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Crear sesión DNI ACR 4 en keycloak-0",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Axiz-Instance",
+                "value": "keycloak-0"
+              }
+            ],
+            "url": "{{keycloak_url}}/realms/axiz/protocol/openid-connect/token",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "client_id",
+                  "value": "payments-password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{password_client_secret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "password",
+                  "type": "text"
+                },
+                {
+                  "key": "username",
+                  "value": "{{dni}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{dni_password}}",
+                  "type": "text"
+                },
+                {
+                  "key": "scope",
+                  "value": "openid profile",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Instancia keycloak-0\", () =>",
+                  "  pm.expect(pm.response.headers.get(\"X-Axiz-Instance\")).to.eql(\"keycloak-0\"),",
+                  ");",
+                  "function jwtClaims(token) {",
+                  "  return JSON.parse(",
+                  "    require(\"buffer\")",
+                  "      .Buffer.from(token.split(\".\")[1], \"base64\")",
+                  "      .toString(\"utf8\"),",
+                  "  );",
+                  "}",
+                  "const result = pm.response.json();",
+                  "const claims = jwtClaims(result.access_token);",
+                  "pm.expect(claims.acr).to.eql(\"4\");",
+                  "pm.environment.set(\"token_ha\", result.access_token);",
+                  "pm.environment.set(\"refresh_ha\", result.refresh_token);",
+                  "pm.environment.set(\"subject_ha\", claims.sub);",
+                  "pm.environment.set(",
+                  "  \"session_ha\",",
+                  "  jwtClaims(result.id_token).sid || claims.sid || result.session_state,",
+                  ");",
+                  "pm.expect(pm.environment.get(\"session_ha\")).to.be.a(\"string\").and.not.empty;"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Comprobar la misma sesión en keycloak-1",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Axiz-Instance",
+                "value": "keycloak-1"
+              }
+            ],
+            "url": "{{keycloak_url}}/admin/realms/axiz/users/{{subject_ha}}/sessions",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{admin_ha}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Instancia keycloak-1\", () =>",
+                  "  pm.expect(pm.response.headers.get(\"X-Axiz-Instance\")).to.eql(\"keycloak-1\"),",
+                  ");",
+                  "pm.expect(pm.response.json().map((session) => session.id)).to.include(",
+                  "  pm.environment.get(\"session_ha\"),",
+                  ");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Renovar la sesión en keycloak-1 y conservar ACR",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Axiz-Instance",
+                "value": "keycloak-1"
+              }
+            ],
+            "url": "{{keycloak_url}}/realms/axiz/protocol/openid-connect/token",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "client_id",
+                  "value": "payments-password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{password_client_secret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "refresh_token",
+                  "type": "text"
+                },
+                {
+                  "key": "refresh_token",
+                  "value": "{{refresh_ha}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Instancia keycloak-1\", () =>",
+                  "  pm.expect(pm.response.headers.get(\"X-Axiz-Instance\")).to.eql(\"keycloak-1\"),",
+                  ");",
+                  "function jwtClaims(token) {",
+                  "  return JSON.parse(",
+                  "    require(\"buffer\")",
+                  "      .Buffer.from(token.split(\".\")[1], \"base64\")",
+                  "      .toString(\"utf8\"),",
+                  "  );",
+                  "}",
+                  "const result = pm.response.json();",
+                  "const claims = jwtClaims(result.access_token);",
+                  "pm.expect(claims.acr).to.eql(\"4\");",
+                  "pm.expect(claims.sub).to.eql(pm.environment.get(\"subject_ha\"));",
+                  "pm.expect(",
+                  "  jwtClaims(result.id_token).sid || claims.sid || result.session_state,",
+                  ").to.eql(pm.environment.get(\"session_ha\"));",
+                  "pm.environment.set(\"token_ha\", result.access_token);",
+                  "pm.environment.set(\"refresh_ha\", result.refresh_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Consultar usuario en keycloak-0 con token renovado en keycloak-1",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Axiz-Instance",
+                "value": "keycloak-0"
+              }
+            ],
+            "url": "{{keycloak_url}}/realms/axiz/protocol/openid-connect/userinfo",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_ha}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Instancia keycloak-0\", () =>",
+                  "  pm.expect(pm.response.headers.get(\"X-Axiz-Instance\")).to.eql(\"keycloak-0\"),",
+                  ");",
+                  "pm.expect(pm.response.json().sub).to.eql(pm.environment.get(\"subject_ha\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Cerrar exclusivamente la sesión de prueba en keycloak-1",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "X-Axiz-Instance",
+                "value": "keycloak-1"
+              }
+            ],
+            "url": "{{keycloak_url}}/admin/realms/axiz/sessions/{{session_ha}}",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{admin_ha}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 204\", () => pm.response.to.have.status(204));",
+                  "pm.test(\"Instancia keycloak-1\", () =>",
+                  "  pm.expect(pm.response.headers.get(\"X-Axiz-Instance\")).to.eql(\"keycloak-1\"),",
+                  ");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Comprobar cierre de esa sesión en keycloak-0",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Axiz-Instance",
+                "value": "keycloak-0"
+              }
+            ],
+            "url": "{{keycloak_url}}/admin/realms/axiz/users/{{subject_ha}}/sessions",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{admin_ha}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Instancia keycloak-0\", () =>",
+                  "  pm.expect(pm.response.headers.get(\"X-Axiz-Instance\")).to.eql(\"keycloak-0\"),",
+                  ");",
+                  "pm.expect(pm.response.json().map((session) => session.id)).not.to.include(",
+                  "  pm.environment.get(\"session_ha\"),",
+                  ");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Denegar renovación en keycloak-0 tras cierre en keycloak-1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Axiz-Instance",
+                "value": "keycloak-0"
+              }
+            ],
+            "url": "{{keycloak_url}}/realms/axiz/protocol/openid-connect/token",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "client_id",
+                  "value": "payments-password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{password_client_secret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "refresh_token",
+                  "type": "text"
+                },
+                {
+                  "key": "refresh_token",
+                  "value": "{{refresh_ha}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Instancia keycloak-0\", () =>",
+                  "  pm.expect(pm.response.headers.get(\"X-Axiz-Instance\")).to.eql(\"keycloak-0\"),",
+                  ");",
+                  "pm.expect(pm.response.json().error).to.eql(\"invalid_grant\");"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "protocolProfileBehavior": {
