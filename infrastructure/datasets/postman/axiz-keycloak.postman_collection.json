@@ -1,0 +1,2581 @@
+{
+  "info": {
+    "_postman_id": "943703be-953d-4eaf-b75d-91534b413bae",
+    "name": "Axiz Keycloak - autenticación, ACR y pagos",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Preparación y discovery",
+      "item": [
+        {
+          "name": "Descubrir realm y limpiar variables de la ejecución",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{keycloak_url}}/realms/axiz/.well-known/openid-configuration",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const generated = [",
+                  "  \"token_dni\",",
+                  "  \"token_phone\",",
+                  "  \"token_code\",",
+                  "  \"refresh_dni\",",
+                  "  \"refresh_phone\",",
+                  "  \"refresh_code\",",
+                  "  \"id_token_dni\",",
+                  "  \"id_token_phone\",",
+                  "  \"id_token_code\",",
+                  "  \"subject_dni\",",
+                  "  \"subject_phone\",",
+                  "  \"subject_code\",",
+                  "  \"payment_id\",",
+                  "  \"approved_payment_id\",",
+                  "  \"idempotency_key\",",
+                  "  \"stale_refresh_dni\",",
+                  "  \"authorization_code\",",
+                  "  \"login_action\",",
+                  "  \"login_cookie\",",
+                  "  \"portal_auth_url\",",
+                  "  \"portal_login_action\",",
+                  "  \"portal_login_cookie\",",
+                  "  \"portal_spring_cookie\",",
+                  "  \"portal_callback_url\",",
+                  "  \"portal_url\",",
+                  "  \"admin_token\",",
+                  "  \"tampered_token\",",
+                  "];",
+                  "generated.forEach((key) => pm.environment.set(key, \"\"));",
+                  "if (!pm.environment.get(\"keycloak_url\") || !pm.environment.get(\"api_url\"))",
+                  "  throw new Error(\"Se selecciona primero el entorno Axiz local\");"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Emisor y endpoints OIDC\", () => {",
+                  "  const data = pm.response.json();",
+                  "  pm.expect(data.issuer).to.eql(",
+                  "    pm.environment.get(\"keycloak_url\") + \"/realms/axiz\",",
+                  "  );",
+                  "  pm.expect(data.token_endpoint).to.include(\"/token\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Comprobar disponibilidad del servicio",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{api_url}}/ready",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Consultar claves públicas JWKS",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{keycloak_url}}/realms/axiz/protocol/openid-connect/certs",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Se publican claves de firma\", () =>",
+                  "  pm.expect(pm.response.json().keys.length).to.be.above(0),",
+                  ");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Denegar API sin token",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{api_url}}/api/payments",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Autenticación telefónica y ACR 3",
+      "item": [
+        {
+          "name": "Autenticar teléfono y guardar tokens ACR 3",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{keycloak_url}}/realms/axiz/protocol/openid-connect/token",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "payments-phone",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{phone_client_secret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "username",
+                  "value": "{{phone}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{phone_password}}",
+                  "type": "text"
+                },
+                {
+                  "key": "scope",
+                  "value": "openid",
+                  "type": "text"
+                },
+                {
+                  "key": "acr_values",
+                  "value": "5",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "function jwtClaims(token) {",
+                  "  const encoded = token.split(\".\")[1].replace(/-/g, \"+\").replace(/_/g, \"/\");",
+                  "  return JSON.parse(",
+                  "    new TextDecoder().decode(",
+                  "      Uint8Array.from(",
+                  "        atob(encoded.padEnd(Math.ceil(encoded.length / 4) * 4, \"=\")),",
+                  "        (char) => char.charCodeAt(0),",
+                  "      ),",
+                  "    ),",
+                  "  );",
+                  "}",
+                  "",
+                  "const result = pm.response.json();",
+                  "pm.test(\"Token phone, ACR 3 y contexto phone\", () => {",
+                  "  pm.expect(result.access_token).to.be.a(\"string\");",
+                  "  const claims = jwtClaims(result.access_token);",
+                  "  pm.expect(claims.acr).to.eql(\"3\");",
+                  "  pm.expect(claims.auth_flow).to.eql(\"phone\");",
+                  "  pm.expect([].concat(claims.aud)).to.include(\"payments-api\");",
+                  "  pm.expect(claims.realm_access.roles).to.include(\"merchant\");",
+                  "  pm.environment.set(\"subject_phone\", claims.sub);",
+                  "});",
+                  "if (pm.response.code === 200) {",
+                  "  pm.environment.set(\"token_phone\", result.access_token);",
+                  "  pm.environment.set(\"refresh_phone\", result.refresh_token);",
+                  "  pm.environment.set(\"id_token_phone\", result.id_token);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Consultar identidad ACR 3",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_phone}}"
+              }
+            ],
+            "url": "{{api_url}}/api/identity",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Identidad telefónica\", () => {",
+                  "  pm.expect(pm.response.json().acr).to.eql(\"3\");",
+                  "  pm.expect(pm.response.json().subject).to.eql(",
+                  "    pm.environment.get(\"subject_phone\"),",
+                  "  );",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Consultar perfil telefónico OIDC",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_phone}}"
+              }
+            ],
+            "url": "{{keycloak_url}}/realms/axiz/protocol/openid-connect/userinfo",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Perfil del teléfono\", () =>",
+                  "  pm",
+                  "    .expect(pm.response.json().preferred_username)",
+                  "    .to.eql(pm.environment.get(\"phone\")),",
+                  ");"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Autenticación DNI y ACR 4",
+      "item": [
+        {
+          "name": "Autenticar DNI y guardar tokens ACR 4",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{keycloak_url}}/realms/axiz/protocol/openid-connect/token",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "payments-password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{password_client_secret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "username",
+                  "value": "{{dni}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{dni_password}}",
+                  "type": "text"
+                },
+                {
+                  "key": "scope",
+                  "value": "openid",
+                  "type": "text"
+                },
+                {
+                  "key": "acr_values",
+                  "value": "5",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "function jwtClaims(token) {",
+                  "  const encoded = token.split(\".\")[1].replace(/-/g, \"+\").replace(/_/g, \"/\");",
+                  "  return JSON.parse(",
+                  "    new TextDecoder().decode(",
+                  "      Uint8Array.from(",
+                  "        atob(encoded.padEnd(Math.ceil(encoded.length / 4) * 4, \"=\")),",
+                  "        (char) => char.charCodeAt(0),",
+                  "      ),",
+                  "    ),",
+                  "  );",
+                  "}",
+                  "",
+                  "const result = pm.response.json();",
+                  "pm.test(\"Token dni, ACR 4 y contexto password\", () => {",
+                  "  pm.expect(result.access_token).to.be.a(\"string\");",
+                  "  const claims = jwtClaims(result.access_token);",
+                  "  pm.expect(claims.acr).to.eql(\"4\");",
+                  "  pm.expect(claims.auth_flow).to.eql(\"password\");",
+                  "  pm.expect([].concat(claims.aud)).to.include(\"payments-api\");",
+                  "  pm.expect(claims.realm_access.roles).to.include(\"merchant\");",
+                  "  pm.environment.set(\"subject_dni\", claims.sub);",
+                  "});",
+                  "if (pm.response.code === 200) {",
+                  "  pm.environment.set(\"token_dni\", result.access_token);",
+                  "  pm.environment.set(\"refresh_dni\", result.refresh_token);",
+                  "  pm.environment.set(\"id_token_dni\", result.id_token);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Consultar identidad ACR 4",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_dni}}"
+              }
+            ],
+            "url": "{{api_url}}/api/identity",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Identidad interna\", () => {",
+                  "  pm.expect(pm.response.json().acr).to.eql(\"4\");",
+                  "  pm.expect(pm.response.json().subject).to.eql(",
+                  "    pm.environment.get(\"subject_dni\"),",
+                  "  );",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Autenticar otro DNI aprovisionado",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{keycloak_url}}/realms/axiz/protocol/openid-connect/token",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "payments-password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{password_client_secret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "username",
+                  "value": "{{additional_dni}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{dni_password}}",
+                  "type": "text"
+                },
+                {
+                  "key": "scope",
+                  "value": "openid",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "function jwtClaims(token) {",
+                  "  const encoded = token.split(\".\")[1].replace(/-/g, \"+\").replace(/_/g, \"/\");",
+                  "  return JSON.parse(",
+                  "    new TextDecoder().decode(",
+                  "      Uint8Array.from(",
+                  "        atob(encoded.padEnd(Math.ceil(encoded.length / 4) * 4, \"=\")),",
+                  "        (char) => char.charCodeAt(0),",
+                  "      ),",
+                  "    ),",
+                  "  );",
+                  "}",
+                  "pm.test(\"Otro usuario DNI\", () => {",
+                  "  const claims = jwtClaims(pm.response.json().access_token);",
+                  "  pm.expect(claims.acr).to.eql(\"4\");",
+                  "  pm.expect(claims.sub).not.to.eql(pm.environment.get(\"subject_dni\"));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Authorization Code PKCE y ACR 5",
+      "item": [
+        {
+          "name": "Generar PKCE y obtener formulario Keycloak",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{keycloak_url}}/realms/axiz/protocol/openid-connect/auth?client_id=payments-web&response_type=code&scope=openid%20profile&redirect_uri={{redirect_uri}}&state={{oauth_state}}&nonce={{oauth_nonce}}&code_challenge={{pkce_challenge}}&code_challenge_method=S256&acr_values=5",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const base64url = (bytes) =>",
+                  "  btoa(String.fromCharCode(...bytes))",
+                  "    .replace(/\\+/g, \"-\")",
+                  "    .replace(/\\//g, \"_\")",
+                  "    .replace(/=+$/g, \"\");",
+                  "const verifier = base64url(crypto.getRandomValues(new Uint8Array(32)));",
+                  "const digest = await crypto.subtle.digest(",
+                  "  \"SHA-256\",",
+                  "  new TextEncoder().encode(verifier),",
+                  ");",
+                  "pm.environment.set(\"pkce_verifier\", verifier);",
+                  "pm.environment.set(\"pkce_challenge\", base64url(new Uint8Array(digest)));",
+                  "pm.environment.set(",
+                  "  \"oauth_state\",",
+                  "  base64url(crypto.getRandomValues(new Uint8Array(24))),",
+                  ");",
+                  "pm.environment.set(",
+                  "  \"oauth_nonce\",",
+                  "  base64url(crypto.getRandomValues(new Uint8Array(24))),",
+                  ");",
+                  "const origin = new URL(pm.environment.get(\"keycloak_url\"));",
+                  "if (",
+                  "  origin.protocol !== \"https:\" &&",
+                  "  ![\"localhost\", \"127.0.0.1\"].includes(origin.hostname)",
+                  ")",
+                  "  throw new Error(\"Se requiere HTTPS fuera de localhost\");"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const html = pm.response.text();",
+                  "const forms = html.match(/<form\\b[^>]*>/gi) || [];",
+                  "const form = forms.find((value) => /id=[\"']kc-form-login[\"']/.test(value));",
+                  "const action = form && form.match(/action=[\"']([^\"']+)[\"']/);",
+                  "if (!action)",
+                  "  throw new Error(\"No se encontró el formulario de credenciales Keycloak\");",
+                  "const location = action[1].replace(/&amp;/g, \"&\");",
+                  "if (",
+                  "  new URL(location).origin !==",
+                  "  new URL(pm.environment.get(\"keycloak_url\")).origin",
+                  ")",
+                  "  throw new Error(\"El formulario debe pertenecer al emisor configurado\");",
+                  "pm.environment.set(\"login_action\", location);",
+                  "const cookies = pm.response.headers",
+                  "  .all()",
+                  "  .filter((header) => header.key.toLowerCase() === \"set-cookie\")",
+                  "  .map((header) => header.value.split(\";\")[0]);",
+                  "pm.environment.set(\"login_cookie\", cookies.join(\"; \"));",
+                  "pm.test(\"Formulario y sesión del realm\", () =>",
+                  "  pm.expect(cookies.length).to.be.above(0),",
+                  ");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Autenticar DNI y capturar código sin seguir callback",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "{{login_cookie}}"
+              }
+            ],
+            "url": "{{login_action}}",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "{{dni}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{dni_password}}",
+                  "type": "text"
+                },
+                {
+                  "key": "credentialId",
+                  "value": "",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 302\", () => pm.response.to.have.status(302));",
+                  "const location = pm.response.headers.get(\"Location\");",
+                  "const callback = new URL(location);",
+                  "const expected = new URL(pm.environment.get(\"redirect_uri\"));",
+                  "pm.test(\"Callback y state coinciden\", () => {",
+                  "  pm.expect(callback.origin + callback.pathname).to.eql(",
+                  "    expected.origin + expected.pathname,",
+                  "  );",
+                  "  pm.expect(callback.searchParams.get(\"state\")).to.eql(",
+                  "    pm.environment.get(\"oauth_state\"),",
+                  "  );",
+                  "});",
+                  "if (callback.searchParams.get(\"state\") !== pm.environment.get(\"oauth_state\"))",
+                  "  throw new Error(\"State inválido\");",
+                  "pm.environment.set(\"authorization_code\", callback.searchParams.get(\"code\"));",
+                  "pm.test(",
+                  "  \"Se recibió un código\",",
+                  "  () =>",
+                  "    pm.expect(pm.environment.get(\"authorization_code\")).to.be.a(\"string\").and",
+                  "      .not.empty,",
+                  ");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Intercambiar código y guardar tokens ACR 5",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{keycloak_url}}/realms/axiz/protocol/openid-connect/token",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "payments-web",
+                  "type": "text"
+                },
+                {
+                  "key": "redirect_uri",
+                  "value": "{{redirect_uri}}",
+                  "type": "text"
+                },
+                {
+                  "key": "code",
+                  "value": "{{authorization_code}}",
+                  "type": "text"
+                },
+                {
+                  "key": "code_verifier",
+                  "value": "{{pkce_verifier}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "function jwtClaims(token) {",
+                  "  const encoded = token.split(\".\")[1].replace(/-/g, \"+\").replace(/_/g, \"/\");",
+                  "  return JSON.parse(",
+                  "    new TextDecoder().decode(",
+                  "      Uint8Array.from(",
+                  "        atob(encoded.padEnd(Math.ceil(encoded.length / 4) * 4, \"=\")),",
+                  "        (char) => char.charCodeAt(0),",
+                  "      ),",
+                  "    ),",
+                  "  );",
+                  "}",
+                  "",
+                  "const result = pm.response.json();",
+                  "pm.test(\"Token code, ACR 5 y contexto code\", () => {",
+                  "  pm.expect(result.access_token).to.be.a(\"string\");",
+                  "  const claims = jwtClaims(result.access_token);",
+                  "  pm.expect(claims.acr).to.eql(\"5\");",
+                  "  pm.expect(claims.auth_flow).to.eql(\"code\");",
+                  "  pm.expect([].concat(claims.aud)).to.include(\"payments-api\");",
+                  "  pm.expect(claims.realm_access.roles).to.include(\"merchant\");",
+                  "  pm.environment.set(\"subject_code\", claims.sub);",
+                  "});",
+                  "if (pm.response.code === 200) {",
+                  "  pm.environment.set(\"token_code\", result.access_token);",
+                  "  pm.environment.set(\"refresh_code\", result.refresh_token);",
+                  "  pm.environment.set(\"id_token_code\", result.id_token);",
+                  "}",
+                  "pm.test(\"Nonce y sujeto del DNI\", () => {",
+                  "  pm.expect(jwtClaims(pm.response.json().id_token).nonce).to.eql(",
+                  "    pm.environment.get(\"oauth_nonce\"),",
+                  "  );",
+                  "  pm.expect(pm.environment.get(\"subject_code\")).to.eql(",
+                  "    pm.environment.get(\"subject_dni\"),",
+                  "  );",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Denegar reutilización del código consumido",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{keycloak_url}}/realms/axiz/protocol/openid-connect/token",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "payments-web",
+                  "type": "text"
+                },
+                {
+                  "key": "redirect_uri",
+                  "value": "{{redirect_uri}}",
+                  "type": "text"
+                },
+                {
+                  "key": "code",
+                  "value": "{{authorization_code}}",
+                  "type": "text"
+                },
+                {
+                  "key": "code_verifier",
+                  "value": "{{pkce_verifier}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Código de un solo uso\", () =>",
+                  "  pm.expect(pm.response.json().error).to.eql(\"invalid_grant\"),",
+                  ");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Consultar identidad ACR 5",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_code}}"
+              }
+            ],
+            "url": "{{api_url}}/api/identity",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Contexto Authorization Code\", () =>",
+                  "  pm.expect(pm.response.json().acr).to.eql(\"5\"),",
+                  ");"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Portal Spring y callback OIDC",
+      "item": [
+        {
+          "name": "Iniciar sesión del portal",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{api_url}}/oauth2/authorization/axiz",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 302\", () => pm.response.to.have.status(302));",
+                  "const location = pm.response.headers.get(\"Location\");",
+                  "if (",
+                  "  new URL(location).origin !==",
+                  "  new URL(pm.environment.get(\"keycloak_url\")).origin",
+                  ")",
+                  "  throw new Error(\"Emisor inesperado\");",
+                  "pm.environment.set(\"portal_auth_url\", location);",
+                  "pm.environment.set(",
+                  "  \"portal_spring_cookie\",",
+                  "  pm.response.headers",
+                  "    .all()",
+                  "    .filter((header) => header.key.toLowerCase() === \"set-cookie\")",
+                  "    .map((header) => header.value.split(\";\")[0])",
+                  "    .join(\"; \"),",
+                  ");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Obtener formulario del recorrido Spring",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{portal_auth_url}}",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const html = pm.response.text();",
+                  "const forms = html.match(/<form\\b[^>]*>/gi) || [];",
+                  "const form = forms.find((value) => /id=[\"']kc-form-login[\"']/.test(value));",
+                  "const action = form && form.match(/action=[\"']([^\"']+)[\"']/);",
+                  "if (!action)",
+                  "  throw new Error(\"No se encontró el formulario de credenciales Keycloak\");",
+                  "const location = action[1].replace(/&amp;/g, \"&\");",
+                  "if (",
+                  "  new URL(location).origin !==",
+                  "  new URL(pm.environment.get(\"keycloak_url\")).origin",
+                  ")",
+                  "  throw new Error(\"El formulario debe pertenecer al emisor configurado\");",
+                  "pm.environment.set(\"portal_login_action\", location);",
+                  "const cookies = pm.response.headers",
+                  "  .all()",
+                  "  .filter((header) => header.key.toLowerCase() === \"set-cookie\")",
+                  "  .map((header) => header.value.split(\";\")[0]);",
+                  "pm.environment.set(\"portal_login_cookie\", cookies.join(\"; \"));",
+                  "pm.test(\"Formulario y sesión del realm\", () =>",
+                  "  pm.expect(cookies.length).to.be.above(0),",
+                  ");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Autenticar DNI en el recorrido Spring",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "{{portal_login_cookie}}"
+              }
+            ],
+            "url": "{{portal_login_action}}",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "{{dni}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{dni_password}}",
+                  "type": "text"
+                },
+                {
+                  "key": "credentialId",
+                  "value": "",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 302\", () => pm.response.to.have.status(302));",
+                  "const location = pm.response.headers.get(\"Location\");",
+                  "const callback = new URL(location);",
+                  "if (",
+                  "  callback.origin !== new URL(pm.environment.get(\"api_url\")).origin ||",
+                  "  callback.pathname !== \"/login/oauth2/code/axiz\"",
+                  ")",
+                  "  throw new Error(\"Callback Spring inesperado\");",
+                  "pm.environment.set(\"portal_callback_url\", location);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Completar callback con la sesión Spring original",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "{{portal_spring_cookie}}"
+              }
+            ],
+            "url": "{{portal_callback_url}}",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 302\", () => pm.response.to.have.status(302));",
+                  "const location = new URL(",
+                  "  pm.response.headers.get(\"Location\"),",
+                  "  pm.environment.get(\"api_url\"),",
+                  ");",
+                  "if (",
+                  "  location.origin !== new URL(pm.environment.get(\"api_url\")).origin ||",
+                  "  location.pathname !== \"/portal\"",
+                  ")",
+                  "  throw new Error(\"La sesión OIDC no se completó\");",
+                  "pm.environment.set(\"portal_url\", location.href);",
+                  "const cookies = pm.response.headers",
+                  "  .all()",
+                  "  .filter((header) => header.key.toLowerCase() === \"set-cookie\")",
+                  "  .map((header) => header.value.split(\";\")[0]);",
+                  "if (cookies.length)",
+                  "  pm.environment.set(\"portal_spring_cookie\", cookies.join(\"; \"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Consultar sesión web autenticada ACR 5",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "{{portal_spring_cookie}}"
+              }
+            ],
+            "url": "{{portal_url}}",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Portal autenticado\", () => {",
+                  "  const data = pm.response.json();",
+                  "  pm.expect(data.username).to.eql(pm.environment.get(\"dni\"));",
+                  "  pm.expect(data.acr).to.eql(\"5\");",
+                  "  pm.expect(data.flow).to.eql(\"code\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Pagos e idempotencia por ACR",
+      "item": [
+        {
+          "name": "Consultar pagos propios con ACR 3",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_phone}}"
+              }
+            ],
+            "url": "{{api_url}}/api/payments",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Sin pagos del DNI en identidad externa\", () =>",
+                  "  pm.expect(pm.response.json()).to.eql([]),",
+                  ");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Denegar creación con ACR 3",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Idempotency-Key",
+                "value": "phone-denied-postman"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_phone}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{api_url}}/api/payments",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"amount\":100.5,\"currency\":\"PEN\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 403\", () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Crear pago con ACR 4 y guardar identificador",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Idempotency-Key",
+                "value": "{{idempotency_key}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_dni}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{api_url}}/api/payments",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"amount\":100.5,\"currency\":\"PEN\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.environment.set(",
+                  "  \"idempotency_key\",",
+                  "  \"postman-\" + pm.variables.replaceIn(\"{{$guid}}\"),",
+                  ");"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const data = pm.response.json();",
+                  "pm.test(\"Pago pendiente del DNI\", () => {",
+                  "  pm.expect(data.status).to.eql(\"PENDING\");",
+                  "  pm.expect(data.owner).to.eql(pm.environment.get(\"subject_dni\"));",
+                  "});",
+                  "pm.environment.set(\"payment_id\", data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Repetir creación con la misma clave",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Idempotency-Key",
+                "value": "{{idempotency_key}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_dni}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{api_url}}/api/payments",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"amount\":100.5,\"currency\":\"PEN\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Se conserva el identificador\", () =>",
+                  "  pm.expect(pm.response.json().id).to.eql(pm.environment.get(\"payment_id\")),",
+                  ");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Denegar otro contenido con la misma clave",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Idempotency-Key",
+                "value": "{{idempotency_key}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_dni}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{api_url}}/api/payments",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"amount\":101,\"currency\":\"PEN\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 409\", () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Denegar aprobación con ACR 3",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_phone}}"
+              }
+            ],
+            "url": "{{api_url}}/api/payments/{{payment_id}}/approve",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 403\", () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Denegar aprobación con ACR 4",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_dni}}"
+              }
+            ],
+            "url": "{{api_url}}/api/payments/{{payment_id}}/approve",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 403\", () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Aprobar con ACR 5 del mismo DNI",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_code}}"
+              }
+            ],
+            "url": "{{api_url}}/api/payments/{{payment_id}}/approve",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Pago aprobado\", () =>",
+                  "  pm.expect(pm.response.json().status).to.eql(\"APPROVED\"),",
+                  ");",
+                  "pm.environment.set(\"approved_payment_id\", pm.environment.get(\"payment_id\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Denegar segunda aprobación del mismo pago",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_code}}"
+              }
+            ],
+            "url": "{{api_url}}/api/payments/{{payment_id}}/approve",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Consultar pagos del DNI con ACR 5",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_code}}"
+              }
+            ],
+            "url": "{{api_url}}/api/payments",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Pago visible para su propietario\", () =>",
+                  "  pm",
+                  "    .expect(",
+                  "      pm.response",
+                  "        .json()",
+                  "        .some((payment) => payment.id === pm.environment.get(\"payment_id\")),",
+                  "    )",
+                  "    .to.eql(true),",
+                  ");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Comprobar aislamiento del usuario telefónico",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_phone}}"
+              }
+            ],
+            "url": "{{api_url}}/api/payments",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Sin pagos de otro sujeto\", () =>",
+                  "  pm.expect(pm.response.json()).to.eql([]),",
+                  ");"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Credenciales incorrectas y separación de flujos",
+      "item": [
+        {
+          "name": "Denegar clave DNI incorrecta",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{keycloak_url}}/realms/axiz/protocol/openid-connect/token",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "payments-password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{password_client_secret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "username",
+                  "value": "{{dni}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "ClaveIncorrecta2026!",
+                  "type": "text"
+                },
+                {
+                  "key": "scope",
+                  "value": "openid",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Credenciales rechazadas\", () =>",
+                  "  pm.expect(pm.response.json().error).to.eql(\"invalid_grant\"),",
+                  ");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Denegar clave telefónica incorrecta",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{keycloak_url}}/realms/axiz/protocol/openid-connect/token",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "payments-phone",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{phone_client_secret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "username",
+                  "value": "{{phone}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "ClaveIncorrecta2026!",
+                  "type": "text"
+                },
+                {
+                  "key": "scope",
+                  "value": "openid",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Credenciales rechazadas\", () =>",
+                  "  pm.expect(pm.response.json().error).to.eql(\"invalid_grant\"),",
+                  ");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Denegar DNI deshabilitado",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{keycloak_url}}/realms/axiz/protocol/openid-connect/token",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "payments-password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{password_client_secret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "username",
+                  "value": "{{disabled_dni}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{dni_password}}",
+                  "type": "text"
+                },
+                {
+                  "key": "scope",
+                  "value": "openid",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Credenciales rechazadas\", () =>",
+                  "  pm.expect(pm.response.json().error).to.eql(\"invalid_grant\"),",
+                  ");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Denegar teléfono deshabilitado",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{keycloak_url}}/realms/axiz/protocol/openid-connect/token",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "payments-phone",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{phone_client_secret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "username",
+                  "value": "{{disabled_phone}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{phone_password}}",
+                  "type": "text"
+                },
+                {
+                  "key": "scope",
+                  "value": "openid",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Credenciales rechazadas\", () =>",
+                  "  pm.expect(pm.response.json().error).to.eql(\"invalid_grant\"),",
+                  ");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Denegar teléfono en flujo DNI",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{keycloak_url}}/realms/axiz/protocol/openid-connect/token",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "payments-password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{password_client_secret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "username",
+                  "value": "{{phone}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{phone_password}}",
+                  "type": "text"
+                },
+                {
+                  "key": "scope",
+                  "value": "openid",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Credenciales rechazadas\", () =>",
+                  "  pm.expect(pm.response.json().error).to.eql(\"invalid_grant\"),",
+                  ");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Denegar DNI en flujo telefónico",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{keycloak_url}}/realms/axiz/protocol/openid-connect/token",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "payments-phone",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{phone_client_secret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "username",
+                  "value": "{{dni}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{dni_password}}",
+                  "type": "text"
+                },
+                {
+                  "key": "scope",
+                  "value": "openid",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Credenciales rechazadas\", () =>",
+                  "  pm.expect(pm.response.json().error).to.eql(\"invalid_grant\"),",
+                  ");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Denegar JWT cuyo ACR fue alterado",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tampered_token}}"
+              }
+            ],
+            "url": "{{api_url}}/api/identity",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "function jwtClaims(token) {",
+                  "  const encoded = token.split(\".\")[1].replace(/-/g, \"+\").replace(/_/g, \"/\");",
+                  "  return JSON.parse(",
+                  "    new TextDecoder().decode(",
+                  "      Uint8Array.from(",
+                  "        atob(encoded.padEnd(Math.ceil(encoded.length / 4) * 4, \"=\")),",
+                  "        (char) => char.charCodeAt(0),",
+                  "      ),",
+                  "    ),",
+                  "  );",
+                  "}",
+                  "const token = pm.environment.get(\"token_dni\").split(\".\");",
+                  "const data = jwtClaims(pm.environment.get(\"token_dni\"));",
+                  "data.acr = \"5\";",
+                  "token[1] = btoa(JSON.stringify(data))",
+                  "  .replace(/\\+/g, \"-\")",
+                  "  .replace(/\\//g, \"_\")",
+                  "  .replace(/=+$/g, \"\");",
+                  "pm.environment.set(\"tampered_token\", token.join(\".\"));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Rotación y revocación de refresh",
+      "item": [
+        {
+          "name": "Renovar token DNI y conservar ACR 4",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{keycloak_url}}/realms/axiz/protocol/openid-connect/token",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "refresh_token",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "payments-password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{password_client_secret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "refresh_token",
+                  "value": "{{refresh_dni}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.environment.set(\"stale_refresh_dni\", pm.environment.get(\"refresh_dni\"));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "function jwtClaims(token) {",
+                  "  const encoded = token.split(\".\")[1].replace(/-/g, \"+\").replace(/_/g, \"/\");",
+                  "  return JSON.parse(",
+                  "    new TextDecoder().decode(",
+                  "      Uint8Array.from(",
+                  "        atob(encoded.padEnd(Math.ceil(encoded.length / 4) * 4, \"=\")),",
+                  "        (char) => char.charCodeAt(0),",
+                  "      ),",
+                  "    ),",
+                  "  );",
+                  "}",
+                  "",
+                  "const result = pm.response.json();",
+                  "pm.test(\"Token dni, ACR 4 y contexto password\", () => {",
+                  "  pm.expect(result.access_token).to.be.a(\"string\");",
+                  "  const claims = jwtClaims(result.access_token);",
+                  "  pm.expect(claims.acr).to.eql(\"4\");",
+                  "  pm.expect(claims.auth_flow).to.eql(\"password\");",
+                  "  pm.expect([].concat(claims.aud)).to.include(\"payments-api\");",
+                  "  pm.expect(claims.realm_access.roles).to.include(\"merchant\");",
+                  "  pm.environment.set(\"subject_dni\", claims.sub);",
+                  "});",
+                  "if (pm.response.code === 200) {",
+                  "  pm.environment.set(\"token_dni\", result.access_token);",
+                  "  pm.environment.set(\"refresh_dni\", result.refresh_token);",
+                  "  pm.environment.set(\"id_token_dni\", result.id_token);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Denegar reutilización del refresh anterior",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{keycloak_url}}/realms/axiz/protocol/openid-connect/token",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "refresh_token",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "payments-password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{password_client_secret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "refresh_token",
+                  "value": "{{stale_refresh_dni}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Rotación obligatoria\", () =>",
+                  "  pm.expect(pm.response.json().error).to.eql(\"invalid_grant\"),",
+                  ");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Consultar identidad del token renovado",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_dni}}"
+              }
+            ],
+            "url": "{{api_url}}/api/identity",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Se conserva ACR 4\", () =>",
+                  "  pm.expect(pm.response.json().acr).to.eql(\"4\"),",
+                  ");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Revocar el refresh vigente del DNI",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{keycloak_url}}/realms/axiz/protocol/openid-connect/revoke",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "client_id",
+                  "value": "payments-password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{password_client_secret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "token",
+                  "value": "{{refresh_dni}}",
+                  "type": "text"
+                },
+                {
+                  "key": "token_type_hint",
+                  "value": "refresh_token",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Denegar renovación tras revocar el refresh",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{keycloak_url}}/realms/axiz/protocol/openid-connect/token",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "refresh_token",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "payments-password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{password_client_secret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "refresh_token",
+                  "value": "{{refresh_dni}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Refresh revocado\", () =>",
+                  "  pm.expect(pm.response.json().error).to.eql(\"invalid_grant\"),",
+                  ");"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Administración y versiones de los SPI",
+      "item": [
+        {
+          "name": "Obtener token administrativo de laboratorio",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{keycloak_url}}/realms/master/protocol/openid-connect/token",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "admin-cli",
+                  "type": "text"
+                },
+                {
+                  "key": "username",
+                  "value": "{{admin_username}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{admin_password}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.environment.set(\"admin_token\", pm.response.json().access_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Comprobar versión individual de los proveedores",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": "{{keycloak_url}}/admin/serverinfo",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const providers = pm.response.json().providers;",
+                  "const expected = {",
+                  "  authenticator: [\"auth-code-dni\", \"ropc-dni\", \"external-auth-phone\"],",
+                  "  \"axiz-acr-policy\": [\"default\"],",
+                  "  storage: [\"external-auth-phone-storage\"],",
+                  "};",
+                  "Object.entries(expected).forEach(([spi, ids]) =>",
+                  "  ids.forEach((id) =>",
+                  "    pm.test(\"Versión \" + spi + \"/\" + id, () =>",
+                  "      pm",
+                  "        .expect(providers[spi].providers[id].operationalInfo.version)",
+                  "        .to.eql(pm.environment.get(\"expected_spi_version\")),",
+                  "    ),",
+                  "  ),",
+                  ");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Comprobar ejecución única de auth-code-dni",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": "{{keycloak_url}}/admin/realms/axiz/authentication/flows/auth-code-dni/executions",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const entries = pm.response.json();",
+                  "pm.test(\"Autenticador propio y nombre versionado\", () => {",
+                  "  pm.expect(entries.length).to.eql(1);",
+                  "  pm.expect(entries[0].providerId).to.eql(\"auth-code-dni\");",
+                  "  pm.expect(entries[0].displayName).to.include(",
+                  "    \"v\" + pm.environment.get(\"expected_spi_version\"),",
+                  "  );",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Comprobar ejecución única de ropc-dni",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": "{{keycloak_url}}/admin/realms/axiz/authentication/flows/ropc-dni/executions",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const entries = pm.response.json();",
+                  "pm.test(\"Autenticador propio y nombre versionado\", () => {",
+                  "  pm.expect(entries.length).to.eql(1);",
+                  "  pm.expect(entries[0].providerId).to.eql(\"ropc-dni\");",
+                  "  pm.expect(entries[0].displayName).to.include(",
+                  "    \"v\" + pm.environment.get(\"expected_spi_version\"),",
+                  "  );",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Comprobar ejecución única de external-auth-phone",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": "{{keycloak_url}}/admin/realms/axiz/authentication/flows/external-auth-phone/executions",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "const entries = pm.response.json();",
+                  "pm.test(\"Autenticador propio y nombre versionado\", () => {",
+                  "  pm.expect(entries.length).to.eql(1);",
+                  "  pm.expect(entries[0].providerId).to.eql(\"external-auth-phone\");",
+                  "  pm.expect(entries[0].displayName).to.include(",
+                  "    \"v\" + pm.environment.get(\"expected_spi_version\"),",
+                  "  );",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Consultar usuarios internos generados",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": "{{keycloak_url}}/admin/realms/axiz/users?max=100",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "protocolProfileBehavior": {
+            "followRedirects": false,
+            "disableCookieJar": true
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Usuarios DNI aprovisionados\", () => {",
+                  "  const users = pm.response.json();",
+                  "  [",
+                  "    pm.environment.get(\"dni\"),",
+                  "    pm.environment.get(\"additional_dni\"),",
+                  "    \"11223344\",",
+                  "    pm.environment.get(\"disabled_dni\"),",
+                  "  ].forEach((dni) =>",
+                  "    pm.expect(users.some((user) => user.username === dni)).to.eql(true),",
+                  "  );",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "protocolProfileBehavior": {
+    "followRedirects": false,
+    "disableCookieJar": true,
+    "strictSSL": true
+  }
+}

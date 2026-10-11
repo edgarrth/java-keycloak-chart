@@ -34,7 +34,7 @@
     </dependency>
     <dependency>
       <groupId>pe.axiz</groupId>
-      <artifactId>spi-common</artifactId>
+      <artifactId>common-spi</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>

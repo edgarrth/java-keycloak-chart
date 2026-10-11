@@ -5,7 +5,7 @@ printf '\n'
 export AXIZ_SEED_PASSWORD="$phone_password"
 python3 - <<'PYTHON'
 import hashlib,os,secrets,pathlib
-p=pathlib.Path('datasets/phone-seed.sql')
+p=pathlib.Path('infrastructure/datasets/phone-seed.sql')
 s=p.read_text()
 import re
 def replace_hash(match):

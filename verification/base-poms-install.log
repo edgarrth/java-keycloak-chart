@@ -1,0 +1,185 @@
+[INFO] Scanning for projects...
+[INFO] Loaded 24056 auto-discovered prefixes for remote repository central (prefixes-central.txt)
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] keycloak-payment-poc                                               [pom]
+[INFO] common-spi                                                         [jar]
+[INFO] auth-code-dni-spi                                                  [jar]
+[INFO] ropc-dni-spi                                                       [jar]
+[INFO] external-auth-phone-spi                                            [jar]
+[INFO] payment-service                                                    [jar]
+[INFO] 
+[INFO] --------------------< pe.axiz:keycloak-payment-poc >--------------------
+[INFO] Building keycloak-payment-poc 1.1.0                                [1/6]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- install:3.2.0:install (default-install) @ keycloak-payment-poc ---
+[INFO] Installing /tmp/axiz-base-poms/pom.xml to /root/.m2/repository/pe/axiz/keycloak-payment-poc/1.1.0/keycloak-payment-poc-1.1.0.pom
+[INFO] 
+[INFO] -------------------------< pe.axiz:common-spi >-------------------------
+[INFO] Building common-spi 1.1.0                                          [2/6]
+[INFO]   from common-spi/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] Loaded 74 auto-discovered prefixes for remote repository apache.snapshots (prefixes-apache.snapshots.txt)
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ common-spi ---
+[INFO] skip non existing resourceDirectory /tmp/axiz-base-poms/common-spi/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ common-spi ---
+[INFO] Loaded 74 auto-discovered prefixes for remote repository apache.snapshots (prefixes-apache.snapshots.txt)
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ common-spi ---
+[INFO] skip non existing resourceDirectory /tmp/axiz-base-poms/common-spi/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ common-spi ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.6.0:test (default-test) @ common-spi ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ common-spi ---
+[WARNING] JAR will be empty - no content was marked for inclusion!
+[INFO] Building jar: /tmp/axiz-base-poms/common-spi/target/common-spi-1.1.0.jar
+[INFO] 
+[INFO] --- install:3.2.0:install (default-install) @ common-spi ---
+[INFO] Installing /tmp/axiz-base-poms/common-spi/pom.xml to /root/.m2/repository/pe/axiz/common-spi/1.1.0/common-spi-1.1.0.pom
+[INFO] Installing /tmp/axiz-base-poms/common-spi/target/common-spi-1.1.0.jar to /root/.m2/repository/pe/axiz/common-spi/1.1.0/common-spi-1.1.0.jar
+[INFO] 
+[INFO] ---------------------< pe.axiz:auth-code-dni-spi >----------------------
+[INFO] Building auth-code-dni-spi 1.1.0                                   [3/6]
+[INFO]   from auth-code-dni-spi/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ auth-code-dni-spi ---
+[INFO] skip non existing resourceDirectory /tmp/axiz-base-poms/auth-code-dni-spi/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ auth-code-dni-spi ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ auth-code-dni-spi ---
+[INFO] skip non existing resourceDirectory /tmp/axiz-base-poms/auth-code-dni-spi/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ auth-code-dni-spi ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.6.0:test (default-test) @ auth-code-dni-spi ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ auth-code-dni-spi ---
+[WARNING] JAR will be empty - no content was marked for inclusion!
+[INFO] Building jar: /tmp/axiz-base-poms/auth-code-dni-spi/target/auth-code-dni-spi-1.1.0.jar
+[INFO] 
+[INFO] --- install:3.2.0:install (default-install) @ auth-code-dni-spi ---
+[INFO] Installing /tmp/axiz-base-poms/auth-code-dni-spi/pom.xml to /root/.m2/repository/pe/axiz/auth-code-dni-spi/1.1.0/auth-code-dni-spi-1.1.0.pom
+[INFO] Installing /tmp/axiz-base-poms/auth-code-dni-spi/target/auth-code-dni-spi-1.1.0.jar to /root/.m2/repository/pe/axiz/auth-code-dni-spi/1.1.0/auth-code-dni-spi-1.1.0.jar
+[INFO] 
+[INFO] ------------------------< pe.axiz:ropc-dni-spi >------------------------
+[INFO] Building ropc-dni-spi 1.1.0                                        [4/6]
+[INFO]   from ropc-dni-spi/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ ropc-dni-spi ---
+[INFO] skip non existing resourceDirectory /tmp/axiz-base-poms/ropc-dni-spi/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ ropc-dni-spi ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ ropc-dni-spi ---
+[INFO] skip non existing resourceDirectory /tmp/axiz-base-poms/ropc-dni-spi/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ ropc-dni-spi ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.6.0:test (default-test) @ ropc-dni-spi ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ ropc-dni-spi ---
+[WARNING] JAR will be empty - no content was marked for inclusion!
+[INFO] Building jar: /tmp/axiz-base-poms/ropc-dni-spi/target/ropc-dni-spi-1.1.0.jar
+[INFO] 
+[INFO] --- install:3.2.0:install (default-install) @ ropc-dni-spi ---
+[INFO] Installing /tmp/axiz-base-poms/ropc-dni-spi/pom.xml to /root/.m2/repository/pe/axiz/ropc-dni-spi/1.1.0/ropc-dni-spi-1.1.0.pom
+[INFO] Installing /tmp/axiz-base-poms/ropc-dni-spi/target/ropc-dni-spi-1.1.0.jar to /root/.m2/repository/pe/axiz/ropc-dni-spi/1.1.0/ropc-dni-spi-1.1.0.jar
+[INFO] 
+[INFO] ------------------< pe.axiz:external-auth-phone-spi >-------------------
+[INFO] Building external-auth-phone-spi 1.1.0                             [5/6]
+[INFO]   from external-auth-phone-spi/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ external-auth-phone-spi ---
+[INFO] skip non existing resourceDirectory /tmp/axiz-base-poms/external-auth-phone-spi/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ external-auth-phone-spi ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ external-auth-phone-spi ---
+[INFO] skip non existing resourceDirectory /tmp/axiz-base-poms/external-auth-phone-spi/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ external-auth-phone-spi ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.6.0:test (default-test) @ external-auth-phone-spi ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ external-auth-phone-spi ---
+[WARNING] JAR will be empty - no content was marked for inclusion!
+[INFO] Building jar: /tmp/axiz-base-poms/external-auth-phone-spi/target/external-auth-phone-spi-1.1.0.jar
+[INFO] 
+[INFO] --- install:3.2.0:install (default-install) @ external-auth-phone-spi ---
+[INFO] Installing /tmp/axiz-base-poms/external-auth-phone-spi/pom.xml to /root/.m2/repository/pe/axiz/external-auth-phone-spi/1.1.0/external-auth-phone-spi-1.1.0.pom
+[INFO] Installing /tmp/axiz-base-poms/external-auth-phone-spi/target/external-auth-phone-spi-1.1.0.jar to /root/.m2/repository/pe/axiz/external-auth-phone-spi/1.1.0/external-auth-phone-spi-1.1.0.jar
+[INFO] 
+[INFO] ----------------------< pe.axiz:payment-service >-----------------------
+[INFO] Building payment-service 1.1.0                                     [6/6]
+[INFO]   from payment-service/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] Loaded 24056 auto-discovered prefixes for remote repository maven-central (prefixes-maven-central.txt)
+[WARNING] Could not transfer metadata /.meta/prefixes.txt from/to flyway-community-db-support (https://maven.pkg.github.com/flyway/flyway-community-db-support): HTTP Status: 401
+[WARNING] Could not transfer metadata /.meta/prefixes.txt from/to MavenFeed (https://red-gate.pkgs.visualstudio.com/MavenFeed/_packaging/MavenFeed/maven/v1/): HTTP Status: 401
+[WARNING] Could not validate integrity of download from https://build.shibboleth.net/nexus/content/repositories/releases/.meta/prefixes.txt: no checksums available
+[INFO] Loaded 7 auto-discovered prefixes for remote repository shibboleth-repo (prefixes-shibboleth-repo.txt)
+[INFO] Loaded 24056 auto-discovered prefixes for remote repository maven_central (prefixes-maven_central.txt)
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ payment-service ---
+[INFO] skip non existing resourceDirectory /tmp/axiz-base-poms/payment-service/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ payment-service ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ payment-service ---
+[INFO] skip non existing resourceDirectory /tmp/axiz-base-poms/payment-service/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ payment-service ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.6.0:test (default-test) @ payment-service ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ payment-service ---
+[WARNING] JAR will be empty - no content was marked for inclusion!
+[INFO] Building jar: /tmp/axiz-base-poms/payment-service/target/payment-service-1.1.0.jar
+[INFO] 
+[INFO] --- spring-boot:4.1.1:repackage (default) @ payment-service ---
+[INFO] Loaded 50 auto-discovered prefixes for remote repository ow2-snapshot (prefixes-ow2-snapshot.txt)
+[INFO] 
+[INFO] --- install:3.2.0:install (default-install) @ payment-service ---
+[INFO] Installing /tmp/axiz-base-poms/payment-service/pom.xml to /root/.m2/repository/pe/axiz/payment-service/1.1.0/payment-service-1.1.0.pom
+[INFO] Installing /tmp/axiz-base-poms/payment-service/target/payment-service-1.1.0.jar to /root/.m2/repository/pe/axiz/payment-service/1.1.0/payment-service-1.1.0.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for keycloak-payment-poc 1.1.0:
+[INFO] 
+[INFO] keycloak-payment-poc ............................... SUCCESS [  0.242 s]
+[INFO] common-spi ......................................... SUCCESS [ 18.540 s]
+[INFO] auth-code-dni-spi .................................. SUCCESS [  0.091 s]
+[INFO] ropc-dni-spi ....................................... SUCCESS [  0.079 s]
+[INFO] external-auth-phone-spi ............................ SUCCESS [  0.052 s]
+[INFO] payment-service .................................... SUCCESS [ 37.793 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:07 min
+[INFO] Finished at: 2026-10-11T13:37:01-04:00
+[INFO] ------------------------------------------------------------------------

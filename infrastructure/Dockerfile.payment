@@ -1,4 +1,4 @@
-FROM axiz/java-build-base:1.1.0 AS build
+FROM java_build_base AS build
 COPY . /build
 RUN mvn -o -B -ntp package -DskipTests
 FROM eclipse-temurin:25-jre

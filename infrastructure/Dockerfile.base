@@ -1,0 +1,11 @@
+FROM maven:3.10.0-eclipse-temurin-25
+WORKDIR /build
+COPY pom.xml ./
+COPY common-spi/pom.xml common-spi/pom.xml
+COPY auth-code-dni-spi/pom.xml auth-code-dni-spi/pom.xml
+COPY ropc-dni-spi/pom.xml ropc-dni-spi/pom.xml
+COPY external-auth-phone-spi/pom.xml external-auth-phone-spi/pom.xml
+COPY payment-service/pom.xml payment-service/pom.xml
+RUN mvn -itr -B -ntp install -DskipTests -Dspring-boot.repackage.skip=true \
+    && mvn -itr -B -ntp dependency:go-offline \
+    && rm -rf /build/*

@@ -28,26 +28,26 @@
     ],
     "artifacts": [
       {
-        "file": "dist/spi-common-1.1.0.jar",
-        "sha256": "0944ae0c0d0e158a2531346fb23d2607ef08e9d3e1b86d9a9a4d483bd2aa6e43",
+        "file": "dist/common-spi-1.1.0.jar",
+        "sha256": "b61cb335af4d7336d7ee4388640fa08133c33eebda81dc418e6bb67bb2276967",
         "java_class_major": 65,
         "implementation_version": "1.1.0"
       },
       {
         "file": "dist/auth-code-dni-spi-1.1.0.jar",
-        "sha256": "9c33cc63d5e496faf95d61e737e79f30954e6c2b15e310a09e0c3197e6dcbfd7",
+        "sha256": "70b51207ad54b9aed3b9da015834b39075b65c727df05dbab2173615293dac4b",
         "java_class_major": 65,
         "implementation_version": "1.1.0"
       },
       {
         "file": "dist/ropc-dni-spi-1.1.0.jar",
-        "sha256": "ef7de54fc802e2c155971b1f940718a6e23a66410d0c21cf8a79268eb0b27c8d",
+        "sha256": "9906f1b630649ba89b5db69b673b228be798af8b4b856ccadf2a2ba7849d44dc",
         "java_class_major": 65,
         "implementation_version": "1.1.0"
       },
       {
         "file": "dist/external-auth-phone-spi-1.1.0.jar",
-        "sha256": "144a8fa00cdaac1d0a974ebfc1ec21a10ad55dd15a07b728e3101586404d8c72",
+        "sha256": "5d2e2e5d0bcaf50341b821fa37d7f7ff472e3a4a4b0cabefe819e7c569002e18",
         "java_class_major": 65,
         "implementation_version": "1.1.0"
       },
@@ -57,7 +57,9 @@
         "java_class_major": 69,
         "implementation_version": "1.1.0"
       }
-    ]
+    ],
+    "base_poms_only": "PASS",
+    "offline_package": "PASS"
   },
   "runtime_identity": {
     "status": "PASS",
@@ -101,7 +103,8 @@
     "helm_lint": "PASS con Helm 4.3.0 y Kubernetes 1.36.4",
     "helm_template": "PASS, 8 recursos; solo workload Keycloak, sin PVC ni PostgreSQL ni pagos",
     "envoyproxy_schema": "PASS contra CRD oficial Envoy Gateway 1.9.2",
-    "external_dataset_hash": "PASS, salts independientes y PBKDF2 600000 iteraciones"
+    "external_dataset_hash": "PASS, salts independientes y PBKDF2 600000 iteraciones",
+    "compose_build_graph": "PASS, base requerida por additional_contexts; perfil build fuera de ejecución app"
   },
   "not_executed": [
     "Construcción efectiva de imágenes Docker",
@@ -109,5 +112,24 @@
     "Persistencia y privilegios de las dos instancias PostgreSQL 18.6",
     "Migraciones Flyway sobre PostgreSQL 18.6",
     "Conjunto completo HTTP de pagos persistidos: creación, idempotencia y aprobación"
-  ]
+  ],
+  "updated_at": "2026-10-11T17:38:56.654740+00:00",
+  "layout": {
+    "infrastructure": "infrastructure/",
+    "datasets": "infrastructure/datasets/",
+    "postman": "infrastructure/datasets/postman/",
+    "common_spi": "common-spi/"
+  },
+  "postman": {
+    "status": "PASS",
+    "collection_requests": 49,
+    "executed_requests": 38,
+    "assertions": 74,
+    "failures": 0,
+    "postman_runtime": "7.56.1",
+    "postman_sandbox": "6.7.4",
+    "schema": "PASS, esquema oficial Collection 2.1",
+    "script_syntax_and_format": "PASS",
+    "pending": "11 solicitudes de pagos persistidos sobre PostgreSQL 18.6"
+  }
 }
