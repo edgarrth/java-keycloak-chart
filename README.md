@@ -1,4 +1,4 @@
-# Keycloak SPI y autorización ACR para procesamiento de pagos
+# Autenticación con Keycloak
 
 Se implementa una PoC de identidad centrada en Keycloak: se extiende el servidor mediante un SPI común, tres módulos de 
 autenticación y federación de usuarios mediante User Storage SPI. Se autentica con identificador y contraseña en cada flujo, se 
