@@ -52,6 +52,29 @@ for attempt in range(120):
             ) from None
         time.sleep(2)
 
+info = request("GET", "/admin/serverinfo")
+selected_theme = os.getenv("KEYCLOAK_LOGIN_THEME", "axiz")
+login_themes = info.get("themes", {}).get("login", [])
+available_themes = {
+    item["name"] if isinstance(item, dict) else item for item in login_themes
+}
+if available_themes and selected_theme not in available_themes:
+    raise RuntimeError(
+        "El tema no está instalado: "
+        + selected_theme
+        + ". Se reconstruye la imagen Keycloak antes de cargar el realm."
+    )
+
+realm = request("GET", "/admin/realms/axiz")
+realm.update(
+    loginTheme=selected_theme,
+    internationalizationEnabled=True,
+    supportedLocales=["es"],
+    defaultLocale="es",
+)
+request("PUT", "/admin/realms/axiz", realm)
+print("Se configuró el tema de login " + realm["loginTheme"] + " en el realm axiz")
+
 role = request("GET", "/admin/realms/axiz/roles/merchant")
 for dni, name, enabled in [
     ("12345678", "Operador", True),
@@ -86,7 +109,6 @@ for dni, name, enabled in [
         "Se aprovisionó DNI " + dni + (" habilitado" if enabled else " deshabilitado")
     )
 
-info = request("GET", "/admin/serverinfo")
 for spi, detail in info.get("providers", {}).items():
     for provider, properties in detail.get("providers", {}).items():
         version = properties.get("operationalInfo", {}).get("version")

@@ -71,6 +71,7 @@ services:
       KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME:?}
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD:?}
       DNI_PASSWORD: ${DNI_PASSWORD:?}
+      KEYCLOAK_LOGIN_THEME: ${KEYCLOAK_LOGIN_THEME:-axiz}
     command: [python3, /seed-keycloak.py]
     volumes: ["./seed-keycloak.py:/seed-keycloak.py:ro"]
 networks:

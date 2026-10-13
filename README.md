@@ -114,6 +114,46 @@ mediante scope mappings explícitos. El flujo web exige revalidar las credencial
 la ejecución Cookie para que una sesión de ACR 3 o 4 no permita obtener ACR 5 sin introducir el DNI y la contraseña.
 
 
+## Web de login del Authorization Code Flow
+
+Se utiliza el tema nativo `axiz` de Keycloak para la pantalla de DNI y contraseña. Se adapta la experiencia visual del diseño de referencia Angular: fondo oscuro, paneles laterales, tarjeta central, acentos celestes, logotipo Axiz y distribución responsive. Se utiliza FreeMarker, el motor de plantillas de Keycloak, para mantener el formulario y el procesamiento de credenciales en el servidor de identidad.
+
+### Ubicación del código de la web
+
+| Archivo | Cambio que se realiza |
+| --- | --- |
+| `themes/axiz/login/login.ftl` | Formulario, campos y composición del login de DNI; se conserva action dinámico, POST, username, password, credentialId e identificación del formulario |
+| `themes/axiz/login/template.ftl` | Distribución de la pantalla, paneles, cabecera, tarjeta, enlaces y pie |
+| `themes/axiz/login/resources/css/axiz-login.css` | Colores, tipografía, botones, campos, espaciado y comportamiento responsive |
+| `themes/axiz/login/messages/messages_es.properties` | Textos visibles en español; DNI, contraseña, ingreso, ayuda y contenido de los paneles |
+| `themes/axiz/login/messages/messages.properties` | Textos de respaldo del tema |
+| `themes/axiz/login/resources/img/` | Logotipo y favicon utilizados en la interfaz Axiz |
+| `themes/axiz/login/theme.properties` | Herencia de keycloak.v2, estilos, recursos y versión del tema |
+| `payment-service/src/main/java/pe/axiz/payments/adapters/PortalController.java` | Página inicial en `http://localhost:8090/`; se inicia el flujo mediante `/oauth2/authorization/axiz` |
+| `auth-code-dni-spi/src/main/java/pe/axiz/identity/authcode/AuthCodeDniAuthenticator.java` | Autenticación del DNI y establecimiento de ACR 5; la apariencia se modifica en el tema, no en el SPI |
+
+Se distinguen la página inicial del servicio de pagos y el formulario servido por Keycloak en el puerto 8080. Se conservan `kc-form-login`, los nombres de los campos, las cookies y la acción del formulario para mantener las pruebas Postman, PKCE y sesiones cruzadas. Los valores del formulario se escapan mediante las plantillas de Keycloak y la contraseña se verifica en el servidor. El tema y los estilos no emiten tokens ni guardan credenciales en el navegador.
+
+### Publicación del tema
+
+El tema se incorpora en `/opt/keycloak/themes/axiz` mediante `infrastructure/Dockerfile.keycloak`. Se conserva la caché de dependencias de la imagen base. Se utiliza el chart 1.5.0 con las dos instancias, Gateway API y las bases externas existentes. Tras el rollout, `seed-keycloak.py` configura el tema y el idioma español del realm `axiz` mediante Admin REST; se aplica también a una base ya inicializada. La consola administrativa del realm `master` conserva su tema.
+
+Con la infraestructura activa se ejecuta desde la raíz:
+
+```bash
+bash infrastructure/deploy-k8s.sh --build
+```
+
+Para levantar todo con las pruebas existentes:
+
+```bash
+bash infrastructure/start-all.sh --build --test
+```
+
+Se abre `http://localhost:8090/` y se selecciona **Iniciar sesión** para llegar al nuevo formulario. No se abre una URL `/auth` incompleta: el cliente genera los parámetros de Authorization Code y PKCE. Se comprueba DNI `12345678` con su clave configurada y el rechazo de una clave incorrecta. Tras un cambio de recursos estáticos se recarga el navegador sin utilizar su caché. Se reconstruye y publica la imagen para distribuir la misma versión del tema en ambas instancias.
+
+Las plantillas se alinean con Keycloak 26.8.0 y extienden `keycloak.v2`. Se revisan al actualizar Keycloak, especialmente los formularios, recursos y scripts heredados. La referencia técnica del mecanismo es https://www.keycloak.org/ui-customization/themes.
+
 ## Preparación
 
 ```bash

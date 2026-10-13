@@ -15,3 +15,5 @@ credentials:
 
 keycloak:
   replicas: 2
+
+portalUrl: http://localhost:8090

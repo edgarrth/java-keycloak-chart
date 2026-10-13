@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "requests": 57,
+  "script_syntax_checks": 62,
+  "ha_requests": 8,
+  "ha_assertions": 16,
+  "sandbox": "4.7.1, respuestas simuladas; sin clúster real"
+}

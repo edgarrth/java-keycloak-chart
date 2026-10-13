@@ -6,6 +6,7 @@ COPY --from=build /build/common-spi/target/common-spi-1.1.0.jar /opt/keycloak/pr
 COPY --from=build /build/auth-code-dni-spi/target/auth-code-dni-spi-1.1.0.jar /opt/keycloak/providers/
 COPY --from=build /build/ropc-dni-spi/target/ropc-dni-spi-1.1.0.jar /opt/keycloak/providers/
 COPY --from=build /build/external-auth-phone-spi/target/external-auth-phone-spi-1.1.0.jar /opt/keycloak/providers/
+COPY --chown=1000:0 themes/axiz /opt/keycloak/themes/axiz
 RUN /opt/keycloak/bin/kc.sh build --db=postgres --health-enabled=true
 ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]
 CMD ["start", "--optimized", "--import-realm"]

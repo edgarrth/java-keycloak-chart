@@ -1,0 +1,49 @@
+{
+  "status": "PASS",
+  "compose": "5.6.0",
+  "buildx": "0.32.0",
+  "app_runtime_services": [
+    "postgres-keycloak",
+    "postgres-external",
+    "payments"
+  ],
+  "app_build_targets": [
+    "payments",
+    "java-build-base",
+    "keycloak"
+  ],
+  "kubernetes_build_targets": [
+    "keycloak",
+    "java-build-base"
+  ],
+  "contexts": {
+    "keycloak": {
+      "java_build_base": "target:java-build-base"
+    },
+    "payments": {
+      "java_build_base": "target:java-build-base"
+    }
+  },
+  "base_preparation": "PASS: solo POM, install con repackage deshabilitado y dependency:go-offline 3.11.0",
+  "offline_source_package": "PASS",
+  "docker_engine_build_executed": false,
+  "compose_versions": [
+    "2.39.4",
+    "5.6.0"
+  ],
+  "base_profiles": [],
+  "base_scale": 0,
+  "regression": {
+    "previous_configuration": "FAIL reproducido en Compose 2.39.4, perfil build excluido por --profile app",
+    "corrected_configuration": "PASS en Compose 2.39.4 y 5.6.0; modelo y build --print para app y Keycloak",
+    "docker_engine_build_executed": false
+  },
+  "task_services": [
+    "seed-keycloak"
+  ],
+  "build_only_services": {
+    "java-build-base": 0,
+    "keycloak": 0
+  },
+  "keycloak_execution": "Exclusivamente Helm"
+}

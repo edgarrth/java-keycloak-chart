@@ -43,6 +43,7 @@ spec:
             - {name: KC_DB_URL, value: {{ required "Se requiere una URL externa para Keycloak" .Values.database.keycloakUrl | quote }}}
             - {name: KC_DB_USERNAME, value: keycloak}
             - {name: KC_HOSTNAME, value: {{ .Values.publicUrl | quote }}}
+            - {name: AXIZ_PORTAL_URL, value: {{ .Values.portalUrl | quote }}}
             - {name: KC_HTTP_ENABLED, value: "true"}
             - {name: KC_PROXY_HEADERS, value: xforwarded}
             - {name: KC_HTTP_ACCESS_LOG_ENABLED, value: "false"}

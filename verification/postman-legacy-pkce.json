@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "sandbox": "4.7.1 real sin crypto, URL ni TextEncoder",
+  "scripts_parsed": 54,
+  "legacy_pkce_executions": 64,
+  "independent_sha256": "PASS",
+  "pool_consumption": "PASS, un conjunto diferente por autorización",
+  "real_keycloak_http_executed": false,
+  "failure_checks": "PASS: material ausente, agotado, tipo incorrecto y campos inválidos; variables previas eliminadas"
+}

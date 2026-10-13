@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "environment": "Fixture HTTP estatal de dos instancias simuladas; no es Keycloak ni Kubernetes",
+  "scenarios": 6,
+  "http_checks": 61,
+  "isolated_sessions_rejected": true,
+  "wrong_instance_rejected": true,
+  "actual_cluster_executed": false
+}

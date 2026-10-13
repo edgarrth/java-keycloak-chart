@@ -1,0 +1,2093 @@
+[INFO] Scanning for projects...
+[INFO] Loaded 24056 auto-discovered prefixes for remote repository central (prefixes-central.txt)
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] keycloak-payment-poc                                               [pom]
+[INFO] common-spi                                                         [jar]
+[INFO] auth-code-dni-spi                                                  [jar]
+[INFO] ropc-dni-spi                                                       [jar]
+[INFO] external-auth-phone-spi                                            [jar]
+[INFO] payment-service                                                    [jar]
+[INFO] 
+[INFO] --------------------< pe.axiz:keycloak-payment-poc >--------------------
+[INFO] Building keycloak-payment-poc 1.1.0                                [1/6]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- dependency:3.11.0:go-offline (default-cli) @ keycloak-payment-poc ---
+[INFO] Resolved plugin: maven-compiler-plugin-3.16.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-compiler-plugin-3.16.0.jar
+[INFO]       asm-9.10.1.jar
+[INFO]       maven-shared-utils-3.4.2.jar
+[INFO]       commons-io-2.22.0.jar
+[INFO]       maven-shared-incremental-1.1.jar
+[INFO]       plexus-java-1.6.0.jar
+[INFO]       plexus-compiler-api-2.17.0.jar
+[INFO]       plexus-compiler-manager-2.17.0.jar
+[INFO]       plexus-compiler-javac-2.17.0.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       javaparser-core-3.28.2.jar
+[INFO]       javax.inject-1.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO] Resolved plugin: maven-surefire-plugin-3.6.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-surefire-plugin-3.6.0.jar
+[INFO]       surefire-api-3.6.0.jar
+[INFO]       surefire-extensions-api-3.6.0.jar
+[INFO]       maven-surefire-common-3.6.0.jar
+[INFO]       surefire-logger-api-3.6.0.jar
+[INFO]       surefire-shared-utils-3.6.0.jar
+[INFO]       surefire-booter-3.6.0.jar
+[INFO]       maven-resolver-util-1.9.27.jar
+[INFO]       maven-common-artifact-filters-3.4.0.jar
+[INFO]       plexus-java-1.6.0.jar
+[INFO]       surefire-extensions-spi-3.6.0.jar
+[INFO]       maven-resolver-api-1.9.27.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       asm-9.10.1.jar
+[INFO]       javaparser-core-3.28.2.jar
+[INFO] Resolved plugin: maven-jar-plugin-3.5.1.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-jar-plugin-3.5.1.jar
+[INFO]       file-management-3.2.0.jar
+[INFO]       maven-archiver-3.6.6.jar
+[INFO]       plexus-archiver-4.12.0.jar
+[INFO]       javax.inject-1.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       commons-io-2.22.0.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       plexus-interpolation-1.29.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO]       plexus-io-3.6.0.jar
+[INFO]       commons-compress-1.28.0.jar
+[INFO]       xz-1.12.jar
+[INFO]       zstd-jni-1.5.7-9.jar
+[INFO]       commons-codec-1.19.0.jar
+[INFO]       commons-lang3-3.18.0.jar
+[INFO] Resolved plugin: spotless-maven-plugin-3.10.4.jar
+[INFO] Resolved plugin dependency:
+[INFO]       spotless-maven-plugin-3.10.4.jar
+[INFO]       spotless-lib-4.10.4.jar
+[INFO]       spotless-lib-extra-4.10.4.jar
+[INFO]       durian-core-1.2.0.jar
+[INFO]       durian-io-1.2.0.jar
+[INFO]       durian-collect-1.2.0.jar
+[INFO]       plexus-resources-1.4.0.jar
+[INFO]       plexus-utils-4.1.0.jar
+[INFO]       org.eclipse.jgit-7.8.0.202609011348-r.jar
+[INFO]       plexus-build-api-0.0.7.jar
+[INFO]       concurrent-trees-2.6.1.jar
+[INFO]       solstice-1.8.2.jar
+[INFO]       org.eclipse.osgi-3.24.300.jar
+[INFO]       plexus-xml-3.1.0.jar
+[INFO]       javax.inject-1.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       JavaEWAH-1.2.3.jar
+[INFO]       commons-codec-1.22.1.jar
+[INFO]       durian-swt.os-4.3.0.jar
+[INFO]       xz-1.9.jar
+[INFO]       okhttp-4.12.0.jar
+[INFO]       okio-3.6.0.jar
+[INFO]       kotlin-stdlib-jdk8-1.8.21.jar
+[INFO]       okio-jvm-3.6.0.jar
+[INFO]       kotlin-stdlib-1.8.21.jar
+[INFO]       kotlin-stdlib-jdk7-1.8.21.jar
+[INFO]       kotlin-stdlib-common-1.9.10.jar
+[INFO]       annotations-13.0.jar
+[INFO] Resolved plugin: maven-clean-plugin-3.5.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-clean-plugin-3.5.0.jar
+[INFO]       plexus-utils-4.0.2.jar
+[INFO] Resolved plugin: maven-install-plugin-3.2.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-install-plugin-3.2.0.jar
+[INFO]       maven-resolver-util-1.9.27.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO]       maven-resolver-api-1.9.27.jar
+[INFO] Resolved plugin: maven-site-plugin-3.22.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-site-plugin-3.22.0.jar
+[INFO]       maven-reporting-api-4.0.0.jar
+[INFO]       maven-reporting-exec-2.0.1.jar
+[INFO]       maven-shared-utils-3.4.2.jar
+[INFO]       maven-resolver-transport-wagon-1.4.1.jar
+[INFO]       maven-archiver-3.6.6.jar
+[INFO]       plexus-archiver-4.11.0.jar
+[INFO]       commons-io-2.22.0.jar
+[INFO]       plexus-i18n-1.1.0.jar
+[INFO]       plexus-interactivity-api-1.5.1.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO]       doxia-sink-api-2.1.0.jar
+[INFO]       doxia-core-2.1.0.jar
+[INFO]       doxia-module-xhtml5-2.1.0.jar
+[INFO]       doxia-module-apt-2.1.0.jar
+[INFO]       doxia-module-xdoc-2.1.0.jar
+[INFO]       doxia-module-fml-2.1.0.jar
+[INFO]       doxia-module-markdown-2.1.0.jar
+[INFO]       doxia-site-model-2.1.0.jar
+[INFO]       doxia-site-renderer-2.1.0.jar
+[INFO]       doxia-integration-tools-2.1.0.jar
+[INFO]       commons-lang3-3.20.0.jar
+[INFO]       jetty-server-9.4.58.v20250814.jar
+[INFO]       jetty-http-9.4.58.v20250814.jar
+[INFO]       jetty-servlet-9.4.58.v20250814.jar
+[INFO]       jetty-webapp-9.4.58.v20250814.jar
+[INFO]       jetty-util-9.4.58.v20250814.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       javax.inject-1.jar
+[INFO]       maven-resolver-api-1.4.1.jar
+[INFO]       maven-resolver-util-1.4.1.jar
+[INFO]       plexus-classworlds-2.9.0.jar
+[INFO]       maven-resolver-spi-1.4.1.jar
+[INFO]       wagon-provider-api-3.0.0.jar
+[INFO]       plexus-interpolation-1.29.jar
+[INFO]       plexus-io-3.6.0.jar
+[INFO]       commons-compress-1.28.0.jar
+[INFO]       xz-1.11.jar
+[INFO]       zstd-jni-1.5.7-6.jar
+[INFO]       flexmark-0.62.2.jar
+[INFO]       flexmark-util-data-0.62.2.jar
+[INFO]       flexmark-util-misc-0.62.2.jar
+[INFO]       flexmark-util-sequence-0.62.2.jar
+[INFO]       flexmark-util-ast-0.62.2.jar
+[INFO]       flexmark-ext-abbreviation-0.62.2.jar
+[INFO]       flexmark-ext-autolink-0.62.2.jar
+[INFO]       flexmark-ext-definition-0.62.2.jar
+[INFO]       flexmark-ext-escaped-character-0.62.2.jar
+[INFO]       flexmark-ext-footnotes-0.62.2.jar
+[INFO]       flexmark-ext-gfm-strikethrough-0.62.2.jar
+[INFO]       flexmark-ext-tables-0.62.2.jar
+[INFO]       flexmark-ext-typographic-0.62.2.jar
+[INFO]       flexmark-ext-wikilink-0.62.2.jar
+[INFO]       flexmark-ext-yaml-front-matter-0.62.2.jar
+[INFO]       jsoup-1.22.1.jar
+[INFO]       annotations-26.1.0.jar
+[INFO]       org.eclipse.sisu.plexus-1.0.0.jar
+[INFO]       doxia-skin-model-2.1.0.jar
+[INFO]       plexus-velocity-2.3.0.jar
+[INFO]       velocity-engine-core-2.4.1.jar
+[INFO]       velocity-tools-generic-3.1.jar
+[INFO]       javax.servlet-api-3.1.0.jar
+[INFO]       jetty-io-9.4.58.v20250814.jar
+[INFO]       jetty-security-9.4.58.v20250814.jar
+[INFO]       jetty-util-ajax-9.4.58.v20250814.jar
+[INFO]       jetty-xml-9.4.58.v20250814.jar
+[INFO]       commons-codec-1.19.0.jar
+[INFO]       flexmark-util-builder-0.62.2.jar
+[INFO]       flexmark-util-collection-0.62.2.jar
+[INFO]       flexmark-util-dependency-0.62.2.jar
+[INFO]       flexmark-util-format-0.62.2.jar
+[INFO]       flexmark-util-html-0.62.2.jar
+[INFO]       flexmark-util-visitor-0.62.2.jar
+[INFO]       flexmark-util-0.62.2.jar
+[INFO]       autolink-0.6.0.jar
+[INFO]       org.eclipse.sisu.inject-1.0.0.jar
+[INFO]       plexus-component-annotations-2.2.0.jar
+[INFO]       commons-beanutils-1.9.4.jar
+[INFO]       commons-digester3-3.2.jar
+[INFO]       json-simple-3.0.2.jar
+[INFO]       flexmark-util-options-0.62.2.jar
+[INFO]       asm-9.9.1.jar
+[INFO]       commons-logging-1.2.jar
+[INFO]       commons-collections-3.2.2.jar
+[INFO] Resolved plugin: maven-deploy-plugin-3.2.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-deploy-plugin-3.2.0.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO]       maven-resolver-util-1.9.27.jar
+[INFO]       maven-resolver-api-1.9.27.jar
+[INFO] 
+[INFO] -------------------------< pe.axiz:common-spi >-------------------------
+[INFO] Building common-spi 1.1.0                                          [2/6]
+[INFO]   from common-spi/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- dependency:3.11.0:go-offline (default-cli) @ common-spi ---
+[INFO] Resolved plugin: maven-compiler-plugin-3.16.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-compiler-plugin-3.16.0.jar
+[INFO]       asm-9.10.1.jar
+[INFO]       maven-shared-utils-3.4.2.jar
+[INFO]       commons-io-2.22.0.jar
+[INFO]       maven-shared-incremental-1.1.jar
+[INFO]       plexus-java-1.6.0.jar
+[INFO]       plexus-compiler-api-2.17.0.jar
+[INFO]       plexus-compiler-manager-2.17.0.jar
+[INFO]       plexus-compiler-javac-2.17.0.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       javaparser-core-3.28.2.jar
+[INFO]       javax.inject-1.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO] Resolved plugin: maven-surefire-plugin-3.6.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-surefire-plugin-3.6.0.jar
+[INFO]       surefire-api-3.6.0.jar
+[INFO]       surefire-extensions-api-3.6.0.jar
+[INFO]       maven-surefire-common-3.6.0.jar
+[INFO]       surefire-logger-api-3.6.0.jar
+[INFO]       surefire-shared-utils-3.6.0.jar
+[INFO]       surefire-booter-3.6.0.jar
+[INFO]       maven-resolver-util-1.9.27.jar
+[INFO]       maven-common-artifact-filters-3.4.0.jar
+[INFO]       plexus-java-1.6.0.jar
+[INFO]       surefire-extensions-spi-3.6.0.jar
+[INFO]       maven-resolver-api-1.9.27.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       asm-9.10.1.jar
+[INFO]       javaparser-core-3.28.2.jar
+[INFO] Resolved plugin: maven-jar-plugin-3.5.1.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-jar-plugin-3.5.1.jar
+[INFO]       file-management-3.2.0.jar
+[INFO]       maven-archiver-3.6.6.jar
+[INFO]       plexus-archiver-4.12.0.jar
+[INFO]       javax.inject-1.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       commons-io-2.22.0.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       plexus-interpolation-1.29.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO]       plexus-io-3.6.0.jar
+[INFO]       commons-compress-1.28.0.jar
+[INFO]       xz-1.12.jar
+[INFO]       zstd-jni-1.5.7-9.jar
+[INFO]       commons-codec-1.19.0.jar
+[INFO]       commons-lang3-3.18.0.jar
+[INFO] Resolved plugin: spotless-maven-plugin-3.10.4.jar
+[INFO] Resolved plugin dependency:
+[INFO]       spotless-maven-plugin-3.10.4.jar
+[INFO]       spotless-lib-4.10.4.jar
+[INFO]       spotless-lib-extra-4.10.4.jar
+[INFO]       durian-core-1.2.0.jar
+[INFO]       durian-io-1.2.0.jar
+[INFO]       durian-collect-1.2.0.jar
+[INFO]       plexus-resources-1.4.0.jar
+[INFO]       plexus-utils-4.1.0.jar
+[INFO]       org.eclipse.jgit-7.8.0.202609011348-r.jar
+[INFO]       plexus-build-api-0.0.7.jar
+[INFO]       concurrent-trees-2.6.1.jar
+[INFO]       solstice-1.8.2.jar
+[INFO]       org.eclipse.osgi-3.24.300.jar
+[INFO]       plexus-xml-3.1.0.jar
+[INFO]       javax.inject-1.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       JavaEWAH-1.2.3.jar
+[INFO]       commons-codec-1.22.1.jar
+[INFO]       durian-swt.os-4.3.0.jar
+[INFO]       xz-1.9.jar
+[INFO]       okhttp-4.12.0.jar
+[INFO]       okio-3.6.0.jar
+[INFO]       kotlin-stdlib-jdk8-1.8.21.jar
+[INFO]       okio-jvm-3.6.0.jar
+[INFO]       kotlin-stdlib-1.8.21.jar
+[INFO]       kotlin-stdlib-jdk7-1.8.21.jar
+[INFO]       kotlin-stdlib-common-1.9.10.jar
+[INFO]       annotations-13.0.jar
+[INFO] Resolved plugin: maven-clean-plugin-3.5.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-clean-plugin-3.5.0.jar
+[INFO]       plexus-utils-4.0.2.jar
+[INFO] Resolved plugin: maven-install-plugin-3.2.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-install-plugin-3.2.0.jar
+[INFO]       maven-resolver-util-1.9.27.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO]       maven-resolver-api-1.9.27.jar
+[INFO] Resolved plugin: maven-site-plugin-3.22.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-site-plugin-3.22.0.jar
+[INFO]       maven-reporting-api-4.0.0.jar
+[INFO]       maven-reporting-exec-2.0.1.jar
+[INFO]       maven-shared-utils-3.4.2.jar
+[INFO]       maven-resolver-transport-wagon-1.4.1.jar
+[INFO]       maven-archiver-3.6.6.jar
+[INFO]       plexus-archiver-4.11.0.jar
+[INFO]       commons-io-2.22.0.jar
+[INFO]       plexus-i18n-1.1.0.jar
+[INFO]       plexus-interactivity-api-1.5.1.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO]       doxia-sink-api-2.1.0.jar
+[INFO]       doxia-core-2.1.0.jar
+[INFO]       doxia-module-xhtml5-2.1.0.jar
+[INFO]       doxia-module-apt-2.1.0.jar
+[INFO]       doxia-module-xdoc-2.1.0.jar
+[INFO]       doxia-module-fml-2.1.0.jar
+[INFO]       doxia-module-markdown-2.1.0.jar
+[INFO]       doxia-site-model-2.1.0.jar
+[INFO]       doxia-site-renderer-2.1.0.jar
+[INFO]       doxia-integration-tools-2.1.0.jar
+[INFO]       commons-lang3-3.20.0.jar
+[INFO]       jetty-server-9.4.58.v20250814.jar
+[INFO]       jetty-http-9.4.58.v20250814.jar
+[INFO]       jetty-servlet-9.4.58.v20250814.jar
+[INFO]       jetty-webapp-9.4.58.v20250814.jar
+[INFO]       jetty-util-9.4.58.v20250814.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       javax.inject-1.jar
+[INFO]       maven-resolver-api-1.4.1.jar
+[INFO]       maven-resolver-util-1.4.1.jar
+[INFO]       plexus-classworlds-2.9.0.jar
+[INFO]       maven-resolver-spi-1.4.1.jar
+[INFO]       wagon-provider-api-3.0.0.jar
+[INFO]       plexus-interpolation-1.29.jar
+[INFO]       plexus-io-3.6.0.jar
+[INFO]       commons-compress-1.28.0.jar
+[INFO]       xz-1.11.jar
+[INFO]       zstd-jni-1.5.7-6.jar
+[INFO]       flexmark-0.62.2.jar
+[INFO]       flexmark-util-data-0.62.2.jar
+[INFO]       flexmark-util-misc-0.62.2.jar
+[INFO]       flexmark-util-sequence-0.62.2.jar
+[INFO]       flexmark-util-ast-0.62.2.jar
+[INFO]       flexmark-ext-abbreviation-0.62.2.jar
+[INFO]       flexmark-ext-autolink-0.62.2.jar
+[INFO]       flexmark-ext-definition-0.62.2.jar
+[INFO]       flexmark-ext-escaped-character-0.62.2.jar
+[INFO]       flexmark-ext-footnotes-0.62.2.jar
+[INFO]       flexmark-ext-gfm-strikethrough-0.62.2.jar
+[INFO]       flexmark-ext-tables-0.62.2.jar
+[INFO]       flexmark-ext-typographic-0.62.2.jar
+[INFO]       flexmark-ext-wikilink-0.62.2.jar
+[INFO]       flexmark-ext-yaml-front-matter-0.62.2.jar
+[INFO]       jsoup-1.22.1.jar
+[INFO]       annotations-26.1.0.jar
+[INFO]       org.eclipse.sisu.plexus-1.0.0.jar
+[INFO]       doxia-skin-model-2.1.0.jar
+[INFO]       plexus-velocity-2.3.0.jar
+[INFO]       velocity-engine-core-2.4.1.jar
+[INFO]       velocity-tools-generic-3.1.jar
+[INFO]       javax.servlet-api-3.1.0.jar
+[INFO]       jetty-io-9.4.58.v20250814.jar
+[INFO]       jetty-security-9.4.58.v20250814.jar
+[INFO]       jetty-util-ajax-9.4.58.v20250814.jar
+[INFO]       jetty-xml-9.4.58.v20250814.jar
+[INFO]       commons-codec-1.19.0.jar
+[INFO]       flexmark-util-builder-0.62.2.jar
+[INFO]       flexmark-util-collection-0.62.2.jar
+[INFO]       flexmark-util-dependency-0.62.2.jar
+[INFO]       flexmark-util-format-0.62.2.jar
+[INFO]       flexmark-util-html-0.62.2.jar
+[INFO]       flexmark-util-visitor-0.62.2.jar
+[INFO]       flexmark-util-0.62.2.jar
+[INFO]       autolink-0.6.0.jar
+[INFO]       org.eclipse.sisu.inject-1.0.0.jar
+[INFO]       plexus-component-annotations-2.2.0.jar
+[INFO]       commons-beanutils-1.9.4.jar
+[INFO]       commons-digester3-3.2.jar
+[INFO]       json-simple-3.0.2.jar
+[INFO]       flexmark-util-options-0.62.2.jar
+[INFO]       asm-9.9.1.jar
+[INFO]       commons-logging-1.2.jar
+[INFO]       commons-collections-3.2.2.jar
+[INFO] Resolved plugin: maven-resources-plugin-3.5.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-resources-plugin-3.5.0.jar
+[INFO]       maven-filtering-3.5.0.jar
+[INFO]       plexus-utils-3.6.0.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       plexus-build-api-1.2.0.jar
+[INFO]       plexus-interpolation-1.29.jar
+[INFO]       javax.inject-1.jar
+[INFO]       plexus-build-api-0.0.7.jar
+[INFO]       org.eclipse.sisu.plexus-0.9.0.M4.jar
+[INFO] Resolved plugin: maven-deploy-plugin-3.2.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-deploy-plugin-3.2.0.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO]       maven-resolver-util-1.9.27.jar
+[INFO]       maven-resolver-api-1.9.27.jar
+[INFO] Resolved dependency: keycloak-server-spi-private-26.8.0.jar
+[INFO] Resolved dependency: keycloak-core-26.8.0.jar
+[INFO] Resolved dependency: keycloak-services-26.8.0.jar
+[INFO] Resolved dependency: keycloak-server-spi-26.8.0.jar
+[INFO] Resolved dependency: httpclient-4.5.14.jar
+[INFO] Resolved dependency: opentelemetry-api-1.62.0.jar
+[INFO] Resolved dependency: keycloak-common-26.8.0.jar
+[INFO] Resolved dependency: jackson-core-2.21.5.jar
+[INFO] Resolved dependency: jackson-databind-2.21.5.jar
+[INFO] Resolved dependency: jackson-datatype-jdk8-2.21.5.jar
+[INFO] Resolved dependency: jackson-datatype-jsr310-2.21.5.jar
+[INFO] Resolved dependency: webauthn4j-core-0.30.3.RELEASE.jar
+[INFO] Resolved dependency: microprofile-openapi-api-4.1.1.jar
+[INFO] Resolved dependency: jakarta.mail-api-2.1.5.jar
+[INFO] Resolved dependency: angus-mail-2.0.5.jar
+[INFO] Resolved dependency: twitter4j-core-4.1.2.jar
+[INFO] Resolved dependency: jboss-logging-3.6.3.Final.jar
+[INFO] Resolved dependency: commons-logging-jboss-logging-2.0.0.Final.jar
+[INFO] Resolved dependency: jakarta.ws.rs-api-4.0.0.jar
+[INFO] Resolved dependency: jakarta.transaction-api-2.0.1.jar
+[INFO] Resolved dependency: jakarta.xml.soap-api-3.0.2.jar
+[INFO] Resolved dependency: owasp-java-html-sanitizer-20260101.1.jar
+[INFO] Resolved dependency: java8-shim-20260101.1.jar
+[INFO] Resolved dependency: java10-shim-20260101.1.jar
+[INFO] Resolved dependency: jackson-annotations-2.21.jar
+[INFO] Resolved dependency: javax.annotation-api-1.3.2.jar
+[INFO] Resolved dependency: jackson-jakarta-rs-yaml-provider-2.21.5.jar
+[INFO] Resolved dependency: javase-3.4.0.jar
+[INFO] Resolved dependency: titanium-json-ld-1.3.3.jar
+[INFO] Resolved dependency: rdf-urdna-1.1.jar
+[INFO] Resolved dependency: uap-java-1.6.1.jar
+[INFO] Resolved dependency: snakeyaml-2.6.jar
+[INFO] Resolved dependency: smallrye-common-annotation-2.19.0.jar
+[INFO] Resolved dependency: keycloak-model-storage-private-26.8.0.jar
+[INFO] Resolved dependency: keycloak-config-api-26.8.0.jar
+[INFO] Resolved dependency: httpcore-4.4.16.jar
+[INFO] Resolved dependency: commons-codec-1.21.0.jar
+[INFO] Resolved dependency: opentelemetry-context-1.62.0.jar
+[INFO] Resolved dependency: jakarta.activation-api-2.1.4.jar
+[INFO] Resolved dependency: jackson-dataformat-cbor-2.21.5.jar
+[INFO] Resolved dependency: slf4j-api-2.0.18.jar
+[INFO] Resolved dependency: angus-activation-2.0.3.jar
+[INFO] Resolved dependency: jackson-jakarta-rs-base-2.21.5.jar
+[INFO] Resolved dependency: jackson-dataformat-yaml-2.21.5.jar
+[INFO] Resolved dependency: jackson-module-jakarta-xmlbind-annotations-2.21.5.jar
+[INFO] Resolved dependency: core-3.4.0.jar
+[INFO] Resolved dependency: jai-imageio-core-1.4.0.jar
+[INFO] Resolved dependency: commons-collections4-4.4.jar
+[INFO] Resolved dependency: keycloak-model-storage-26.8.0.jar
+[INFO] Resolved dependency: infinispan-commons-16.1.4.jar
+[INFO] Resolved dependency: quarkus-opentelemetry-3.40.1.jar
+[INFO] Resolved dependency: opentelemetry-common-1.62.0.jar
+[INFO] Resolved dependency: jakarta.xml.bind-api-4.0.5.jar
+[INFO] Resolved dependency: protostream-6.0.7.jar
+[INFO] Resolved dependency: protostream-types-6.0.7.jar
+[INFO] Resolved dependency: caffeine-3.2.4.jar
+[INFO] Resolved dependency: rxjava-3.1.12.jar
+[INFO] Resolved dependency: quarkus-core-3.40.1.jar
+[INFO] Resolved dependency: quarkus-tls-registry-3.40.1.jar
+[INFO] Resolved dependency: quarkus-arc-3.40.1.jar
+[INFO] Resolved dependency: quarkus-vertx-3.40.1.jar
+[INFO] Resolved dependency: quarkus-security-runtime-spi-3.40.1.jar
+[INFO] Resolved dependency: quarkus-grpc-common-3.40.1.jar
+[INFO] Resolved dependency: smallrye-common-vertx-context-2.19.0.jar
+[INFO] Resolved dependency: quarkus-websockets-next-spi-3.40.1.jar
+[INFO] Resolved dependency: opentelemetry-sdk-extension-autoconfigure-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-sdk-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-sdk-extension-autoconfigure-spi-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-semconv-1.41.1.jar
+[INFO] Resolved dependency: opentelemetry-semconv-incubating-1.40.0-alpha.jar
+[INFO] Resolved dependency: opentelemetry-api-incubator-1.62.0-alpha.jar
+[INFO] Resolved dependency: opentelemetry-instrumentation-api-2.28.1.jar
+[INFO] Resolved dependency: opentelemetry-instrumentation-annotations-2.28.1.jar
+[INFO] Resolved dependency: opentelemetry-instrumentation-annotations-support-2.28.1-alpha.jar
+[INFO] Resolved dependency: opentelemetry-instrumentation-api-incubator-2.28.1-alpha.jar
+[INFO] Resolved dependency: opentelemetry-exporter-otlp-common-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-exporter-otlp-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-runtime-telemetry-2.28.1-alpha.jar
+[INFO] Resolved dependency: vertx-grpc-client-4.5.34.jar
+[INFO] Resolved dependency: opentelemetry-jdbc-2.28.1-alpha.jar
+[INFO] Resolved dependency: jspecify-1.0.1.jar
+[INFO] Resolved dependency: reactive-streams-1.0.4.jar
+[INFO] Resolved dependency: jakarta.annotation-api-3.0.0.jar
+[INFO] Resolved dependency: jakarta.enterprise.cdi-api-4.1.0.jar
+[INFO] Resolved dependency: jakarta.inject-api-2.0.1.jar
+[INFO] Resolved dependency: smallrye-common-os-2.19.0.jar
+[INFO] Resolved dependency: quarkus-ide-launcher-3.40.1.jar
+[INFO] Resolved dependency: quarkus-development-mode-spi-3.40.1.jar
+[INFO] Resolved dependency: smallrye-config-3.17.2.jar
+[INFO] Resolved dependency: jboss-logmanager-3.2.2.Final.jar
+[INFO] Resolved dependency: jboss-threads-3.9.2.jar
+[INFO] Resolved dependency: slf4j-jboss-logmanager-2.0.2.Final.jar
+[INFO] Resolved dependency: wildfly-common-2.0.1.jar
+[INFO] Resolved dependency: quarkus-value-registry-3.40.1.jar
+[INFO] Resolved dependency: quarkus-fs-util-1.4.2.jar
+[INFO] Resolved dependency: quarkus-tls-registry-spi-3.40.1.jar
+[INFO] Resolved dependency: quarkus-credentials-3.40.1.jar
+[INFO] Resolved dependency: smallrye-private-key-pem-parser-0.9.4.jar
+[INFO] Resolved dependency: arc-3.40.1.jar
+[INFO] Resolved dependency: microprofile-context-propagation-api-1.3.jar
+[INFO] Resolved dependency: quarkus-netty-3.40.1.jar
+[INFO] Resolved dependency: netty-codec-haproxy-4.2.17.Final.jar
+[INFO] Resolved dependency: quarkus-mutiny-3.40.1.jar
+[INFO] Resolved dependency: quarkus-virtual-threads-3.40.1.jar
+[INFO] Resolved dependency: quarkus-vertx-latebound-mdc-provider-3.40.1.jar
+[INFO] Resolved dependency: smallrye-mutiny-vertx-core-3.23.1.jar
+[INFO] Resolved dependency: smallrye-fault-tolerance-vertx-6.11.4.jar
+[INFO] Resolved dependency: quarkus-security-2.3.2.jar
+[INFO] Resolved dependency: vertx-grpc-4.5.34.jar
+[INFO] Resolved dependency: vertx-grpc-server-4.5.34.jar
+[INFO] Resolved dependency: grpc-core-1.83.1.jar
+[INFO] Resolved dependency: vertx-core-4.5.28.jar
+[INFO] Resolved dependency: smallrye-common-constraint-2.19.0.jar
+[INFO] Resolved dependency: opentelemetry-sdk-common-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-sdk-trace-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-sdk-metrics-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-sdk-logs-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-exporter-common-1.62.0.jar
+[INFO] Resolved dependency: vertx-grpc-common-4.5.34.jar
+[INFO] Resolved dependency: grpc-stub-1.83.1.jar
+[INFO] Resolved dependency: grpc-api-1.83.1.jar
+[INFO] Resolved dependency: jakarta.enterprise.lang-model-4.1.0.jar
+[INFO] Resolved dependency: jakarta.el-api-6.0.0.jar
+[INFO] Resolved dependency: jakarta.interceptor-api-2.2.0.jar
+[INFO] Resolved dependency: smallrye-config-core-3.17.2.jar
+[INFO] Resolved dependency: smallrye-common-cpu-2.15.0.jar
+[INFO] Resolved dependency: smallrye-common-expression-2.15.0.jar
+[INFO] Resolved dependency: smallrye-common-net-2.15.0.jar
+[INFO] Resolved dependency: smallrye-common-ref-2.15.0.jar
+[INFO] Resolved dependency: jakarta.json-api-2.1.3.jar
+[INFO] Resolved dependency: parsson-1.1.7.jar
+[INFO] Resolved dependency: smallrye-common-function-2.14.0.jar
+[INFO] Resolved dependency: mutiny-3.3.0.jar
+[INFO] Resolved dependency: netty-codec-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-codec-http-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-codec-http2-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-handler-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-buffer-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-transport-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-codec-base-4.2.17.Final.jar
+[INFO] Resolved dependency: quarkus-smallrye-context-propagation-3.40.1.jar
+[INFO] Resolved dependency: mutiny-smallrye-context-propagation-3.3.0.jar
+[INFO] Resolved dependency: smallrye-mutiny-vertx-runtime-3.23.1.jar
+[INFO] Resolved dependency: grpc-netty-1.83.1.jar
+[INFO] Resolved dependency: grpc-protobuf-1.83.1.jar
+[INFO] Resolved dependency: guava-32.1.2-jre.jar
+[INFO] Resolved dependency: gson-2.13.2.jar
+[INFO] Resolved dependency: error_prone_annotations-2.50.0.jar
+[INFO] Resolved dependency: perfmark-api-0.27.0.jar
+[INFO] Resolved dependency: grpc-context-1.83.1.jar
+[INFO] Resolved dependency: netty-common-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-handler-proxy-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-resolver-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-resolver-dns-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-tcnative-classes-2.0.81.Final.jar
+[INFO] Resolved dependency: microprofile-config-api-3.1.1-RC1.jar
+[INFO] Resolved dependency: smallrye-common-classloader-2.17.1.jar
+[INFO] Resolved dependency: asm-9.9.1.jar
+[INFO] Resolved dependency: smallrye-config-common-3.17.2.jar
+[INFO] Resolved dependency: jctools-core-4.0.6.jar
+[INFO] Resolved dependency: netty-codec-compression-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-codec-protobuf-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-codec-marshalling-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-transport-native-unix-common-4.2.17.Final.jar
+[INFO] Resolved dependency: smallrye-context-propagation-2.3.0.jar
+[INFO] Resolved dependency: grpc-util-1.83.1.jar
+[INFO] Resolved dependency: protobuf-java-4.35.1.jar
+[INFO] Resolved dependency: proto-google-common-protos-2.64.1.jar
+[INFO] Resolved dependency: grpc-protobuf-lite-1.83.1.jar
+[INFO] Resolved dependency: failureaccess-1.0.1.jar
+[INFO] Resolved dependency: listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar
+[INFO] Resolved dependency: j2objc-annotations-2.8.jar
+[INFO] Resolved dependency: netty-codec-socks-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-codec-dns-4.2.17.Final.jar
+[INFO] Resolved dependency: smallrye-context-propagation-api-2.3.0.jar
+[INFO] Resolved dependency: smallrye-context-propagation-storage-2.3.0.jar
+[INFO] 
+[INFO] ---------------------< pe.axiz:auth-code-dni-spi >----------------------
+[INFO] Building auth-code-dni-spi 1.1.0                                   [3/6]
+[INFO]   from auth-code-dni-spi/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- dependency:3.11.0:go-offline (default-cli) @ auth-code-dni-spi ---
+[INFO] Resolved plugin: maven-compiler-plugin-3.16.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-compiler-plugin-3.16.0.jar
+[INFO]       asm-9.10.1.jar
+[INFO]       maven-shared-utils-3.4.2.jar
+[INFO]       commons-io-2.22.0.jar
+[INFO]       maven-shared-incremental-1.1.jar
+[INFO]       plexus-java-1.6.0.jar
+[INFO]       plexus-compiler-api-2.17.0.jar
+[INFO]       plexus-compiler-manager-2.17.0.jar
+[INFO]       plexus-compiler-javac-2.17.0.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       javaparser-core-3.28.2.jar
+[INFO]       javax.inject-1.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO] Resolved plugin: maven-surefire-plugin-3.6.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-surefire-plugin-3.6.0.jar
+[INFO]       surefire-api-3.6.0.jar
+[INFO]       surefire-extensions-api-3.6.0.jar
+[INFO]       maven-surefire-common-3.6.0.jar
+[INFO]       surefire-logger-api-3.6.0.jar
+[INFO]       surefire-shared-utils-3.6.0.jar
+[INFO]       surefire-booter-3.6.0.jar
+[INFO]       maven-resolver-util-1.9.27.jar
+[INFO]       maven-common-artifact-filters-3.4.0.jar
+[INFO]       plexus-java-1.6.0.jar
+[INFO]       surefire-extensions-spi-3.6.0.jar
+[INFO]       maven-resolver-api-1.9.27.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       asm-9.10.1.jar
+[INFO]       javaparser-core-3.28.2.jar
+[INFO] Resolved plugin: maven-jar-plugin-3.5.1.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-jar-plugin-3.5.1.jar
+[INFO]       file-management-3.2.0.jar
+[INFO]       maven-archiver-3.6.6.jar
+[INFO]       plexus-archiver-4.12.0.jar
+[INFO]       javax.inject-1.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       commons-io-2.22.0.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       plexus-interpolation-1.29.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO]       plexus-io-3.6.0.jar
+[INFO]       commons-compress-1.28.0.jar
+[INFO]       xz-1.12.jar
+[INFO]       zstd-jni-1.5.7-9.jar
+[INFO]       commons-codec-1.19.0.jar
+[INFO]       commons-lang3-3.18.0.jar
+[INFO] Resolved plugin: spotless-maven-plugin-3.10.4.jar
+[INFO] Resolved plugin dependency:
+[INFO]       spotless-maven-plugin-3.10.4.jar
+[INFO]       spotless-lib-4.10.4.jar
+[INFO]       spotless-lib-extra-4.10.4.jar
+[INFO]       durian-core-1.2.0.jar
+[INFO]       durian-io-1.2.0.jar
+[INFO]       durian-collect-1.2.0.jar
+[INFO]       plexus-resources-1.4.0.jar
+[INFO]       plexus-utils-4.1.0.jar
+[INFO]       org.eclipse.jgit-7.8.0.202609011348-r.jar
+[INFO]       plexus-build-api-0.0.7.jar
+[INFO]       concurrent-trees-2.6.1.jar
+[INFO]       solstice-1.8.2.jar
+[INFO]       org.eclipse.osgi-3.24.300.jar
+[INFO]       plexus-xml-3.1.0.jar
+[INFO]       javax.inject-1.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       JavaEWAH-1.2.3.jar
+[INFO]       commons-codec-1.22.1.jar
+[INFO]       durian-swt.os-4.3.0.jar
+[INFO]       xz-1.9.jar
+[INFO]       okhttp-4.12.0.jar
+[INFO]       okio-3.6.0.jar
+[INFO]       kotlin-stdlib-jdk8-1.8.21.jar
+[INFO]       okio-jvm-3.6.0.jar
+[INFO]       kotlin-stdlib-1.8.21.jar
+[INFO]       kotlin-stdlib-jdk7-1.8.21.jar
+[INFO]       kotlin-stdlib-common-1.9.10.jar
+[INFO]       annotations-13.0.jar
+[INFO] Resolved plugin: maven-clean-plugin-3.5.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-clean-plugin-3.5.0.jar
+[INFO]       plexus-utils-4.0.2.jar
+[INFO] Resolved plugin: maven-install-plugin-3.2.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-install-plugin-3.2.0.jar
+[INFO]       maven-resolver-util-1.9.27.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO]       maven-resolver-api-1.9.27.jar
+[INFO] Resolved plugin: maven-site-plugin-3.22.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-site-plugin-3.22.0.jar
+[INFO]       maven-reporting-api-4.0.0.jar
+[INFO]       maven-reporting-exec-2.0.1.jar
+[INFO]       maven-shared-utils-3.4.2.jar
+[INFO]       maven-resolver-transport-wagon-1.4.1.jar
+[INFO]       maven-archiver-3.6.6.jar
+[INFO]       plexus-archiver-4.11.0.jar
+[INFO]       commons-io-2.22.0.jar
+[INFO]       plexus-i18n-1.1.0.jar
+[INFO]       plexus-interactivity-api-1.5.1.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO]       doxia-sink-api-2.1.0.jar
+[INFO]       doxia-core-2.1.0.jar
+[INFO]       doxia-module-xhtml5-2.1.0.jar
+[INFO]       doxia-module-apt-2.1.0.jar
+[INFO]       doxia-module-xdoc-2.1.0.jar
+[INFO]       doxia-module-fml-2.1.0.jar
+[INFO]       doxia-module-markdown-2.1.0.jar
+[INFO]       doxia-site-model-2.1.0.jar
+[INFO]       doxia-site-renderer-2.1.0.jar
+[INFO]       doxia-integration-tools-2.1.0.jar
+[INFO]       commons-lang3-3.20.0.jar
+[INFO]       jetty-server-9.4.58.v20250814.jar
+[INFO]       jetty-http-9.4.58.v20250814.jar
+[INFO]       jetty-servlet-9.4.58.v20250814.jar
+[INFO]       jetty-webapp-9.4.58.v20250814.jar
+[INFO]       jetty-util-9.4.58.v20250814.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       javax.inject-1.jar
+[INFO]       maven-resolver-api-1.4.1.jar
+[INFO]       maven-resolver-util-1.4.1.jar
+[INFO]       plexus-classworlds-2.9.0.jar
+[INFO]       maven-resolver-spi-1.4.1.jar
+[INFO]       wagon-provider-api-3.0.0.jar
+[INFO]       plexus-interpolation-1.29.jar
+[INFO]       plexus-io-3.6.0.jar
+[INFO]       commons-compress-1.28.0.jar
+[INFO]       xz-1.11.jar
+[INFO]       zstd-jni-1.5.7-6.jar
+[INFO]       flexmark-0.62.2.jar
+[INFO]       flexmark-util-data-0.62.2.jar
+[INFO]       flexmark-util-misc-0.62.2.jar
+[INFO]       flexmark-util-sequence-0.62.2.jar
+[INFO]       flexmark-util-ast-0.62.2.jar
+[INFO]       flexmark-ext-abbreviation-0.62.2.jar
+[INFO]       flexmark-ext-autolink-0.62.2.jar
+[INFO]       flexmark-ext-definition-0.62.2.jar
+[INFO]       flexmark-ext-escaped-character-0.62.2.jar
+[INFO]       flexmark-ext-footnotes-0.62.2.jar
+[INFO]       flexmark-ext-gfm-strikethrough-0.62.2.jar
+[INFO]       flexmark-ext-tables-0.62.2.jar
+[INFO]       flexmark-ext-typographic-0.62.2.jar
+[INFO]       flexmark-ext-wikilink-0.62.2.jar
+[INFO]       flexmark-ext-yaml-front-matter-0.62.2.jar
+[INFO]       jsoup-1.22.1.jar
+[INFO]       annotations-26.1.0.jar
+[INFO]       org.eclipse.sisu.plexus-1.0.0.jar
+[INFO]       doxia-skin-model-2.1.0.jar
+[INFO]       plexus-velocity-2.3.0.jar
+[INFO]       velocity-engine-core-2.4.1.jar
+[INFO]       velocity-tools-generic-3.1.jar
+[INFO]       javax.servlet-api-3.1.0.jar
+[INFO]       jetty-io-9.4.58.v20250814.jar
+[INFO]       jetty-security-9.4.58.v20250814.jar
+[INFO]       jetty-util-ajax-9.4.58.v20250814.jar
+[INFO]       jetty-xml-9.4.58.v20250814.jar
+[INFO]       commons-codec-1.19.0.jar
+[INFO]       flexmark-util-builder-0.62.2.jar
+[INFO]       flexmark-util-collection-0.62.2.jar
+[INFO]       flexmark-util-dependency-0.62.2.jar
+[INFO]       flexmark-util-format-0.62.2.jar
+[INFO]       flexmark-util-html-0.62.2.jar
+[INFO]       flexmark-util-visitor-0.62.2.jar
+[INFO]       flexmark-util-0.62.2.jar
+[INFO]       autolink-0.6.0.jar
+[INFO]       org.eclipse.sisu.inject-1.0.0.jar
+[INFO]       plexus-component-annotations-2.2.0.jar
+[INFO]       commons-beanutils-1.9.4.jar
+[INFO]       commons-digester3-3.2.jar
+[INFO]       json-simple-3.0.2.jar
+[INFO]       flexmark-util-options-0.62.2.jar
+[INFO]       asm-9.9.1.jar
+[INFO]       commons-logging-1.2.jar
+[INFO]       commons-collections-3.2.2.jar
+[INFO] Resolved plugin: maven-resources-plugin-3.5.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-resources-plugin-3.5.0.jar
+[INFO]       maven-filtering-3.5.0.jar
+[INFO]       plexus-utils-3.6.0.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       plexus-build-api-1.2.0.jar
+[INFO]       plexus-interpolation-1.29.jar
+[INFO]       javax.inject-1.jar
+[INFO]       plexus-build-api-0.0.7.jar
+[INFO]       org.eclipse.sisu.plexus-0.9.0.M4.jar
+[INFO] Resolved plugin: maven-deploy-plugin-3.2.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-deploy-plugin-3.2.0.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO]       maven-resolver-util-1.9.27.jar
+[INFO]       maven-resolver-api-1.9.27.jar
+[INFO] Resolved dependency: keycloak-server-spi-private-26.8.0.jar
+[INFO] Resolved dependency: keycloak-core-26.8.0.jar
+[INFO] Resolved dependency: keycloak-services-26.8.0.jar
+[INFO] Resolved dependency: keycloak-server-spi-26.8.0.jar
+[INFO] Resolved dependency: httpclient-4.5.14.jar
+[INFO] Resolved dependency: opentelemetry-api-1.62.0.jar
+[INFO] Resolved dependency: keycloak-common-26.8.0.jar
+[INFO] Resolved dependency: jackson-core-2.21.5.jar
+[INFO] Resolved dependency: jackson-databind-2.21.5.jar
+[INFO] Resolved dependency: jackson-datatype-jdk8-2.21.5.jar
+[INFO] Resolved dependency: jackson-datatype-jsr310-2.21.5.jar
+[INFO] Resolved dependency: webauthn4j-core-0.30.3.RELEASE.jar
+[INFO] Resolved dependency: microprofile-openapi-api-4.1.1.jar
+[INFO] Resolved dependency: jakarta.mail-api-2.1.5.jar
+[INFO] Resolved dependency: angus-mail-2.0.5.jar
+[INFO] Resolved dependency: twitter4j-core-4.1.2.jar
+[INFO] Resolved dependency: jboss-logging-3.6.3.Final.jar
+[INFO] Resolved dependency: commons-logging-jboss-logging-2.0.0.Final.jar
+[INFO] Resolved dependency: jakarta.ws.rs-api-4.0.0.jar
+[INFO] Resolved dependency: jakarta.transaction-api-2.0.1.jar
+[INFO] Resolved dependency: jakarta.xml.soap-api-3.0.2.jar
+[INFO] Resolved dependency: owasp-java-html-sanitizer-20260101.1.jar
+[INFO] Resolved dependency: java8-shim-20260101.1.jar
+[INFO] Resolved dependency: java10-shim-20260101.1.jar
+[INFO] Resolved dependency: jackson-annotations-2.21.jar
+[INFO] Resolved dependency: javax.annotation-api-1.3.2.jar
+[INFO] Resolved dependency: jackson-jakarta-rs-yaml-provider-2.21.5.jar
+[INFO] Resolved dependency: javase-3.4.0.jar
+[INFO] Resolved dependency: titanium-json-ld-1.3.3.jar
+[INFO] Resolved dependency: rdf-urdna-1.1.jar
+[INFO] Resolved dependency: uap-java-1.6.1.jar
+[INFO] Resolved dependency: snakeyaml-2.6.jar
+[INFO] Resolved dependency: smallrye-common-annotation-2.19.0.jar
+[INFO] Resolved dependency: keycloak-model-storage-private-26.8.0.jar
+[INFO] Resolved dependency: keycloak-config-api-26.8.0.jar
+[INFO] Resolved dependency: httpcore-4.4.16.jar
+[INFO] Resolved dependency: commons-codec-1.21.0.jar
+[INFO] Resolved dependency: opentelemetry-context-1.62.0.jar
+[INFO] Resolved dependency: jakarta.activation-api-2.1.4.jar
+[INFO] Resolved dependency: jackson-dataformat-cbor-2.21.5.jar
+[INFO] Resolved dependency: slf4j-api-2.0.18.jar
+[INFO] Resolved dependency: angus-activation-2.0.3.jar
+[INFO] Resolved dependency: jackson-jakarta-rs-base-2.21.5.jar
+[INFO] Resolved dependency: jackson-dataformat-yaml-2.21.5.jar
+[INFO] Resolved dependency: jackson-module-jakarta-xmlbind-annotations-2.21.5.jar
+[INFO] Resolved dependency: core-3.4.0.jar
+[INFO] Resolved dependency: jai-imageio-core-1.4.0.jar
+[INFO] Resolved dependency: commons-collections4-4.4.jar
+[INFO] Resolved dependency: keycloak-model-storage-26.8.0.jar
+[INFO] Resolved dependency: infinispan-commons-16.1.4.jar
+[INFO] Resolved dependency: quarkus-opentelemetry-3.40.1.jar
+[INFO] Resolved dependency: opentelemetry-common-1.62.0.jar
+[INFO] Resolved dependency: jakarta.xml.bind-api-4.0.5.jar
+[INFO] Resolved dependency: protostream-6.0.7.jar
+[INFO] Resolved dependency: protostream-types-6.0.7.jar
+[INFO] Resolved dependency: caffeine-3.2.4.jar
+[INFO] Resolved dependency: rxjava-3.1.12.jar
+[INFO] Resolved dependency: quarkus-core-3.40.1.jar
+[INFO] Resolved dependency: quarkus-tls-registry-3.40.1.jar
+[INFO] Resolved dependency: quarkus-arc-3.40.1.jar
+[INFO] Resolved dependency: quarkus-vertx-3.40.1.jar
+[INFO] Resolved dependency: quarkus-security-runtime-spi-3.40.1.jar
+[INFO] Resolved dependency: quarkus-grpc-common-3.40.1.jar
+[INFO] Resolved dependency: smallrye-common-vertx-context-2.19.0.jar
+[INFO] Resolved dependency: quarkus-websockets-next-spi-3.40.1.jar
+[INFO] Resolved dependency: opentelemetry-sdk-extension-autoconfigure-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-sdk-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-sdk-extension-autoconfigure-spi-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-semconv-1.41.1.jar
+[INFO] Resolved dependency: opentelemetry-semconv-incubating-1.40.0-alpha.jar
+[INFO] Resolved dependency: opentelemetry-api-incubator-1.62.0-alpha.jar
+[INFO] Resolved dependency: opentelemetry-instrumentation-api-2.28.1.jar
+[INFO] Resolved dependency: opentelemetry-instrumentation-annotations-2.28.1.jar
+[INFO] Resolved dependency: opentelemetry-instrumentation-annotations-support-2.28.1-alpha.jar
+[INFO] Resolved dependency: opentelemetry-instrumentation-api-incubator-2.28.1-alpha.jar
+[INFO] Resolved dependency: opentelemetry-exporter-otlp-common-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-exporter-otlp-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-runtime-telemetry-2.28.1-alpha.jar
+[INFO] Resolved dependency: vertx-grpc-client-4.5.34.jar
+[INFO] Resolved dependency: opentelemetry-jdbc-2.28.1-alpha.jar
+[INFO] Resolved dependency: jspecify-1.0.1.jar
+[INFO] Resolved dependency: reactive-streams-1.0.4.jar
+[INFO] Resolved dependency: jakarta.annotation-api-3.0.0.jar
+[INFO] Resolved dependency: jakarta.enterprise.cdi-api-4.1.0.jar
+[INFO] Resolved dependency: jakarta.inject-api-2.0.1.jar
+[INFO] Resolved dependency: smallrye-common-os-2.19.0.jar
+[INFO] Resolved dependency: quarkus-ide-launcher-3.40.1.jar
+[INFO] Resolved dependency: quarkus-development-mode-spi-3.40.1.jar
+[INFO] Resolved dependency: smallrye-config-3.17.2.jar
+[INFO] Resolved dependency: jboss-logmanager-3.2.2.Final.jar
+[INFO] Resolved dependency: jboss-threads-3.9.2.jar
+[INFO] Resolved dependency: slf4j-jboss-logmanager-2.0.2.Final.jar
+[INFO] Resolved dependency: wildfly-common-2.0.1.jar
+[INFO] Resolved dependency: quarkus-value-registry-3.40.1.jar
+[INFO] Resolved dependency: quarkus-fs-util-1.4.2.jar
+[INFO] Resolved dependency: quarkus-tls-registry-spi-3.40.1.jar
+[INFO] Resolved dependency: quarkus-credentials-3.40.1.jar
+[INFO] Resolved dependency: smallrye-private-key-pem-parser-0.9.4.jar
+[INFO] Resolved dependency: arc-3.40.1.jar
+[INFO] Resolved dependency: microprofile-context-propagation-api-1.3.jar
+[INFO] Resolved dependency: quarkus-netty-3.40.1.jar
+[INFO] Resolved dependency: netty-codec-haproxy-4.2.17.Final.jar
+[INFO] Resolved dependency: quarkus-mutiny-3.40.1.jar
+[INFO] Resolved dependency: quarkus-virtual-threads-3.40.1.jar
+[INFO] Resolved dependency: quarkus-vertx-latebound-mdc-provider-3.40.1.jar
+[INFO] Resolved dependency: smallrye-mutiny-vertx-core-3.23.1.jar
+[INFO] Resolved dependency: smallrye-fault-tolerance-vertx-6.11.4.jar
+[INFO] Resolved dependency: quarkus-security-2.3.2.jar
+[INFO] Resolved dependency: vertx-grpc-4.5.34.jar
+[INFO] Resolved dependency: vertx-grpc-server-4.5.34.jar
+[INFO] Resolved dependency: grpc-core-1.83.1.jar
+[INFO] Resolved dependency: vertx-core-4.5.28.jar
+[INFO] Resolved dependency: smallrye-common-constraint-2.19.0.jar
+[INFO] Resolved dependency: opentelemetry-sdk-common-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-sdk-trace-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-sdk-metrics-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-sdk-logs-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-exporter-common-1.62.0.jar
+[INFO] Resolved dependency: vertx-grpc-common-4.5.34.jar
+[INFO] Resolved dependency: grpc-stub-1.83.1.jar
+[INFO] Resolved dependency: grpc-api-1.83.1.jar
+[INFO] Resolved dependency: jakarta.enterprise.lang-model-4.1.0.jar
+[INFO] Resolved dependency: jakarta.el-api-6.0.0.jar
+[INFO] Resolved dependency: jakarta.interceptor-api-2.2.0.jar
+[INFO] Resolved dependency: smallrye-config-core-3.17.2.jar
+[INFO] Resolved dependency: smallrye-common-cpu-2.15.0.jar
+[INFO] Resolved dependency: smallrye-common-expression-2.15.0.jar
+[INFO] Resolved dependency: smallrye-common-net-2.15.0.jar
+[INFO] Resolved dependency: smallrye-common-ref-2.15.0.jar
+[INFO] Resolved dependency: jakarta.json-api-2.1.3.jar
+[INFO] Resolved dependency: parsson-1.1.7.jar
+[INFO] Resolved dependency: smallrye-common-function-2.14.0.jar
+[INFO] Resolved dependency: mutiny-3.3.0.jar
+[INFO] Resolved dependency: netty-codec-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-codec-http-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-codec-http2-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-handler-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-buffer-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-transport-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-codec-base-4.2.17.Final.jar
+[INFO] Resolved dependency: quarkus-smallrye-context-propagation-3.40.1.jar
+[INFO] Resolved dependency: mutiny-smallrye-context-propagation-3.3.0.jar
+[INFO] Resolved dependency: smallrye-mutiny-vertx-runtime-3.23.1.jar
+[INFO] Resolved dependency: grpc-netty-1.83.1.jar
+[INFO] Resolved dependency: grpc-protobuf-1.83.1.jar
+[INFO] Resolved dependency: guava-32.1.2-jre.jar
+[INFO] Resolved dependency: gson-2.13.2.jar
+[INFO] Resolved dependency: error_prone_annotations-2.50.0.jar
+[INFO] Resolved dependency: perfmark-api-0.27.0.jar
+[INFO] Resolved dependency: grpc-context-1.83.1.jar
+[INFO] Resolved dependency: netty-common-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-handler-proxy-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-resolver-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-resolver-dns-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-tcnative-classes-2.0.81.Final.jar
+[INFO] Resolved dependency: microprofile-config-api-3.1.1-RC1.jar
+[INFO] Resolved dependency: smallrye-common-classloader-2.17.1.jar
+[INFO] Resolved dependency: asm-9.9.1.jar
+[INFO] Resolved dependency: smallrye-config-common-3.17.2.jar
+[INFO] Resolved dependency: jctools-core-4.0.6.jar
+[INFO] Resolved dependency: netty-codec-compression-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-codec-protobuf-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-codec-marshalling-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-transport-native-unix-common-4.2.17.Final.jar
+[INFO] Resolved dependency: smallrye-context-propagation-2.3.0.jar
+[INFO] Resolved dependency: grpc-util-1.83.1.jar
+[INFO] Resolved dependency: protobuf-java-4.35.1.jar
+[INFO] Resolved dependency: proto-google-common-protos-2.64.1.jar
+[INFO] Resolved dependency: grpc-protobuf-lite-1.83.1.jar
+[INFO] Resolved dependency: failureaccess-1.0.1.jar
+[INFO] Resolved dependency: listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar
+[INFO] Resolved dependency: j2objc-annotations-2.8.jar
+[INFO] Resolved dependency: netty-codec-socks-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-codec-dns-4.2.17.Final.jar
+[INFO] Resolved dependency: smallrye-context-propagation-api-2.3.0.jar
+[INFO] Resolved dependency: smallrye-context-propagation-storage-2.3.0.jar
+[INFO] 
+[INFO] ------------------------< pe.axiz:ropc-dni-spi >------------------------
+[INFO] Building ropc-dni-spi 1.1.0                                        [4/6]
+[INFO]   from ropc-dni-spi/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- dependency:3.11.0:go-offline (default-cli) @ ropc-dni-spi ---
+[INFO] Resolved plugin: maven-compiler-plugin-3.16.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-compiler-plugin-3.16.0.jar
+[INFO]       asm-9.10.1.jar
+[INFO]       maven-shared-utils-3.4.2.jar
+[INFO]       commons-io-2.22.0.jar
+[INFO]       maven-shared-incremental-1.1.jar
+[INFO]       plexus-java-1.6.0.jar
+[INFO]       plexus-compiler-api-2.17.0.jar
+[INFO]       plexus-compiler-manager-2.17.0.jar
+[INFO]       plexus-compiler-javac-2.17.0.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       javaparser-core-3.28.2.jar
+[INFO]       javax.inject-1.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO] Resolved plugin: maven-surefire-plugin-3.6.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-surefire-plugin-3.6.0.jar
+[INFO]       surefire-api-3.6.0.jar
+[INFO]       surefire-extensions-api-3.6.0.jar
+[INFO]       maven-surefire-common-3.6.0.jar
+[INFO]       surefire-logger-api-3.6.0.jar
+[INFO]       surefire-shared-utils-3.6.0.jar
+[INFO]       surefire-booter-3.6.0.jar
+[INFO]       maven-resolver-util-1.9.27.jar
+[INFO]       maven-common-artifact-filters-3.4.0.jar
+[INFO]       plexus-java-1.6.0.jar
+[INFO]       surefire-extensions-spi-3.6.0.jar
+[INFO]       maven-resolver-api-1.9.27.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       asm-9.10.1.jar
+[INFO]       javaparser-core-3.28.2.jar
+[INFO] Resolved plugin: maven-jar-plugin-3.5.1.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-jar-plugin-3.5.1.jar
+[INFO]       file-management-3.2.0.jar
+[INFO]       maven-archiver-3.6.6.jar
+[INFO]       plexus-archiver-4.12.0.jar
+[INFO]       javax.inject-1.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       commons-io-2.22.0.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       plexus-interpolation-1.29.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO]       plexus-io-3.6.0.jar
+[INFO]       commons-compress-1.28.0.jar
+[INFO]       xz-1.12.jar
+[INFO]       zstd-jni-1.5.7-9.jar
+[INFO]       commons-codec-1.19.0.jar
+[INFO]       commons-lang3-3.18.0.jar
+[INFO] Resolved plugin: spotless-maven-plugin-3.10.4.jar
+[INFO] Resolved plugin dependency:
+[INFO]       spotless-maven-plugin-3.10.4.jar
+[INFO]       spotless-lib-4.10.4.jar
+[INFO]       spotless-lib-extra-4.10.4.jar
+[INFO]       durian-core-1.2.0.jar
+[INFO]       durian-io-1.2.0.jar
+[INFO]       durian-collect-1.2.0.jar
+[INFO]       plexus-resources-1.4.0.jar
+[INFO]       plexus-utils-4.1.0.jar
+[INFO]       org.eclipse.jgit-7.8.0.202609011348-r.jar
+[INFO]       plexus-build-api-0.0.7.jar
+[INFO]       concurrent-trees-2.6.1.jar
+[INFO]       solstice-1.8.2.jar
+[INFO]       org.eclipse.osgi-3.24.300.jar
+[INFO]       plexus-xml-3.1.0.jar
+[INFO]       javax.inject-1.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       JavaEWAH-1.2.3.jar
+[INFO]       commons-codec-1.22.1.jar
+[INFO]       durian-swt.os-4.3.0.jar
+[INFO]       xz-1.9.jar
+[INFO]       okhttp-4.12.0.jar
+[INFO]       okio-3.6.0.jar
+[INFO]       kotlin-stdlib-jdk8-1.8.21.jar
+[INFO]       okio-jvm-3.6.0.jar
+[INFO]       kotlin-stdlib-1.8.21.jar
+[INFO]       kotlin-stdlib-jdk7-1.8.21.jar
+[INFO]       kotlin-stdlib-common-1.9.10.jar
+[INFO]       annotations-13.0.jar
+[INFO] Resolved plugin: maven-clean-plugin-3.5.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-clean-plugin-3.5.0.jar
+[INFO]       plexus-utils-4.0.2.jar
+[INFO] Resolved plugin: maven-install-plugin-3.2.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-install-plugin-3.2.0.jar
+[INFO]       maven-resolver-util-1.9.27.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO]       maven-resolver-api-1.9.27.jar
+[INFO] Resolved plugin: maven-site-plugin-3.22.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-site-plugin-3.22.0.jar
+[INFO]       maven-reporting-api-4.0.0.jar
+[INFO]       maven-reporting-exec-2.0.1.jar
+[INFO]       maven-shared-utils-3.4.2.jar
+[INFO]       maven-resolver-transport-wagon-1.4.1.jar
+[INFO]       maven-archiver-3.6.6.jar
+[INFO]       plexus-archiver-4.11.0.jar
+[INFO]       commons-io-2.22.0.jar
+[INFO]       plexus-i18n-1.1.0.jar
+[INFO]       plexus-interactivity-api-1.5.1.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO]       doxia-sink-api-2.1.0.jar
+[INFO]       doxia-core-2.1.0.jar
+[INFO]       doxia-module-xhtml5-2.1.0.jar
+[INFO]       doxia-module-apt-2.1.0.jar
+[INFO]       doxia-module-xdoc-2.1.0.jar
+[INFO]       doxia-module-fml-2.1.0.jar
+[INFO]       doxia-module-markdown-2.1.0.jar
+[INFO]       doxia-site-model-2.1.0.jar
+[INFO]       doxia-site-renderer-2.1.0.jar
+[INFO]       doxia-integration-tools-2.1.0.jar
+[INFO]       commons-lang3-3.20.0.jar
+[INFO]       jetty-server-9.4.58.v20250814.jar
+[INFO]       jetty-http-9.4.58.v20250814.jar
+[INFO]       jetty-servlet-9.4.58.v20250814.jar
+[INFO]       jetty-webapp-9.4.58.v20250814.jar
+[INFO]       jetty-util-9.4.58.v20250814.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       javax.inject-1.jar
+[INFO]       maven-resolver-api-1.4.1.jar
+[INFO]       maven-resolver-util-1.4.1.jar
+[INFO]       plexus-classworlds-2.9.0.jar
+[INFO]       maven-resolver-spi-1.4.1.jar
+[INFO]       wagon-provider-api-3.0.0.jar
+[INFO]       plexus-interpolation-1.29.jar
+[INFO]       plexus-io-3.6.0.jar
+[INFO]       commons-compress-1.28.0.jar
+[INFO]       xz-1.11.jar
+[INFO]       zstd-jni-1.5.7-6.jar
+[INFO]       flexmark-0.62.2.jar
+[INFO]       flexmark-util-data-0.62.2.jar
+[INFO]       flexmark-util-misc-0.62.2.jar
+[INFO]       flexmark-util-sequence-0.62.2.jar
+[INFO]       flexmark-util-ast-0.62.2.jar
+[INFO]       flexmark-ext-abbreviation-0.62.2.jar
+[INFO]       flexmark-ext-autolink-0.62.2.jar
+[INFO]       flexmark-ext-definition-0.62.2.jar
+[INFO]       flexmark-ext-escaped-character-0.62.2.jar
+[INFO]       flexmark-ext-footnotes-0.62.2.jar
+[INFO]       flexmark-ext-gfm-strikethrough-0.62.2.jar
+[INFO]       flexmark-ext-tables-0.62.2.jar
+[INFO]       flexmark-ext-typographic-0.62.2.jar
+[INFO]       flexmark-ext-wikilink-0.62.2.jar
+[INFO]       flexmark-ext-yaml-front-matter-0.62.2.jar
+[INFO]       jsoup-1.22.1.jar
+[INFO]       annotations-26.1.0.jar
+[INFO]       org.eclipse.sisu.plexus-1.0.0.jar
+[INFO]       doxia-skin-model-2.1.0.jar
+[INFO]       plexus-velocity-2.3.0.jar
+[INFO]       velocity-engine-core-2.4.1.jar
+[INFO]       velocity-tools-generic-3.1.jar
+[INFO]       javax.servlet-api-3.1.0.jar
+[INFO]       jetty-io-9.4.58.v20250814.jar
+[INFO]       jetty-security-9.4.58.v20250814.jar
+[INFO]       jetty-util-ajax-9.4.58.v20250814.jar
+[INFO]       jetty-xml-9.4.58.v20250814.jar
+[INFO]       commons-codec-1.19.0.jar
+[INFO]       flexmark-util-builder-0.62.2.jar
+[INFO]       flexmark-util-collection-0.62.2.jar
+[INFO]       flexmark-util-dependency-0.62.2.jar
+[INFO]       flexmark-util-format-0.62.2.jar
+[INFO]       flexmark-util-html-0.62.2.jar
+[INFO]       flexmark-util-visitor-0.62.2.jar
+[INFO]       flexmark-util-0.62.2.jar
+[INFO]       autolink-0.6.0.jar
+[INFO]       org.eclipse.sisu.inject-1.0.0.jar
+[INFO]       plexus-component-annotations-2.2.0.jar
+[INFO]       commons-beanutils-1.9.4.jar
+[INFO]       commons-digester3-3.2.jar
+[INFO]       json-simple-3.0.2.jar
+[INFO]       flexmark-util-options-0.62.2.jar
+[INFO]       asm-9.9.1.jar
+[INFO]       commons-logging-1.2.jar
+[INFO]       commons-collections-3.2.2.jar
+[INFO] Resolved plugin: maven-resources-plugin-3.5.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-resources-plugin-3.5.0.jar
+[INFO]       maven-filtering-3.5.0.jar
+[INFO]       plexus-utils-3.6.0.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       plexus-build-api-1.2.0.jar
+[INFO]       plexus-interpolation-1.29.jar
+[INFO]       javax.inject-1.jar
+[INFO]       plexus-build-api-0.0.7.jar
+[INFO]       org.eclipse.sisu.plexus-0.9.0.M4.jar
+[INFO] Resolved plugin: maven-deploy-plugin-3.2.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-deploy-plugin-3.2.0.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO]       maven-resolver-util-1.9.27.jar
+[INFO]       maven-resolver-api-1.9.27.jar
+[INFO] Resolved dependency: keycloak-services-26.8.0.jar
+[INFO] Resolved dependency: keycloak-server-spi-private-26.8.0.jar
+[INFO] Resolved dependency: keycloak-core-26.8.0.jar
+[INFO] Resolved dependency: keycloak-server-spi-26.8.0.jar
+[INFO] Resolved dependency: jakarta.mail-api-2.1.5.jar
+[INFO] Resolved dependency: angus-mail-2.0.5.jar
+[INFO] Resolved dependency: keycloak-common-26.8.0.jar
+[INFO] Resolved dependency: twitter4j-core-4.1.2.jar
+[INFO] Resolved dependency: jboss-logging-3.6.3.Final.jar
+[INFO] Resolved dependency: commons-logging-jboss-logging-2.0.0.Final.jar
+[INFO] Resolved dependency: jakarta.ws.rs-api-4.0.0.jar
+[INFO] Resolved dependency: jakarta.transaction-api-2.0.1.jar
+[INFO] Resolved dependency: jakarta.xml.soap-api-3.0.2.jar
+[INFO] Resolved dependency: owasp-java-html-sanitizer-20260101.1.jar
+[INFO] Resolved dependency: java8-shim-20260101.1.jar
+[INFO] Resolved dependency: java10-shim-20260101.1.jar
+[INFO] Resolved dependency: jackson-core-2.21.5.jar
+[INFO] Resolved dependency: jackson-databind-2.21.5.jar
+[INFO] Resolved dependency: jackson-annotations-2.21.jar
+[INFO] Resolved dependency: javax.annotation-api-1.3.2.jar
+[INFO] Resolved dependency: jackson-datatype-jdk8-2.21.5.jar
+[INFO] Resolved dependency: jackson-jakarta-rs-yaml-provider-2.21.5.jar
+[INFO] Resolved dependency: javase-3.4.0.jar
+[INFO] Resolved dependency: titanium-json-ld-1.3.3.jar
+[INFO] Resolved dependency: rdf-urdna-1.1.jar
+[INFO] Resolved dependency: webauthn4j-core-0.30.3.RELEASE.jar
+[INFO] Resolved dependency: uap-java-1.6.1.jar
+[INFO] Resolved dependency: snakeyaml-2.6.jar
+[INFO] Resolved dependency: microprofile-openapi-api-4.1.1.jar
+[INFO] Resolved dependency: smallrye-common-annotation-2.19.0.jar
+[INFO] Resolved dependency: keycloak-model-storage-private-26.8.0.jar
+[INFO] Resolved dependency: keycloak-config-api-26.8.0.jar
+[INFO] Resolved dependency: httpclient-4.5.14.jar
+[INFO] Resolved dependency: opentelemetry-api-1.62.0.jar
+[INFO] Resolved dependency: jackson-datatype-jsr310-2.21.5.jar
+[INFO] Resolved dependency: jakarta.activation-api-2.1.4.jar
+[INFO] Resolved dependency: angus-activation-2.0.3.jar
+[INFO] Resolved dependency: jackson-jakarta-rs-base-2.21.5.jar
+[INFO] Resolved dependency: jackson-dataformat-yaml-2.21.5.jar
+[INFO] Resolved dependency: jackson-module-jakarta-xmlbind-annotations-2.21.5.jar
+[INFO] Resolved dependency: core-3.4.0.jar
+[INFO] Resolved dependency: jai-imageio-core-1.4.0.jar
+[INFO] Resolved dependency: jackson-dataformat-cbor-2.21.5.jar
+[INFO] Resolved dependency: slf4j-api-2.0.18.jar
+[INFO] Resolved dependency: commons-collections4-4.4.jar
+[INFO] Resolved dependency: keycloak-model-storage-26.8.0.jar
+[INFO] Resolved dependency: infinispan-commons-16.1.4.jar
+[INFO] Resolved dependency: quarkus-opentelemetry-3.40.1.jar
+[INFO] Resolved dependency: httpcore-4.4.16.jar
+[INFO] Resolved dependency: commons-codec-1.21.0.jar
+[INFO] Resolved dependency: opentelemetry-context-1.62.0.jar
+[INFO] Resolved dependency: jakarta.xml.bind-api-4.0.5.jar
+[INFO] Resolved dependency: protostream-6.0.7.jar
+[INFO] Resolved dependency: protostream-types-6.0.7.jar
+[INFO] Resolved dependency: caffeine-3.2.4.jar
+[INFO] Resolved dependency: rxjava-3.1.12.jar
+[INFO] Resolved dependency: quarkus-core-3.40.1.jar
+[INFO] Resolved dependency: quarkus-tls-registry-3.40.1.jar
+[INFO] Resolved dependency: quarkus-arc-3.40.1.jar
+[INFO] Resolved dependency: quarkus-vertx-3.40.1.jar
+[INFO] Resolved dependency: quarkus-security-runtime-spi-3.40.1.jar
+[INFO] Resolved dependency: quarkus-grpc-common-3.40.1.jar
+[INFO] Resolved dependency: smallrye-common-vertx-context-2.19.0.jar
+[INFO] Resolved dependency: quarkus-websockets-next-spi-3.40.1.jar
+[INFO] Resolved dependency: opentelemetry-sdk-extension-autoconfigure-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-sdk-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-sdk-extension-autoconfigure-spi-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-semconv-1.41.1.jar
+[INFO] Resolved dependency: opentelemetry-semconv-incubating-1.40.0-alpha.jar
+[INFO] Resolved dependency: opentelemetry-api-incubator-1.62.0-alpha.jar
+[INFO] Resolved dependency: opentelemetry-instrumentation-api-2.28.1.jar
+[INFO] Resolved dependency: opentelemetry-instrumentation-annotations-2.28.1.jar
+[INFO] Resolved dependency: opentelemetry-instrumentation-annotations-support-2.28.1-alpha.jar
+[INFO] Resolved dependency: opentelemetry-instrumentation-api-incubator-2.28.1-alpha.jar
+[INFO] Resolved dependency: opentelemetry-exporter-otlp-common-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-exporter-otlp-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-runtime-telemetry-2.28.1-alpha.jar
+[INFO] Resolved dependency: vertx-grpc-client-4.5.34.jar
+[INFO] Resolved dependency: opentelemetry-jdbc-2.28.1-alpha.jar
+[INFO] Resolved dependency: opentelemetry-common-1.62.0.jar
+[INFO] Resolved dependency: jspecify-1.0.1.jar
+[INFO] Resolved dependency: reactive-streams-1.0.4.jar
+[INFO] Resolved dependency: jakarta.annotation-api-3.0.0.jar
+[INFO] Resolved dependency: jakarta.enterprise.cdi-api-4.1.0.jar
+[INFO] Resolved dependency: jakarta.inject-api-2.0.1.jar
+[INFO] Resolved dependency: smallrye-common-os-2.19.0.jar
+[INFO] Resolved dependency: quarkus-ide-launcher-3.40.1.jar
+[INFO] Resolved dependency: quarkus-development-mode-spi-3.40.1.jar
+[INFO] Resolved dependency: smallrye-config-3.17.2.jar
+[INFO] Resolved dependency: jboss-logmanager-3.2.2.Final.jar
+[INFO] Resolved dependency: jboss-threads-3.9.2.jar
+[INFO] Resolved dependency: slf4j-jboss-logmanager-2.0.2.Final.jar
+[INFO] Resolved dependency: wildfly-common-2.0.1.jar
+[INFO] Resolved dependency: quarkus-value-registry-3.40.1.jar
+[INFO] Resolved dependency: quarkus-fs-util-1.4.2.jar
+[INFO] Resolved dependency: quarkus-tls-registry-spi-3.40.1.jar
+[INFO] Resolved dependency: quarkus-credentials-3.40.1.jar
+[INFO] Resolved dependency: smallrye-private-key-pem-parser-0.9.4.jar
+[INFO] Resolved dependency: arc-3.40.1.jar
+[INFO] Resolved dependency: microprofile-context-propagation-api-1.3.jar
+[INFO] Resolved dependency: quarkus-netty-3.40.1.jar
+[INFO] Resolved dependency: netty-codec-haproxy-4.2.17.Final.jar
+[INFO] Resolved dependency: quarkus-mutiny-3.40.1.jar
+[INFO] Resolved dependency: quarkus-virtual-threads-3.40.1.jar
+[INFO] Resolved dependency: quarkus-vertx-latebound-mdc-provider-3.40.1.jar
+[INFO] Resolved dependency: smallrye-mutiny-vertx-core-3.23.1.jar
+[INFO] Resolved dependency: smallrye-fault-tolerance-vertx-6.11.4.jar
+[INFO] Resolved dependency: quarkus-security-2.3.2.jar
+[INFO] Resolved dependency: vertx-grpc-4.5.34.jar
+[INFO] Resolved dependency: vertx-grpc-server-4.5.34.jar
+[INFO] Resolved dependency: grpc-core-1.83.1.jar
+[INFO] Resolved dependency: vertx-core-4.5.28.jar
+[INFO] Resolved dependency: smallrye-common-constraint-2.19.0.jar
+[INFO] Resolved dependency: opentelemetry-sdk-common-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-sdk-trace-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-sdk-metrics-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-sdk-logs-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-exporter-common-1.62.0.jar
+[INFO] Resolved dependency: vertx-grpc-common-4.5.34.jar
+[INFO] Resolved dependency: grpc-stub-1.83.1.jar
+[INFO] Resolved dependency: grpc-api-1.83.1.jar
+[INFO] Resolved dependency: jakarta.enterprise.lang-model-4.1.0.jar
+[INFO] Resolved dependency: jakarta.el-api-6.0.0.jar
+[INFO] Resolved dependency: jakarta.interceptor-api-2.2.0.jar
+[INFO] Resolved dependency: smallrye-config-core-3.17.2.jar
+[INFO] Resolved dependency: smallrye-common-cpu-2.15.0.jar
+[INFO] Resolved dependency: smallrye-common-expression-2.15.0.jar
+[INFO] Resolved dependency: smallrye-common-net-2.15.0.jar
+[INFO] Resolved dependency: smallrye-common-ref-2.15.0.jar
+[INFO] Resolved dependency: jakarta.json-api-2.1.3.jar
+[INFO] Resolved dependency: parsson-1.1.7.jar
+[INFO] Resolved dependency: smallrye-common-function-2.14.0.jar
+[INFO] Resolved dependency: mutiny-3.3.0.jar
+[INFO] Resolved dependency: netty-codec-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-codec-http-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-codec-http2-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-handler-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-buffer-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-transport-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-codec-base-4.2.17.Final.jar
+[INFO] Resolved dependency: quarkus-smallrye-context-propagation-3.40.1.jar
+[INFO] Resolved dependency: mutiny-smallrye-context-propagation-3.3.0.jar
+[INFO] Resolved dependency: smallrye-mutiny-vertx-runtime-3.23.1.jar
+[INFO] Resolved dependency: grpc-netty-1.83.1.jar
+[INFO] Resolved dependency: grpc-protobuf-1.83.1.jar
+[INFO] Resolved dependency: guava-32.1.2-jre.jar
+[INFO] Resolved dependency: gson-2.13.2.jar
+[INFO] Resolved dependency: error_prone_annotations-2.50.0.jar
+[INFO] Resolved dependency: perfmark-api-0.27.0.jar
+[INFO] Resolved dependency: grpc-context-1.83.1.jar
+[INFO] Resolved dependency: netty-common-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-handler-proxy-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-resolver-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-resolver-dns-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-tcnative-classes-2.0.81.Final.jar
+[INFO] Resolved dependency: microprofile-config-api-3.1.1-RC1.jar
+[INFO] Resolved dependency: smallrye-common-classloader-2.17.1.jar
+[INFO] Resolved dependency: asm-9.9.1.jar
+[INFO] Resolved dependency: smallrye-config-common-3.17.2.jar
+[INFO] Resolved dependency: jctools-core-4.0.6.jar
+[INFO] Resolved dependency: netty-codec-compression-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-codec-protobuf-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-codec-marshalling-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-transport-native-unix-common-4.2.17.Final.jar
+[INFO] Resolved dependency: smallrye-context-propagation-2.3.0.jar
+[INFO] Resolved dependency: grpc-util-1.83.1.jar
+[INFO] Resolved dependency: protobuf-java-4.35.1.jar
+[INFO] Resolved dependency: proto-google-common-protos-2.64.1.jar
+[INFO] Resolved dependency: grpc-protobuf-lite-1.83.1.jar
+[INFO] Resolved dependency: failureaccess-1.0.1.jar
+[INFO] Resolved dependency: listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar
+[INFO] Resolved dependency: j2objc-annotations-2.8.jar
+[INFO] Resolved dependency: netty-codec-socks-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-codec-dns-4.2.17.Final.jar
+[INFO] Resolved dependency: smallrye-context-propagation-api-2.3.0.jar
+[INFO] Resolved dependency: smallrye-context-propagation-storage-2.3.0.jar
+[INFO] 
+[INFO] ------------------< pe.axiz:external-auth-phone-spi >-------------------
+[INFO] Building external-auth-phone-spi 1.1.0                             [5/6]
+[INFO]   from external-auth-phone-spi/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- dependency:3.11.0:go-offline (default-cli) @ external-auth-phone-spi ---
+[INFO] Resolved plugin: maven-compiler-plugin-3.16.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-compiler-plugin-3.16.0.jar
+[INFO]       asm-9.10.1.jar
+[INFO]       maven-shared-utils-3.4.2.jar
+[INFO]       commons-io-2.22.0.jar
+[INFO]       maven-shared-incremental-1.1.jar
+[INFO]       plexus-java-1.6.0.jar
+[INFO]       plexus-compiler-api-2.17.0.jar
+[INFO]       plexus-compiler-manager-2.17.0.jar
+[INFO]       plexus-compiler-javac-2.17.0.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       javaparser-core-3.28.2.jar
+[INFO]       javax.inject-1.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO] Resolved plugin: maven-surefire-plugin-3.6.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-surefire-plugin-3.6.0.jar
+[INFO]       surefire-api-3.6.0.jar
+[INFO]       surefire-extensions-api-3.6.0.jar
+[INFO]       maven-surefire-common-3.6.0.jar
+[INFO]       surefire-logger-api-3.6.0.jar
+[INFO]       surefire-shared-utils-3.6.0.jar
+[INFO]       surefire-booter-3.6.0.jar
+[INFO]       maven-resolver-util-1.9.27.jar
+[INFO]       maven-common-artifact-filters-3.4.0.jar
+[INFO]       plexus-java-1.6.0.jar
+[INFO]       surefire-extensions-spi-3.6.0.jar
+[INFO]       maven-resolver-api-1.9.27.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       asm-9.10.1.jar
+[INFO]       javaparser-core-3.28.2.jar
+[INFO] Resolved plugin: maven-jar-plugin-3.5.1.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-jar-plugin-3.5.1.jar
+[INFO]       file-management-3.2.0.jar
+[INFO]       maven-archiver-3.6.6.jar
+[INFO]       plexus-archiver-4.12.0.jar
+[INFO]       javax.inject-1.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       commons-io-2.22.0.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       plexus-interpolation-1.29.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO]       plexus-io-3.6.0.jar
+[INFO]       commons-compress-1.28.0.jar
+[INFO]       xz-1.12.jar
+[INFO]       zstd-jni-1.5.7-9.jar
+[INFO]       commons-codec-1.19.0.jar
+[INFO]       commons-lang3-3.18.0.jar
+[INFO] Resolved plugin: spotless-maven-plugin-3.10.4.jar
+[INFO] Resolved plugin dependency:
+[INFO]       spotless-maven-plugin-3.10.4.jar
+[INFO]       spotless-lib-4.10.4.jar
+[INFO]       spotless-lib-extra-4.10.4.jar
+[INFO]       durian-core-1.2.0.jar
+[INFO]       durian-io-1.2.0.jar
+[INFO]       durian-collect-1.2.0.jar
+[INFO]       plexus-resources-1.4.0.jar
+[INFO]       plexus-utils-4.1.0.jar
+[INFO]       org.eclipse.jgit-7.8.0.202609011348-r.jar
+[INFO]       plexus-build-api-0.0.7.jar
+[INFO]       concurrent-trees-2.6.1.jar
+[INFO]       solstice-1.8.2.jar
+[INFO]       org.eclipse.osgi-3.24.300.jar
+[INFO]       plexus-xml-3.1.0.jar
+[INFO]       javax.inject-1.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       JavaEWAH-1.2.3.jar
+[INFO]       commons-codec-1.22.1.jar
+[INFO]       durian-swt.os-4.3.0.jar
+[INFO]       xz-1.9.jar
+[INFO]       okhttp-4.12.0.jar
+[INFO]       okio-3.6.0.jar
+[INFO]       kotlin-stdlib-jdk8-1.8.21.jar
+[INFO]       okio-jvm-3.6.0.jar
+[INFO]       kotlin-stdlib-1.8.21.jar
+[INFO]       kotlin-stdlib-jdk7-1.8.21.jar
+[INFO]       kotlin-stdlib-common-1.9.10.jar
+[INFO]       annotations-13.0.jar
+[INFO] Resolved plugin: maven-clean-plugin-3.5.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-clean-plugin-3.5.0.jar
+[INFO]       plexus-utils-4.0.2.jar
+[INFO] Resolved plugin: maven-install-plugin-3.2.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-install-plugin-3.2.0.jar
+[INFO]       maven-resolver-util-1.9.27.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO]       maven-resolver-api-1.9.27.jar
+[INFO] Resolved plugin: maven-site-plugin-3.22.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-site-plugin-3.22.0.jar
+[INFO]       maven-reporting-api-4.0.0.jar
+[INFO]       maven-reporting-exec-2.0.1.jar
+[INFO]       maven-shared-utils-3.4.2.jar
+[INFO]       maven-resolver-transport-wagon-1.4.1.jar
+[INFO]       maven-archiver-3.6.6.jar
+[INFO]       plexus-archiver-4.11.0.jar
+[INFO]       commons-io-2.22.0.jar
+[INFO]       plexus-i18n-1.1.0.jar
+[INFO]       plexus-interactivity-api-1.5.1.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO]       doxia-sink-api-2.1.0.jar
+[INFO]       doxia-core-2.1.0.jar
+[INFO]       doxia-module-xhtml5-2.1.0.jar
+[INFO]       doxia-module-apt-2.1.0.jar
+[INFO]       doxia-module-xdoc-2.1.0.jar
+[INFO]       doxia-module-fml-2.1.0.jar
+[INFO]       doxia-module-markdown-2.1.0.jar
+[INFO]       doxia-site-model-2.1.0.jar
+[INFO]       doxia-site-renderer-2.1.0.jar
+[INFO]       doxia-integration-tools-2.1.0.jar
+[INFO]       commons-lang3-3.20.0.jar
+[INFO]       jetty-server-9.4.58.v20250814.jar
+[INFO]       jetty-http-9.4.58.v20250814.jar
+[INFO]       jetty-servlet-9.4.58.v20250814.jar
+[INFO]       jetty-webapp-9.4.58.v20250814.jar
+[INFO]       jetty-util-9.4.58.v20250814.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       javax.inject-1.jar
+[INFO]       maven-resolver-api-1.4.1.jar
+[INFO]       maven-resolver-util-1.4.1.jar
+[INFO]       plexus-classworlds-2.9.0.jar
+[INFO]       maven-resolver-spi-1.4.1.jar
+[INFO]       wagon-provider-api-3.0.0.jar
+[INFO]       plexus-interpolation-1.29.jar
+[INFO]       plexus-io-3.6.0.jar
+[INFO]       commons-compress-1.28.0.jar
+[INFO]       xz-1.11.jar
+[INFO]       zstd-jni-1.5.7-6.jar
+[INFO]       flexmark-0.62.2.jar
+[INFO]       flexmark-util-data-0.62.2.jar
+[INFO]       flexmark-util-misc-0.62.2.jar
+[INFO]       flexmark-util-sequence-0.62.2.jar
+[INFO]       flexmark-util-ast-0.62.2.jar
+[INFO]       flexmark-ext-abbreviation-0.62.2.jar
+[INFO]       flexmark-ext-autolink-0.62.2.jar
+[INFO]       flexmark-ext-definition-0.62.2.jar
+[INFO]       flexmark-ext-escaped-character-0.62.2.jar
+[INFO]       flexmark-ext-footnotes-0.62.2.jar
+[INFO]       flexmark-ext-gfm-strikethrough-0.62.2.jar
+[INFO]       flexmark-ext-tables-0.62.2.jar
+[INFO]       flexmark-ext-typographic-0.62.2.jar
+[INFO]       flexmark-ext-wikilink-0.62.2.jar
+[INFO]       flexmark-ext-yaml-front-matter-0.62.2.jar
+[INFO]       jsoup-1.22.1.jar
+[INFO]       annotations-26.1.0.jar
+[INFO]       org.eclipse.sisu.plexus-1.0.0.jar
+[INFO]       doxia-skin-model-2.1.0.jar
+[INFO]       plexus-velocity-2.3.0.jar
+[INFO]       velocity-engine-core-2.4.1.jar
+[INFO]       velocity-tools-generic-3.1.jar
+[INFO]       javax.servlet-api-3.1.0.jar
+[INFO]       jetty-io-9.4.58.v20250814.jar
+[INFO]       jetty-security-9.4.58.v20250814.jar
+[INFO]       jetty-util-ajax-9.4.58.v20250814.jar
+[INFO]       jetty-xml-9.4.58.v20250814.jar
+[INFO]       commons-codec-1.19.0.jar
+[INFO]       flexmark-util-builder-0.62.2.jar
+[INFO]       flexmark-util-collection-0.62.2.jar
+[INFO]       flexmark-util-dependency-0.62.2.jar
+[INFO]       flexmark-util-format-0.62.2.jar
+[INFO]       flexmark-util-html-0.62.2.jar
+[INFO]       flexmark-util-visitor-0.62.2.jar
+[INFO]       flexmark-util-0.62.2.jar
+[INFO]       autolink-0.6.0.jar
+[INFO]       org.eclipse.sisu.inject-1.0.0.jar
+[INFO]       plexus-component-annotations-2.2.0.jar
+[INFO]       commons-beanutils-1.9.4.jar
+[INFO]       commons-digester3-3.2.jar
+[INFO]       json-simple-3.0.2.jar
+[INFO]       flexmark-util-options-0.62.2.jar
+[INFO]       asm-9.9.1.jar
+[INFO]       commons-logging-1.2.jar
+[INFO]       commons-collections-3.2.2.jar
+[INFO] Resolved plugin: maven-resources-plugin-3.5.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-resources-plugin-3.5.0.jar
+[INFO]       maven-filtering-3.5.0.jar
+[INFO]       plexus-utils-3.6.0.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       plexus-build-api-1.2.0.jar
+[INFO]       plexus-interpolation-1.29.jar
+[INFO]       javax.inject-1.jar
+[INFO]       plexus-build-api-0.0.7.jar
+[INFO]       org.eclipse.sisu.plexus-0.9.0.M4.jar
+[INFO] Resolved plugin: maven-deploy-plugin-3.2.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-deploy-plugin-3.2.0.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO]       maven-resolver-util-1.9.27.jar
+[INFO]       maven-resolver-api-1.9.27.jar
+[INFO] Resolved dependency: keycloak-server-spi-private-26.8.0.jar
+[INFO] Resolved dependency: postgresql-42.7.13.jar
+[INFO] Resolved dependency: keycloak-server-spi-26.8.0.jar
+[INFO] Resolved dependency: keycloak-services-26.8.0.jar
+[INFO] Resolved dependency: keycloak-core-26.8.0.jar
+[INFO] Resolved dependency: httpclient-4.5.14.jar
+[INFO] Resolved dependency: opentelemetry-api-1.62.0.jar
+[INFO] Resolved dependency: checker-qual-3.55.1.jar
+[INFO] Resolved dependency: jakarta.mail-api-2.1.5.jar
+[INFO] Resolved dependency: angus-mail-2.0.5.jar
+[INFO] Resolved dependency: keycloak-common-26.8.0.jar
+[INFO] Resolved dependency: twitter4j-core-4.1.2.jar
+[INFO] Resolved dependency: jboss-logging-3.6.3.Final.jar
+[INFO] Resolved dependency: commons-logging-jboss-logging-2.0.0.Final.jar
+[INFO] Resolved dependency: jakarta.ws.rs-api-4.0.0.jar
+[INFO] Resolved dependency: jakarta.transaction-api-2.0.1.jar
+[INFO] Resolved dependency: jakarta.xml.soap-api-3.0.2.jar
+[INFO] Resolved dependency: owasp-java-html-sanitizer-20260101.1.jar
+[INFO] Resolved dependency: java8-shim-20260101.1.jar
+[INFO] Resolved dependency: java10-shim-20260101.1.jar
+[INFO] Resolved dependency: jackson-core-2.21.5.jar
+[INFO] Resolved dependency: jackson-databind-2.21.5.jar
+[INFO] Resolved dependency: jackson-annotations-2.21.jar
+[INFO] Resolved dependency: javax.annotation-api-1.3.2.jar
+[INFO] Resolved dependency: jackson-datatype-jdk8-2.21.5.jar
+[INFO] Resolved dependency: jackson-jakarta-rs-yaml-provider-2.21.5.jar
+[INFO] Resolved dependency: javase-3.4.0.jar
+[INFO] Resolved dependency: titanium-json-ld-1.3.3.jar
+[INFO] Resolved dependency: rdf-urdna-1.1.jar
+[INFO] Resolved dependency: webauthn4j-core-0.30.3.RELEASE.jar
+[INFO] Resolved dependency: uap-java-1.6.1.jar
+[INFO] Resolved dependency: snakeyaml-2.6.jar
+[INFO] Resolved dependency: microprofile-openapi-api-4.1.1.jar
+[INFO] Resolved dependency: smallrye-common-annotation-2.19.0.jar
+[INFO] Resolved dependency: keycloak-model-storage-private-26.8.0.jar
+[INFO] Resolved dependency: keycloak-config-api-26.8.0.jar
+[INFO] Resolved dependency: jackson-datatype-jsr310-2.21.5.jar
+[INFO] Resolved dependency: httpcore-4.4.16.jar
+[INFO] Resolved dependency: commons-codec-1.21.0.jar
+[INFO] Resolved dependency: opentelemetry-context-1.62.0.jar
+[INFO] Resolved dependency: jakarta.activation-api-2.1.4.jar
+[INFO] Resolved dependency: angus-activation-2.0.3.jar
+[INFO] Resolved dependency: jackson-jakarta-rs-base-2.21.5.jar
+[INFO] Resolved dependency: jackson-dataformat-yaml-2.21.5.jar
+[INFO] Resolved dependency: jackson-module-jakarta-xmlbind-annotations-2.21.5.jar
+[INFO] Resolved dependency: core-3.4.0.jar
+[INFO] Resolved dependency: jai-imageio-core-1.4.0.jar
+[INFO] Resolved dependency: jackson-dataformat-cbor-2.21.5.jar
+[INFO] Resolved dependency: slf4j-api-2.0.18.jar
+[INFO] Resolved dependency: commons-collections4-4.4.jar
+[INFO] Resolved dependency: keycloak-model-storage-26.8.0.jar
+[INFO] Resolved dependency: infinispan-commons-16.1.4.jar
+[INFO] Resolved dependency: quarkus-opentelemetry-3.40.1.jar
+[INFO] Resolved dependency: opentelemetry-common-1.62.0.jar
+[INFO] Resolved dependency: jakarta.xml.bind-api-4.0.5.jar
+[INFO] Resolved dependency: protostream-6.0.7.jar
+[INFO] Resolved dependency: protostream-types-6.0.7.jar
+[INFO] Resolved dependency: caffeine-3.2.4.jar
+[INFO] Resolved dependency: rxjava-3.1.12.jar
+[INFO] Resolved dependency: quarkus-core-3.40.1.jar
+[INFO] Resolved dependency: quarkus-tls-registry-3.40.1.jar
+[INFO] Resolved dependency: quarkus-arc-3.40.1.jar
+[INFO] Resolved dependency: quarkus-vertx-3.40.1.jar
+[INFO] Resolved dependency: quarkus-security-runtime-spi-3.40.1.jar
+[INFO] Resolved dependency: quarkus-grpc-common-3.40.1.jar
+[INFO] Resolved dependency: smallrye-common-vertx-context-2.19.0.jar
+[INFO] Resolved dependency: quarkus-websockets-next-spi-3.40.1.jar
+[INFO] Resolved dependency: opentelemetry-sdk-extension-autoconfigure-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-sdk-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-sdk-extension-autoconfigure-spi-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-semconv-1.41.1.jar
+[INFO] Resolved dependency: opentelemetry-semconv-incubating-1.40.0-alpha.jar
+[INFO] Resolved dependency: opentelemetry-api-incubator-1.62.0-alpha.jar
+[INFO] Resolved dependency: opentelemetry-instrumentation-api-2.28.1.jar
+[INFO] Resolved dependency: opentelemetry-instrumentation-annotations-2.28.1.jar
+[INFO] Resolved dependency: opentelemetry-instrumentation-annotations-support-2.28.1-alpha.jar
+[INFO] Resolved dependency: opentelemetry-instrumentation-api-incubator-2.28.1-alpha.jar
+[INFO] Resolved dependency: opentelemetry-exporter-otlp-common-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-exporter-otlp-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-runtime-telemetry-2.28.1-alpha.jar
+[INFO] Resolved dependency: vertx-grpc-client-4.5.34.jar
+[INFO] Resolved dependency: opentelemetry-jdbc-2.28.1-alpha.jar
+[INFO] Resolved dependency: jspecify-1.0.1.jar
+[INFO] Resolved dependency: reactive-streams-1.0.4.jar
+[INFO] Resolved dependency: jakarta.annotation-api-3.0.0.jar
+[INFO] Resolved dependency: jakarta.enterprise.cdi-api-4.1.0.jar
+[INFO] Resolved dependency: jakarta.inject-api-2.0.1.jar
+[INFO] Resolved dependency: smallrye-common-os-2.19.0.jar
+[INFO] Resolved dependency: quarkus-ide-launcher-3.40.1.jar
+[INFO] Resolved dependency: quarkus-development-mode-spi-3.40.1.jar
+[INFO] Resolved dependency: smallrye-config-3.17.2.jar
+[INFO] Resolved dependency: jboss-logmanager-3.2.2.Final.jar
+[INFO] Resolved dependency: jboss-threads-3.9.2.jar
+[INFO] Resolved dependency: slf4j-jboss-logmanager-2.0.2.Final.jar
+[INFO] Resolved dependency: wildfly-common-2.0.1.jar
+[INFO] Resolved dependency: quarkus-value-registry-3.40.1.jar
+[INFO] Resolved dependency: quarkus-fs-util-1.4.2.jar
+[INFO] Resolved dependency: quarkus-tls-registry-spi-3.40.1.jar
+[INFO] Resolved dependency: quarkus-credentials-3.40.1.jar
+[INFO] Resolved dependency: smallrye-private-key-pem-parser-0.9.4.jar
+[INFO] Resolved dependency: arc-3.40.1.jar
+[INFO] Resolved dependency: microprofile-context-propagation-api-1.3.jar
+[INFO] Resolved dependency: quarkus-netty-3.40.1.jar
+[INFO] Resolved dependency: netty-codec-haproxy-4.2.17.Final.jar
+[INFO] Resolved dependency: quarkus-mutiny-3.40.1.jar
+[INFO] Resolved dependency: quarkus-virtual-threads-3.40.1.jar
+[INFO] Resolved dependency: quarkus-vertx-latebound-mdc-provider-3.40.1.jar
+[INFO] Resolved dependency: smallrye-mutiny-vertx-core-3.23.1.jar
+[INFO] Resolved dependency: smallrye-fault-tolerance-vertx-6.11.4.jar
+[INFO] Resolved dependency: quarkus-security-2.3.2.jar
+[INFO] Resolved dependency: vertx-grpc-4.5.34.jar
+[INFO] Resolved dependency: vertx-grpc-server-4.5.34.jar
+[INFO] Resolved dependency: grpc-core-1.83.1.jar
+[INFO] Resolved dependency: vertx-core-4.5.28.jar
+[INFO] Resolved dependency: smallrye-common-constraint-2.19.0.jar
+[INFO] Resolved dependency: opentelemetry-sdk-common-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-sdk-trace-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-sdk-metrics-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-sdk-logs-1.62.0.jar
+[INFO] Resolved dependency: opentelemetry-exporter-common-1.62.0.jar
+[INFO] Resolved dependency: vertx-grpc-common-4.5.34.jar
+[INFO] Resolved dependency: grpc-stub-1.83.1.jar
+[INFO] Resolved dependency: grpc-api-1.83.1.jar
+[INFO] Resolved dependency: jakarta.enterprise.lang-model-4.1.0.jar
+[INFO] Resolved dependency: jakarta.el-api-6.0.0.jar
+[INFO] Resolved dependency: jakarta.interceptor-api-2.2.0.jar
+[INFO] Resolved dependency: smallrye-config-core-3.17.2.jar
+[INFO] Resolved dependency: smallrye-common-cpu-2.15.0.jar
+[INFO] Resolved dependency: smallrye-common-expression-2.15.0.jar
+[INFO] Resolved dependency: smallrye-common-net-2.15.0.jar
+[INFO] Resolved dependency: smallrye-common-ref-2.15.0.jar
+[INFO] Resolved dependency: jakarta.json-api-2.1.3.jar
+[INFO] Resolved dependency: parsson-1.1.7.jar
+[INFO] Resolved dependency: smallrye-common-function-2.14.0.jar
+[INFO] Resolved dependency: mutiny-3.3.0.jar
+[INFO] Resolved dependency: netty-codec-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-codec-http-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-codec-http2-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-handler-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-buffer-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-transport-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-codec-base-4.2.17.Final.jar
+[INFO] Resolved dependency: quarkus-smallrye-context-propagation-3.40.1.jar
+[INFO] Resolved dependency: mutiny-smallrye-context-propagation-3.3.0.jar
+[INFO] Resolved dependency: smallrye-mutiny-vertx-runtime-3.23.1.jar
+[INFO] Resolved dependency: grpc-netty-1.83.1.jar
+[INFO] Resolved dependency: grpc-protobuf-1.83.1.jar
+[INFO] Resolved dependency: guava-32.1.2-jre.jar
+[INFO] Resolved dependency: gson-2.13.2.jar
+[INFO] Resolved dependency: error_prone_annotations-2.50.0.jar
+[INFO] Resolved dependency: perfmark-api-0.27.0.jar
+[INFO] Resolved dependency: grpc-context-1.83.1.jar
+[INFO] Resolved dependency: netty-common-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-handler-proxy-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-resolver-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-resolver-dns-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-tcnative-classes-2.0.81.Final.jar
+[INFO] Resolved dependency: microprofile-config-api-3.1.1-RC1.jar
+[INFO] Resolved dependency: smallrye-common-classloader-2.17.1.jar
+[INFO] Resolved dependency: asm-9.9.1.jar
+[INFO] Resolved dependency: smallrye-config-common-3.17.2.jar
+[INFO] Resolved dependency: jctools-core-4.0.6.jar
+[INFO] Resolved dependency: netty-codec-compression-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-codec-protobuf-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-codec-marshalling-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-transport-native-unix-common-4.2.17.Final.jar
+[INFO] Resolved dependency: smallrye-context-propagation-2.3.0.jar
+[INFO] Resolved dependency: grpc-util-1.83.1.jar
+[INFO] Resolved dependency: protobuf-java-4.35.1.jar
+[INFO] Resolved dependency: proto-google-common-protos-2.64.1.jar
+[INFO] Resolved dependency: grpc-protobuf-lite-1.83.1.jar
+[INFO] Resolved dependency: failureaccess-1.0.1.jar
+[INFO] Resolved dependency: listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar
+[INFO] Resolved dependency: j2objc-annotations-2.8.jar
+[INFO] Resolved dependency: netty-codec-socks-4.2.17.Final.jar
+[INFO] Resolved dependency: netty-codec-dns-4.2.17.Final.jar
+[INFO] Resolved dependency: smallrye-context-propagation-api-2.3.0.jar
+[INFO] Resolved dependency: smallrye-context-propagation-storage-2.3.0.jar
+[INFO] 
+[INFO] ----------------------< pe.axiz:payment-service >-----------------------
+[INFO] Building payment-service 1.1.0                                     [6/6]
+[INFO]   from payment-service/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- dependency:3.11.0:go-offline (default-cli) @ payment-service ---
+[INFO] Resolved plugin: maven-compiler-plugin-3.16.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-compiler-plugin-3.16.0.jar
+[INFO]       asm-9.10.1.jar
+[INFO]       maven-shared-utils-3.4.2.jar
+[INFO]       commons-io-2.22.0.jar
+[INFO]       maven-shared-incremental-1.1.jar
+[INFO]       plexus-java-1.6.0.jar
+[INFO]       plexus-compiler-api-2.17.0.jar
+[INFO]       plexus-compiler-manager-2.17.0.jar
+[INFO]       plexus-compiler-javac-2.17.0.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       javaparser-core-3.28.2.jar
+[INFO]       javax.inject-1.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO] Resolved plugin: maven-surefire-plugin-3.6.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-surefire-plugin-3.6.0.jar
+[INFO]       surefire-api-3.6.0.jar
+[INFO]       surefire-extensions-api-3.6.0.jar
+[INFO]       maven-surefire-common-3.6.0.jar
+[INFO]       surefire-logger-api-3.6.0.jar
+[INFO]       surefire-shared-utils-3.6.0.jar
+[INFO]       surefire-booter-3.6.0.jar
+[INFO]       maven-resolver-util-1.9.27.jar
+[INFO]       maven-common-artifact-filters-3.4.0.jar
+[INFO]       plexus-java-1.6.0.jar
+[INFO]       surefire-extensions-spi-3.6.0.jar
+[INFO]       maven-resolver-api-1.9.27.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       asm-9.10.1.jar
+[INFO]       javaparser-core-3.28.2.jar
+[INFO] Resolved plugin: maven-jar-plugin-3.5.1.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-jar-plugin-3.5.1.jar
+[INFO]       file-management-3.2.0.jar
+[INFO]       maven-archiver-3.6.6.jar
+[INFO]       plexus-archiver-4.12.0.jar
+[INFO]       javax.inject-1.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       commons-io-2.22.0.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       plexus-interpolation-1.29.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO]       plexus-io-3.6.0.jar
+[INFO]       commons-compress-1.28.0.jar
+[INFO]       xz-1.12.jar
+[INFO]       zstd-jni-1.5.7-9.jar
+[INFO]       commons-codec-1.19.0.jar
+[INFO]       commons-lang3-3.18.0.jar
+[INFO] Resolved plugin: spotless-maven-plugin-3.10.4.jar
+[INFO] Resolved plugin dependency:
+[INFO]       spotless-maven-plugin-3.10.4.jar
+[INFO]       spotless-lib-4.10.4.jar
+[INFO]       spotless-lib-extra-4.10.4.jar
+[INFO]       durian-core-1.2.0.jar
+[INFO]       durian-io-1.2.0.jar
+[INFO]       durian-collect-1.2.0.jar
+[INFO]       plexus-resources-1.4.0.jar
+[INFO]       plexus-utils-4.1.0.jar
+[INFO]       org.eclipse.jgit-7.8.0.202609011348-r.jar
+[INFO]       plexus-build-api-0.0.7.jar
+[INFO]       concurrent-trees-2.6.1.jar
+[INFO]       solstice-1.8.2.jar
+[INFO]       org.eclipse.osgi-3.24.300.jar
+[INFO]       plexus-xml-3.1.0.jar
+[INFO]       javax.inject-1.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       JavaEWAH-1.2.3.jar
+[INFO]       commons-codec-1.22.1.jar
+[INFO]       durian-swt.os-4.3.0.jar
+[INFO]       xz-1.9.jar
+[INFO]       okhttp-4.12.0.jar
+[INFO]       okio-3.6.0.jar
+[INFO]       kotlin-stdlib-jdk8-1.8.21.jar
+[INFO]       okio-jvm-3.6.0.jar
+[INFO]       kotlin-stdlib-1.8.21.jar
+[INFO]       kotlin-stdlib-jdk7-1.8.21.jar
+[INFO]       kotlin-stdlib-common-1.9.10.jar
+[INFO]       annotations-13.0.jar
+[INFO] Resolved plugin: maven-clean-plugin-3.5.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-clean-plugin-3.5.0.jar
+[INFO]       plexus-utils-4.0.2.jar
+[INFO] Resolved plugin: maven-install-plugin-3.2.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-install-plugin-3.2.0.jar
+[INFO]       maven-resolver-util-1.9.27.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO]       maven-resolver-api-1.9.27.jar
+[INFO] Resolved plugin: maven-site-plugin-3.22.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-site-plugin-3.22.0.jar
+[INFO]       maven-reporting-api-4.0.0.jar
+[INFO]       maven-reporting-exec-2.0.1.jar
+[INFO]       maven-shared-utils-3.4.2.jar
+[INFO]       maven-resolver-transport-wagon-1.4.1.jar
+[INFO]       maven-archiver-3.6.6.jar
+[INFO]       plexus-archiver-4.11.0.jar
+[INFO]       commons-io-2.22.0.jar
+[INFO]       plexus-i18n-1.1.0.jar
+[INFO]       plexus-interactivity-api-1.5.1.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO]       doxia-sink-api-2.1.0.jar
+[INFO]       doxia-core-2.1.0.jar
+[INFO]       doxia-module-xhtml5-2.1.0.jar
+[INFO]       doxia-module-apt-2.1.0.jar
+[INFO]       doxia-module-xdoc-2.1.0.jar
+[INFO]       doxia-module-fml-2.1.0.jar
+[INFO]       doxia-module-markdown-2.1.0.jar
+[INFO]       doxia-site-model-2.1.0.jar
+[INFO]       doxia-site-renderer-2.1.0.jar
+[INFO]       doxia-integration-tools-2.1.0.jar
+[INFO]       commons-lang3-3.20.0.jar
+[INFO]       jetty-server-9.4.58.v20250814.jar
+[INFO]       jetty-http-9.4.58.v20250814.jar
+[INFO]       jetty-servlet-9.4.58.v20250814.jar
+[INFO]       jetty-webapp-9.4.58.v20250814.jar
+[INFO]       jetty-util-9.4.58.v20250814.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       javax.inject-1.jar
+[INFO]       maven-resolver-api-1.4.1.jar
+[INFO]       maven-resolver-util-1.4.1.jar
+[INFO]       plexus-classworlds-2.9.0.jar
+[INFO]       maven-resolver-spi-1.4.1.jar
+[INFO]       wagon-provider-api-3.0.0.jar
+[INFO]       plexus-interpolation-1.29.jar
+[INFO]       plexus-io-3.6.0.jar
+[INFO]       commons-compress-1.28.0.jar
+[INFO]       xz-1.11.jar
+[INFO]       zstd-jni-1.5.7-6.jar
+[INFO]       flexmark-0.62.2.jar
+[INFO]       flexmark-util-data-0.62.2.jar
+[INFO]       flexmark-util-misc-0.62.2.jar
+[INFO]       flexmark-util-sequence-0.62.2.jar
+[INFO]       flexmark-util-ast-0.62.2.jar
+[INFO]       flexmark-ext-abbreviation-0.62.2.jar
+[INFO]       flexmark-ext-autolink-0.62.2.jar
+[INFO]       flexmark-ext-definition-0.62.2.jar
+[INFO]       flexmark-ext-escaped-character-0.62.2.jar
+[INFO]       flexmark-ext-footnotes-0.62.2.jar
+[INFO]       flexmark-ext-gfm-strikethrough-0.62.2.jar
+[INFO]       flexmark-ext-tables-0.62.2.jar
+[INFO]       flexmark-ext-typographic-0.62.2.jar
+[INFO]       flexmark-ext-wikilink-0.62.2.jar
+[INFO]       flexmark-ext-yaml-front-matter-0.62.2.jar
+[INFO]       jsoup-1.22.1.jar
+[INFO]       annotations-26.1.0.jar
+[INFO]       org.eclipse.sisu.plexus-1.0.0.jar
+[INFO]       doxia-skin-model-2.1.0.jar
+[INFO]       plexus-velocity-2.3.0.jar
+[INFO]       velocity-engine-core-2.4.1.jar
+[INFO]       velocity-tools-generic-3.1.jar
+[INFO]       javax.servlet-api-3.1.0.jar
+[INFO]       jetty-io-9.4.58.v20250814.jar
+[INFO]       jetty-security-9.4.58.v20250814.jar
+[INFO]       jetty-util-ajax-9.4.58.v20250814.jar
+[INFO]       jetty-xml-9.4.58.v20250814.jar
+[INFO]       commons-codec-1.19.0.jar
+[INFO]       flexmark-util-builder-0.62.2.jar
+[INFO]       flexmark-util-collection-0.62.2.jar
+[INFO]       flexmark-util-dependency-0.62.2.jar
+[INFO]       flexmark-util-format-0.62.2.jar
+[INFO]       flexmark-util-html-0.62.2.jar
+[INFO]       flexmark-util-visitor-0.62.2.jar
+[INFO]       flexmark-util-0.62.2.jar
+[INFO]       autolink-0.6.0.jar
+[INFO]       org.eclipse.sisu.inject-1.0.0.jar
+[INFO]       plexus-component-annotations-2.2.0.jar
+[INFO]       commons-beanutils-1.9.4.jar
+[INFO]       commons-digester3-3.2.jar
+[INFO]       json-simple-3.0.2.jar
+[INFO]       flexmark-util-options-0.62.2.jar
+[INFO]       asm-9.9.1.jar
+[INFO]       commons-logging-1.2.jar
+[INFO]       commons-collections-3.2.2.jar
+[INFO] Resolved plugin: maven-resources-plugin-3.5.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-resources-plugin-3.5.0.jar
+[INFO]       maven-filtering-3.5.0.jar
+[INFO]       plexus-utils-3.6.0.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       plexus-build-api-1.2.0.jar
+[INFO]       plexus-interpolation-1.29.jar
+[INFO]       javax.inject-1.jar
+[INFO]       plexus-build-api-0.0.7.jar
+[INFO]       org.eclipse.sisu.plexus-0.9.0.M4.jar
+[INFO] Resolved plugin: spring-boot-maven-plugin-4.1.1.jar
+[INFO] Resolved plugin dependency:
+[INFO]       spring-boot-maven-plugin-4.1.1.jar
+[INFO]       spring-boot-buildpack-platform-4.1.1.jar
+[INFO]       spring-boot-loader-tools-4.1.1.jar
+[INFO]       maven-common-artifact-filters-3.4.0.jar
+[INFO]       plexus-build-api-0.0.7.jar
+[INFO]       spring-core-7.0.9.jar
+[INFO]       spring-context-7.0.9.jar
+[INFO]       maven-shade-plugin-3.6.0.jar
+[INFO]       jna-platform-5.17.0.jar
+[INFO]       commons-compress-1.27.1.jar
+[INFO]       httpclient5-5.6.4.jar
+[INFO]       tomlj-1.0.0.jar
+[INFO]       jackson-databind-3.1.5.jar
+[INFO]       slf4j-api-1.7.36.jar
+[INFO]       maven-resolver-util-1.4.1.jar
+[INFO]       commons-logging-1.3.5.jar
+[INFO]       jspecify-1.0.0.jar
+[INFO]       spring-aop-7.0.9.jar
+[INFO]       spring-beans-7.0.9.jar
+[INFO]       spring-expression-7.0.9.jar
+[INFO]       micrometer-observation-1.16.7.jar
+[INFO]       plexus-utils-3.5.1.jar
+[INFO]       asm-9.7.jar
+[INFO]       asm-commons-9.7.jar
+[INFO]       jdom2-2.0.6.1.jar
+[INFO]       commons-io-2.16.1.jar
+[INFO]       jdependency-2.10.jar
+[INFO]       jna-5.17.0.jar
+[INFO]       commons-codec-1.17.1.jar
+[INFO]       commons-lang3-3.16.0.jar
+[INFO]       httpcore5-5.4.3.jar
+[INFO]       httpcore5-h2-5.4.3.jar
+[INFO]       antlr4-runtime-4.7.2.jar
+[INFO]       jsr305-3.0.2.jar
+[INFO]       jackson-annotations-2.21.jar
+[INFO]       jackson-core-3.1.5.jar
+[INFO]       maven-resolver-api-1.4.1.jar
+[INFO]       micrometer-commons-1.16.7.jar
+[INFO]       asm-tree-9.7.jar
+[INFO] Resolved plugin: maven-deploy-plugin-3.2.0.jar
+[INFO] Resolved plugin dependency:
+[INFO]       maven-deploy-plugin-3.2.0.jar
+[INFO]       plexus-utils-4.0.3.jar
+[INFO]       plexus-xml-3.0.1.jar
+[INFO]       maven-resolver-util-1.9.27.jar
+[INFO]       maven-resolver-api-1.9.27.jar
+[INFO] Resolved dependency: spring-boot-starter-oauth2-resource-server-4.1.1.jar
+[INFO] Resolved dependency: spring-boot-starter-test-4.1.1.jar
+[INFO] Resolved dependency: spring-boot-starter-oauth2-client-4.1.1.jar
+[INFO] Resolved dependency: postgresql-42.7.13.jar
+[INFO] Resolved dependency: spring-boot-starter-security-4.1.1.jar
+[INFO] Resolved dependency: spring-boot-starter-webmvc-4.1.1.jar
+[INFO] Resolved dependency: spring-boot-starter-flyway-4.1.1.jar
+[INFO] Resolved dependency: flyway-database-postgresql-12.4.0.jar
+[INFO] Resolved dependency: spring-boot-starter-validation-4.1.1.jar
+[INFO] Resolved dependency: spring-boot-starter-jdbc-4.1.1.jar
+[INFO] Resolved dependency: spring-boot-starter-4.1.1.jar
+[INFO] Resolved dependency: spring-boot-security-oauth2-resource-server-4.1.1.jar
+[INFO] Resolved dependency: spring-boot-test-4.1.1.jar
+[INFO] Resolved dependency: spring-boot-test-autoconfigure-4.1.1.jar
+[INFO] Resolved dependency: json-path-2.10.0.jar
+[INFO] Resolved dependency: jakarta.xml.bind-api-4.0.5.jar
+[INFO] Resolved dependency: json-smart-2.6.0.jar
+[INFO] Resolved dependency: assertj-core-3.27.7.jar
+[INFO] Resolved dependency: awaitility-4.3.0.jar
+[INFO] Resolved dependency: hamcrest-3.0.jar
+[INFO] Resolved dependency: junit-jupiter-6.0.3.jar
+[INFO] Resolved dependency: mockito-core-5.23.0.jar
+[INFO] Resolved dependency: mockito-junit-jupiter-5.23.0.jar
+[INFO] Resolved dependency: jsonassert-1.5.3.jar
+[INFO] Resolved dependency: spring-core-7.0.9.jar
+[INFO] Resolved dependency: spring-test-7.0.9.jar
+[INFO] Resolved dependency: xmlunit-core-2.11.0.jar
+[INFO] Resolved dependency: spring-boot-security-oauth2-client-4.1.1.jar
+[INFO] Resolved dependency: spring-security-oauth2-jose-7.1.1.jar
+[INFO] Resolved dependency: checker-qual-3.55.1.jar
+[INFO] Resolved dependency: spring-boot-security-4.1.1.jar
+[INFO] Resolved dependency: spring-aop-7.0.9.jar
+[INFO] Resolved dependency: spring-boot-starter-jackson-4.1.1.jar
+[INFO] Resolved dependency: spring-boot-starter-tomcat-4.1.1.jar
+[INFO] Resolved dependency: spring-boot-http-converter-4.1.1.jar
+[INFO] Resolved dependency: spring-boot-webmvc-4.1.1.jar
+[INFO] Resolved dependency: spring-boot-flyway-4.1.1.jar
+[INFO] Resolved dependency: spring-boot-jdbc-4.1.1.jar
+[INFO] Resolved dependency: flyway-core-12.4.0.jar
+[INFO] Resolved dependency: spring-boot-validation-4.1.1.jar
+[INFO] Resolved dependency: HikariCP-7.0.2.jar
+[INFO] Resolved dependency: spring-boot-starter-logging-4.1.1.jar
+[INFO] Resolved dependency: spring-boot-autoconfigure-4.1.1.jar
+[INFO] Resolved dependency: jakarta.annotation-api-3.0.0.jar
+[INFO] Resolved dependency: snakeyaml-2.6.jar
+[INFO] Resolved dependency: spring-boot-4.1.1.jar
+[INFO] Resolved dependency: spring-security-oauth2-resource-server-7.1.1.jar
+[INFO] Resolved dependency: slf4j-api-2.0.18.jar
+[INFO] Resolved dependency: jakarta.activation-api-2.1.4.jar
+[INFO] Resolved dependency: accessors-smart-2.6.0.jar
+[INFO] Resolved dependency: byte-buddy-1.18.11.jar
+[INFO] Resolved dependency: junit-jupiter-api-6.0.3.jar
+[INFO] Resolved dependency: junit-jupiter-params-6.0.3.jar
+[INFO] Resolved dependency: junit-jupiter-engine-6.0.3.jar
+[INFO] Resolved dependency: byte-buddy-agent-1.18.11.jar
+[INFO] Resolved dependency: objenesis-3.3.jar
+[INFO] Resolved dependency: android-json-0.0.20131108.vaadin1.jar
+[INFO] Resolved dependency: commons-logging-1.3.6.jar
+[INFO] Resolved dependency: jspecify-1.0.1.jar
+[INFO] Resolved dependency: spring-security-oauth2-client-7.1.1.jar
+[INFO] Resolved dependency: spring-security-core-7.1.1.jar
+[INFO] Resolved dependency: spring-security-oauth2-core-7.1.1.jar
+[INFO] Resolved dependency: nimbus-jose-jwt-10.9.1.jar
+[INFO] Resolved dependency: spring-security-config-7.1.1.jar
+[INFO] Resolved dependency: spring-security-web-7.1.1.jar
+[INFO] Resolved dependency: spring-beans-7.0.9.jar
+[INFO] Resolved dependency: spring-boot-jackson-4.1.1.jar
+[INFO] Resolved dependency: spring-boot-starter-tomcat-runtime-4.1.1.jar
+[INFO] Resolved dependency: spring-boot-tomcat-4.1.1.jar
+[INFO] Resolved dependency: spring-web-7.0.9.jar
+[INFO] Resolved dependency: spring-boot-servlet-4.1.1.jar
+[INFO] Resolved dependency: spring-webmvc-7.0.9.jar
+[INFO] Resolved dependency: spring-boot-sql-4.1.1.jar
+[INFO] Resolved dependency: spring-boot-transaction-4.1.1.jar
+[INFO] Resolved dependency: spring-jdbc-7.0.9.jar
+[INFO] Resolved dependency: jackson-databind-3.1.5.jar
+[INFO] Resolved dependency: tomcat-embed-el-11.0.24.jar
+[INFO] Resolved dependency: hibernate-validator-9.1.3.Final.jar
+[INFO] Resolved dependency: logback-classic-1.5.38.jar
+[INFO] Resolved dependency: log4j-to-slf4j-2.25.5.jar
+[INFO] Resolved dependency: jul-to-slf4j-2.0.18.jar
+[INFO] Resolved dependency: spring-context-7.0.9.jar
+[INFO] Resolved dependency: asm-9.7.1.jar
+[INFO] Resolved dependency: opentest4j-1.3.0.jar
+[INFO] Resolved dependency: junit-platform-commons-6.0.3.jar
+[INFO] Resolved dependency: apiguardian-api-1.1.2.jar
+[INFO] Resolved dependency: junit-platform-engine-6.0.3.jar
+[INFO] Resolved dependency: oauth2-oidc-sdk-11.38.2.jar
+[INFO] Resolved dependency: spring-security-crypto-7.1.1.jar
+[INFO] Resolved dependency: spring-expression-7.0.9.jar
+[INFO] Resolved dependency: micrometer-observation-1.17.1.jar
+[INFO] Resolved dependency: spring-boot-web-server-4.1.1.jar
+[INFO] Resolved dependency: tomcat-embed-core-11.0.24.jar
+[INFO] Resolved dependency: tomcat-embed-websocket-11.0.24.jar
+[INFO] Resolved dependency: spring-boot-persistence-4.1.1.jar
+[INFO] Resolved dependency: spring-tx-7.0.9.jar
+[INFO] Resolved dependency: jackson-annotations-2.21.jar
+[INFO] Resolved dependency: jackson-core-3.1.5.jar
+[INFO] Resolved dependency: jakarta.validation-api-3.1.1.jar
+[INFO] Resolved dependency: jboss-logging-3.6.3.Final.jar
+[INFO] Resolved dependency: classmate-1.7.3.jar
+[INFO] Resolved dependency: logback-core-1.5.38.jar
+[INFO] Resolved dependency: log4j-api-2.25.5.jar
+[INFO] Resolved dependency: jcip-annotations-1.0-1.jar
+[INFO] Resolved dependency: content-type-2.3.jar
+[INFO] Resolved dependency: lang-tag-1.7.jar
+[INFO] Resolved dependency: micrometer-commons-1.17.1.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for keycloak-payment-poc 1.1.0:
+[INFO] 
+[INFO] keycloak-payment-poc ............................... SUCCESS [ 11.765 s]
+[INFO] common-spi ......................................... SUCCESS [  0.328 s]
+[INFO] auth-code-dni-spi .................................. SUCCESS [  0.091 s]
+[INFO] ropc-dni-spi ....................................... SUCCESS [  0.084 s]
+[INFO] external-auth-phone-spi ............................ SUCCESS [  0.091 s]
+[INFO] payment-service .................................... SUCCESS [  0.191 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  24.831 s
+[INFO] Finished at: 2026-10-11T13:37:49-04:00
+[INFO] ------------------------------------------------------------------------

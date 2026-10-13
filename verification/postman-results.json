@@ -1,0 +1,206 @@
+{
+  "status": "PASS",
+  "collection_requests": 49,
+  "executed_requests": 38,
+  "assertions": 74,
+  "failures": 0,
+  "postman_runtime": "7.56.1",
+  "postman_sandbox": "6.7.4",
+  "postman_collection_sdk": "5.2.0",
+  "checked": [
+    {
+      "name": "Descubrir realm y limpiar variables de la ejecución",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "name": "Comprobar disponibilidad del servicio",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "name": "Consultar claves públicas JWKS",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "name": "Denegar API sin token",
+      "method": "GET",
+      "status": 401
+    },
+    {
+      "name": "Autenticar teléfono y guardar tokens ACR 3",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "name": "Consultar identidad ACR 3",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "name": "Consultar perfil telefónico OIDC",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "name": "Autenticar DNI y guardar tokens ACR 4",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "name": "Consultar identidad ACR 4",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "name": "Autenticar otro DNI aprovisionado",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "name": "Generar PKCE y obtener formulario Keycloak",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "name": "Autenticar DNI y capturar código sin seguir callback",
+      "method": "POST",
+      "status": 302
+    },
+    {
+      "name": "Intercambiar código y guardar tokens ACR 5",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "name": "Denegar reutilización del código consumido",
+      "method": "POST",
+      "status": 400
+    },
+    {
+      "name": "Consultar identidad ACR 5",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "name": "Iniciar sesión del portal",
+      "method": "GET",
+      "status": 302
+    },
+    {
+      "name": "Obtener formulario del recorrido Spring",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "name": "Autenticar DNI en el recorrido Spring",
+      "method": "POST",
+      "status": 302
+    },
+    {
+      "name": "Completar callback con la sesión Spring original",
+      "method": "GET",
+      "status": 302
+    },
+    {
+      "name": "Consultar sesión web autenticada ACR 5",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "name": "Denegar clave DNI incorrecta",
+      "method": "POST",
+      "status": 400
+    },
+    {
+      "name": "Denegar clave telefónica incorrecta",
+      "method": "POST",
+      "status": 400
+    },
+    {
+      "name": "Denegar DNI deshabilitado",
+      "method": "POST",
+      "status": 400
+    },
+    {
+      "name": "Denegar teléfono deshabilitado",
+      "method": "POST",
+      "status": 400
+    },
+    {
+      "name": "Denegar teléfono en flujo DNI",
+      "method": "POST",
+      "status": 400
+    },
+    {
+      "name": "Denegar DNI en flujo telefónico",
+      "method": "POST",
+      "status": 400
+    },
+    {
+      "name": "Denegar JWT cuyo ACR fue alterado",
+      "method": "GET",
+      "status": 401
+    },
+    {
+      "name": "Renovar token DNI y conservar ACR 4",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "name": "Denegar reutilización del refresh anterior",
+      "method": "POST",
+      "status": 400
+    },
+    {
+      "name": "Consultar identidad del token renovado",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "name": "Revocar el refresh vigente del DNI",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "name": "Denegar renovación tras revocar el refresh",
+      "method": "POST",
+      "status": 400
+    },
+    {
+      "name": "Obtener token administrativo de laboratorio",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "name": "Comprobar versión individual de los proveedores",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "name": "Comprobar ejecución única de auth-code-dni",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "name": "Comprobar ejecución única de ropc-dni",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "name": "Comprobar ejecución única de external-auth-phone",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "name": "Consultar usuarios internos generados",
+      "method": "GET",
+      "status": 200
+    }
+  ],
+  "not_executed": "11 requests de pagos persistidos; se requiere PostgreSQL 18.6 y Flyway.",
+  "environment": "Keycloak 26.8.0 real, H2 interno y fixture externo PostgreSQL-wire; Flyway deshabilitado solo para esa verificación.",
+  "updated_at": "2026-10-11T17:38:56.654740+00:00",
+  "common_module": "common-spi"
+}

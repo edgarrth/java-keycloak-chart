@@ -271,5 +271,11 @@
         "merchant"
       ]
     }
-  ]
+  ],
+  "loginTheme": "axiz",
+  "internationalizationEnabled": true,
+  "supportedLocales": [
+    "es"
+  ],
+  "defaultLocale": "es"
 }
